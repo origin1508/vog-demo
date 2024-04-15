@@ -26,6 +26,11 @@ const Login = () => {
       <LoginContainer>
         <LoginTitle>VOG 로그인</LoginTitle>
         <OAuthLogin />
+        <LoginButton
+          onClick={() => router.push("/auth/login/naver?code=test&state=test")}
+        >
+          로그인
+        </LoginButton>
       </LoginContainer>
     </LoginWrapper>
   );
@@ -44,4 +49,8 @@ const LoginContainer = tw.div`
 
 const LoginTitle = tw.h2`
   w-full mb-4 text-3xl font-bold text-center
+`;
+
+const LoginButton = tw.button`
+  flex items-center justify-center w-full h-12 mt-5 rounded bg-white text-black
 `;

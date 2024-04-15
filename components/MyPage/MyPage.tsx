@@ -19,6 +19,7 @@ import {
 } from "@/apis/user";
 import { NicknameEditValue, ProfilePicEditValue } from "@/types/myPage";
 import imageResize from "@/utils/imageResize";
+import { deleteAccessToken } from "@/utils/tokenManager";
 
 const MyPage = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ const MyPage = () => {
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
 
   const handleProfilePicUpload = async (data: ProfilePicEditValue) => {
-    if (!userId) return;
+    if (userId === null) return;
 
     const { profilePic } = data;
     const image = profilePic.item(0);
@@ -53,7 +54,7 @@ const MyPage = () => {
   };
 
   const handleNicknameChangeSubmit = async (data: NicknameEditValue) => {
-    if (!userId) return;
+    if (userId === null) return;
 
     const { nickname } = data;
     const res = await changeNicknameRequest(userId, nickname);
@@ -74,7 +75,7 @@ const MyPage = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (!userId) return;
+    if (userId === null) return;
     if (!password) {
       toast.alert("비밀번호를 입력하세요.");
       return;
@@ -83,6 +84,7 @@ const MyPage = () => {
     const res = await withdrawalRequest(userId, password);
     if (res.success) {
       resetUser();
+      deleteAccessToken();
       router.replace("/");
     } else {
       toast.alert(res.error);

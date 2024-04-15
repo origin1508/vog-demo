@@ -8,7 +8,7 @@ const useUserProfileState = () => {
   const isOpen = userProfile.isOpen;
 
   const handleUserProfileOpen = async (userId: number | null) => {
-    if (!userId) return;
+    if (userId === null) return;
     const res = await getUserInfoRequest(userId);
     if (res.success) {
       setUserProfile((prev) => {

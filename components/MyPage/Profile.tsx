@@ -1,18 +1,22 @@
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import tw from "twin.macro";
 import { ProfileProps } from "@/types/myPage";
 
 const Profile = ({ user }: ProfileProps) => {
+  const [profileUrl, setProfileUrl] = useState("");
+  const [nickname, setNickname] = useState("");
+
+  useEffect(() => {
+    setProfileUrl(user.profileUrl);
+    setNickname(user.nickname);
+  }, [user]);
+
   return (
     <ProfileContainer>
-      <ProfilePic
-        src={user.profileUrl}
-        alt="profilePic"
-        width={1280}
-        height={800}
-      />
+      <ProfilePic src={profileUrl} alt="profilePic" width={1280} height={800} />
       <ProfileInfo>
-        <Nickname>{user.nickname}</Nickname>
+        <Nickname>{nickname}</Nickname>
       </ProfileInfo>
     </ProfileContainer>
   );
@@ -30,6 +34,6 @@ const ProfilePic = tw(Image)`
 
 const ProfileInfo = tw.div``;
 
-const Nickname = tw.p`
+const Nickname = tw.span`
   text-2xl
 `;

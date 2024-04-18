@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Link from "next/link";
 import tw, { styled } from "twin.macro";
 import { COMMUNITY_NAV_MENU } from "@/constants/nav";
@@ -30,7 +31,9 @@ const Navigation = ({ category }: NavigationProps) => {
   );
 };
 
-export default Navigation;
+export default memo(Navigation, (prevProps, nextProps) => {
+  return prevProps.category === nextProps.category;
+});
 
 const NavConatiner = tw.nav`
   w-full border-b border-neutral-700

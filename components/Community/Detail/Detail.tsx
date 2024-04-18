@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
@@ -49,14 +49,13 @@ const Detail = () => {
   const { setLoadingFalse, setLoadingTrue } = useLoadingState();
   const { toast } = useToast();
   const router = useRouter();
-  const query = router.query as CommunityQuery;
+  const query = useMemo(() => router.query as CommunityQuery, [router]);
 
   useEffect(() => {
     if (!query.id) return;
     const postId = Number(query.id);
     setCategory(query.category);
     updatePostDetail(postId);
-    updateComments(1);
     updateLikes(postId);
   }, [query]);
 
@@ -120,7 +119,7 @@ const Detail = () => {
   };
 
   const handleListButtonClick = () => {
-    category ? router.push(`${category}`) : router.push("/community");
+    router.push(`/community?category=${category}`);
   };
 
   const handleCommentSubmit: HandleCommentSubmit = async (

@@ -3,13 +3,13 @@ const initMSW = async () => {
     (async () => {
       const { server } = await import("../mocks/server");
 
-      server.listen();
+      server.listen({ onUnhandledRequest: "bypass" });
     })();
   } else {
     (async () => {
       const { worker } = await import("../mocks/browser");
 
-      worker.start();
+      worker.start({ onUnhandledRequest: "bypass" });
     })();
   }
 };

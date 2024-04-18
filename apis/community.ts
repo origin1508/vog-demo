@@ -59,16 +59,6 @@ const getPostRequest = async (postId: number) => {
   return res.data;
 };
 
-const updatePostRequest = async (postId: number, data: PostData) => {
-  const { title, content } = data;
-  const res = await customAxios.patch(`/posts/${postId}`, {
-    title,
-    content,
-  });
-
-  return res.data;
-};
-
 const deletePostRequest = async (postId: number) => {
   const res = await customAxios.delete(`/posts/${postId}`);
 
@@ -98,7 +88,6 @@ export {
   editPostRequest,
   getPostsRequest,
   getPostRequest,
-  updatePostRequest,
   deletePostRequest,
   searchPostRequest,
 };

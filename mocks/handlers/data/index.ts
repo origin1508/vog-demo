@@ -1,6 +1,15 @@
+import { StaticImageData } from "next/image";
 import profilePic from "./profile.jpg";
 import { Comment, ContentDetail } from "@/types/community";
 
+interface User {
+  oauthId: string;
+  id: number;
+  nickname: string;
+  sex: "남" | "여";
+  jwtAccessToken: string;
+  profileUrl: StaticImageData | string;
+}
 interface Post extends Omit<ContentDetail, "user"> {
   likes: number[];
   writerId: number;
@@ -17,7 +26,7 @@ interface Comments {
   [key: string]: Comment[];
 }
 
-export const users = [
+export const users: User[] = [
   {
     oauthId: "test-oauth",
     id: 0,

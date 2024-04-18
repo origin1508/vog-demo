@@ -61,7 +61,7 @@ const Edit = () => {
   }, []);
 
   const handlePostSumbit = async () => {
-    if (!userId) return;
+    if (userId === null) return;
 
     const res = editMode
       ? await editPostRequest(Number(query.id), post.title, post.content)

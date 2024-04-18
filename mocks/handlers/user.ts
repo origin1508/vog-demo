@@ -6,8 +6,8 @@ interface UserParams extends PathParams {
 }
 
 export const handler = [
-  http.get("/users/:userId", ({ params }) => {
-    const { userId } = params as UserParams;
+  http.get<UserParams>("/users/:userId", ({ params }) => {
+    const { userId } = params;
     const user = users.filter((it) => it.id === parseInt(userId));
     return HttpResponse.json({ sucess: true, result: { ...user } });
   }),

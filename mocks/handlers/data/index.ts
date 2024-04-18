@@ -1,4 +1,21 @@
 import profilePic from "./profile.jpg";
+import { Comment, ContentDetail } from "@/types/community";
+
+interface Post extends Omit<ContentDetail, "user"> {
+  likes: number[];
+  writerId: number;
+  postCategory: "free" | "humor" | "championship";
+}
+
+interface Posts {
+  free: Post[];
+  humor: Post[];
+  championship: Post[];
+}
+
+interface Comments {
+  [key: string]: Comment[];
+}
 
 export const users = [
   {
@@ -35,7 +52,7 @@ export const users = [
   },
 ];
 
-export const posts = {
+export const posts: Posts = {
   free: [
     {
       id: 0,
@@ -44,11 +61,14 @@ export const posts = {
       content: "",
       view: 0,
       likeCount: 0,
-      postCategory: "",
-      createAt: "",
-      updatedAt: "",
+      likes: [],
+      postCategory: "free",
+      createdAt: "2024-04-18T11:03:43.315Z",
+      updatedAt: "2024-04-18T11:03:43.315Z",
     },
   ],
   humor: [],
   championship: [],
 };
+
+export const comments: Comments = {};

@@ -21,6 +21,8 @@ const Pagination = ({ count, curPage, setCurPage }: PaginationProps) => {
     curPage,
     setCurPage,
   });
+  if (count === 0) return null;
+
   return (
     <PaginationContainer>
       <PrevPage onClick={handlePrevPageClick}>{getIcons("left", 20)}</PrevPage>

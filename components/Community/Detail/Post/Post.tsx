@@ -9,12 +9,8 @@ import timeDifference from "@/utils/timeDifference";
 const Post = ({
   userId,
   content,
-  comments,
   likes,
   handleDeletePostClick,
-  handleCommentSubmit,
-  handleDeleteCommentClick,
-  handleEditCommentSubmit,
   handleLikeButtonClick,
   handleUserProfileOpen,
 }: PostProps) => {
@@ -84,14 +80,7 @@ const Post = ({
           </Button>
         </PostLike>
       </PostTextContainer>
-      <Comments
-        userId={userId}
-        comments={comments}
-        handleCommentSubmit={handleCommentSubmit}
-        handleDeleteCommentClick={handleDeleteCommentClick}
-        handleEditCommentSubmit={handleEditCommentSubmit}
-        handleUserProfileOpen={handleUserProfileOpen}
-      />
+      <Comments userId={userId} handleUserProfileOpen={handleUserProfileOpen} />
     </PostContainer>
   );
 };

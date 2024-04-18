@@ -1,16 +1,21 @@
 import tw from "twin.macro";
+import useComments from "@/hooks/useComments";
 import Comment from "./Comment";
 import CommentEdit from "./CommentEdit";
 import { CommentsProps } from "@/types/community";
+import Pagination from "@/components/Pagination";
 
-const Comments = ({
-  userId,
-  comments,
-  handleCommentSubmit,
-  handleDeleteCommentClick,
-  handleEditCommentSubmit,
-  handleUserProfileOpen,
-}: CommentsProps) => {
+const Comments = ({ userId, handleUserProfileOpen }: CommentsProps) => {
+  const {
+    comments,
+    curPage,
+    totalCount,
+    setCurPage,
+    handleCommentSubmit,
+    handleDeleteCommentClick,
+    handleEditCommentSubmit,
+  } = useComments();
+
   return (
     <CommentsContainer>
       <CommentsTitle>댓글</CommentsTitle>
@@ -32,6 +37,11 @@ const Comments = ({
           />
         );
       })}
+      <Pagination
+        count={totalCount}
+        curPage={curPage}
+        setCurPage={setCurPage}
+      />
     </CommentsContainer>
   );
 };

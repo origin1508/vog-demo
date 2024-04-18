@@ -3,24 +3,13 @@ import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useUserProfileState from "@/hooks/useUserProfileState";
-import useLoadingState from "@/hooks/useLoadingState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
 import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
-import Pagination from "@/components/Pagination/Pagination";
 import Post from "./Post";
 import { getPostRequest, deletePostRequest } from "@/apis/community";
-import {
-  getCommentsRequest,
-  createCommentRequest,
-  deleteCommentRequest,
-  editCommentRequest,
-  createReplyRequest,
-  deleteReplyRequest,
-  editReplyRequest,
-} from "@/apis/comment";
 import {
   getLikeListRequest,
   addLikePostRequest,
@@ -28,25 +17,14 @@ import {
 } from "@/apis/like";
 import { getTitle } from "@/utils/getTitle";
 import { getIcons } from "@/components/icons";
-import {
-  CommunityQuery,
-  ContentDetail,
-  Comment,
-  HandleDeleteCommentClick,
-  HandleCommentSubmit,
-  HandleEditCommentSubmit,
-} from "@/types/community";
+import { CommunityQuery, ContentDetail } from "@/types/community";
 
 const Detail = () => {
-  const [curPage, setCurPage] = useState(1);
   const [content, setContent] = useState<ContentDetail>();
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
   const [category, setCategory] = useState("");
   const [likes, setLikes] = useState<Number[]>([]);
   const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
-  const { setLoadingFalse, setLoadingTrue } = useLoadingState();
   const { toast } = useToast();
   const router = useRouter();
   const query = useMemo(() => router.query as CommunityQuery, [router]);
@@ -58,30 +36,6 @@ const Detail = () => {
     updatePostDetail(postId);
     updateLikes(postId);
   }, [query]);
-
-  useEffect(() => {
-    updateComments(curPage);
-  }, [curPage]);
-
-  const updateComments = async (page: number) => {
-    if (!query.id) return;
-
-    const postId = Number(query.id);
-    setLoadingTrue();
-    try {
-      const res = await getCommentsRequest(postId, page);
-      if (res.success) {
-        setComments(res.result.result);
-        setTotalCount(res.result.totalCount);
-      } else {
-        toast.alert(res.error);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
-    setLoadingFalse();
-  };
 
   const updateLikes = async (postId: number) => {
     const res = await getLikeListRequest(postId);
@@ -122,63 +76,6 @@ const Detail = () => {
     router.push(`/community?category=${category}`);
   };
 
-  const handleCommentSubmit: HandleCommentSubmit = async (
-    content,
-    commentId
-  ) => {
-    if (!userId) return;
-    if (!query.id) return;
-    if (!content) {
-      toast.alert("댓글을 입력해주세요.");
-      return;
-    }
-
-    const postId = Number(query.id);
-    const res = commentId
-      ? await createReplyRequest(userId, commentId, content)
-      : await createCommentRequest(userId, postId, content);
-    if (res.success) {
-      updateComments(curPage);
-    }
-  };
-
-  const handleDeleteCommentClick: HandleDeleteCommentClick = async (
-    isReply,
-    commentId
-  ) => {
-    const res = isReply
-      ? await deleteReplyRequest(commentId)
-      : await deleteCommentRequest(commentId);
-    if (res.success) {
-      updateComments(curPage);
-    } else {
-      toast.alert(res.error);
-    }
-  };
-
-  const handleEditCommentSubmit: HandleEditCommentSubmit = async (
-    isReply,
-    content,
-    setIsEditing,
-    commentId
-  ) => {
-    if (!commentId) return;
-    if (!content) {
-      toast.alert("댓글을 입력해주세요.");
-      return;
-    }
-
-    const res = isReply
-      ? await editReplyRequest(commentId, content)
-      : await editCommentRequest(commentId, content);
-    if (res.success) {
-      updateComments(curPage);
-      if (setIsEditing) setIsEditing(false);
-    } else {
-      toast.alert(res.error);
-    }
-  };
-
   const handleLikeButtonClick = async () => {
     if (!userId) return;
     const postId = Number(query.id);
@@ -217,21 +114,12 @@ const Detail = () => {
           <Post
             userId={userId}
             content={content}
-            comments={comments}
             likes={likes}
             handleDeletePostClick={handleDeletePostClick}
-            handleCommentSubmit={handleCommentSubmit}
-            handleDeleteCommentClick={handleDeleteCommentClick}
-            handleEditCommentSubmit={handleEditCommentSubmit}
             handleLikeButtonClick={handleLikeButtonClick}
             handleUserProfileOpen={handleUserProfileOpen}
           />
         </DetailContainer>
-        <Pagination
-          count={totalCount}
-          curPage={curPage}
-          setCurPage={setCurPage}
-        />
       </DetailWrapper>
     </MainLayout>
   );

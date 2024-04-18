@@ -76,22 +76,14 @@ export interface CommunityProps {
 export interface PostProps {
   userId: number | null;
   content?: ContentDetail;
-  comments: Comment[];
   likes: Number[];
   handleDeletePostClick: (postId: number) => Promise<void>;
-  handleCommentSubmit: HandleCommentSubmit;
-  handleDeleteCommentClick: HandleDeleteCommentClick;
-  handleEditCommentSubmit: HandleEditCommentSubmit;
   handleLikeButtonClick: () => void;
   handleUserProfileOpen: HandleUserProfileOpen;
 }
 
 export interface CommentsProps {
   userId: number | null;
-  comments: Comment[];
-  handleCommentSubmit: HandleCommentSubmit;
-  handleDeleteCommentClick: HandleDeleteCommentClick;
-  handleEditCommentSubmit: HandleEditCommentSubmit;
   handleUserProfileOpen: HandleUserProfileOpen;
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
@@ -24,19 +24,23 @@ const Community = ({ data }: CommunityProps) => {
   const router = useRouter();
   const { toast } = useToast();
   const { setLoadingFalse, setLoadingTrue } = useLoadingState();
-  const query = router.query as CommunityQuery;
-  const category = query.category;
-  const title = getTitle(category || "");
+  const query = useMemo(() => router.query as CommunityQuery, [router]);
+  const category = useMemo(() => query.category, [router]);
+  const title = useMemo(() => getTitle(query.category || ""), [router]);
 
   useEffect(() => {
     (async () => {
       setLoadingTrue();
-      const res = await getPostsRequest(category, 1);
-      setContents(res.result.result);
-      setTotalCount(res.result.totalCount);
+      try {
+        const res = await getPostsRequest(category, 1);
+        setContents(res.result.result);
+        setTotalCount(res.result.totalCount);
+      } catch (error) {
+        console.log(error);
+      }
       setLoadingFalse();
     })();
-  }, [category]);
+  }, [query]);
 
   useEffect(() => {
     const searchType = query.type;

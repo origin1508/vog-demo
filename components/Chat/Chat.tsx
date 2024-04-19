@@ -24,8 +24,9 @@ import { ChatProps, ChatEditValue, ChatQuery } from "@/types/chat";
 import { getAccessToken } from "@/utils/tokenManager";
 import { getIcons } from "../icons";
 import { CHAT_SEARCH_OPTION } from "@/constants/search";
+import { NextPageWithLayout } from "@/pages/_app";
 
-const Chat = ({ data }: ChatProps) => {
+const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
   const router = useRouter();
   const { result } = data;
   const [roomList, setRoomList] = useState(result.result);
@@ -70,9 +71,13 @@ const Chat = ({ data }: ChatProps) => {
 
   const updateChatRooms = async (curPage: number) => {
     setLoadingTrue();
-    const res = await getChatRoomsRequest(curPage);
-    setRoomList(res.result.result);
-    setTotalCount(res.result.totalCount);
+    try {
+      const res = await getChatRoomsRequest(curPage);
+      setRoomList(res.result.result);
+      setTotalCount(res.result.totalCount);
+    } catch (error) {
+      console.log(error);
+    }
     setLoadingFalse();
   };
 
@@ -120,7 +125,7 @@ const Chat = ({ data }: ChatProps) => {
   };
 
   return (
-    <MainLayout>
+    <>
       <ChatWrapper>
         <Header title="채팅" />
         <ChatContainer>
@@ -133,7 +138,7 @@ const Chat = ({ data }: ChatProps) => {
                 <RefreshIcon>{getIcons("reload", 30)}</RefreshIcon>
               </RefreshButton>
             </ChatButtonContainer>
-            <Search options={CHAT_SEARCH_OPTION} />
+            {CHAT_SEARCH_OPTION && <Search options={CHAT_SEARCH_OPTION} />}
           </SearchContainer>
           <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
         </ChatContainer>
@@ -150,8 +155,12 @@ const Chat = ({ data }: ChatProps) => {
         handleModalClose={handleModalClose}
         handleChatRoomCreate={handleChatRoomCreate}
       />
-    </MainLayout>
+    </>
   );
+};
+
+Chat.getLayout = function getLayout(page) {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export default Chat;
@@ -160,7 +169,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const req = context.req;
   const accessToken = getAccessToken(req);
   const res = await getChatRoomsRequest(1, accessToken);
-
   if (res.success) {
     return {
       props: {
@@ -179,7 +187,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const ChatWrapper = tw.article`
-  w-full h-full p-4 ml-64
+  w-full h-full p-4
 `;
 
 const ChatContainer = tw.div`

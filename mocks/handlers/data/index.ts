@@ -1,5 +1,6 @@
 import { Comment, ContentDetail } from "@/types/community";
 import { Friend } from "@/types/friend";
+import { ChatRoom } from "@/types/chat";
 
 interface User {
   oauthId: string;
@@ -101,6 +102,8 @@ export const likes: Likes = { "0": [] };
 export const comments: Comments = { "0": [] };
 
 export const friends: Friends = { "0": [] };
+
+export const rooms: ChatRoom[] = [];
 
 export const addInformation = (posts: Post[]) => {
   return posts.map((it) => {

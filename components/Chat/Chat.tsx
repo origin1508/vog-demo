@@ -82,7 +82,7 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
   };
 
   const handleChatRoomCreate = async (data: ChatEditValue) => {
-    if (!userId) {
+    if (userId === null) {
       router.push("/login");
       return;
     }
@@ -106,7 +106,7 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
   };
 
   const handleRoomClick = async (roomId: string) => {
-    if (!userId) {
+    if (userId === null) {
       router.push("/login");
       return;
     }
@@ -140,7 +140,11 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
             </ChatButtonContainer>
             {CHAT_SEARCH_OPTION && <Search options={CHAT_SEARCH_OPTION} />}
           </SearchContainer>
-          <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
+          {roomList.length !== 0 ? (
+            <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
+          ) : (
+            <div>생성된 방이 없습니다.</div>
+          )}
         </ChatContainer>
         <PaginationContainer>
           <Pagination

@@ -4,6 +4,7 @@ import { handler as communityHandler } from "./community";
 import { handler as likeHandler } from "./like";
 import { handler as commentHandler } from "./comments";
 import { handler as friendHandler } from "./friend";
+import { handler as chatHandler } from "./chat";
 
 export const handlers = [
   ...authHandler,
@@ -12,4 +13,5 @@ export const handlers = [
   ...likeHandler,
   ...commentHandler,
   ...friendHandler,
+  ...chatHandler,
 ];

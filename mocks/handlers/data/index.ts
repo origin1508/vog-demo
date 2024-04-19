@@ -14,6 +14,7 @@ interface Post extends Omit<ContentDetail, "user"> {
   likes: number[];
   writerId: number;
   postCategory: "free" | "humor" | "championship";
+  user: User;
 }
 
 interface Posts {
@@ -24,6 +25,10 @@ interface Posts {
 
 interface Comments {
   [key: string]: Comment[];
+}
+
+interface Likes {
+  [key: string]: number[];
 }
 
 export const users: User[] = [
@@ -66,18 +71,36 @@ export const posts: Posts = {
     {
       id: 0,
       writerId: 0,
-      title: "",
-      content: "",
+      title: "테스트",
+      content: "테스트 중",
       view: 0,
       likeCount: 0,
       likes: [],
       postCategory: "free",
       createdAt: "2024-04-18T11:03:43.315Z",
       updatedAt: "2024-04-18T11:03:43.315Z",
+      user: {
+        oauthId: "test-oauth",
+        id: 0,
+        nickname: "테스트",
+        sex: "남",
+        jwtAccessToken: "test-access-token",
+        profileUrl: profilePic,
+      },
     },
   ],
   humor: [],
   championship: [],
 };
 
-export const comments: Comments = {};
+export const likes: Likes = { "0": [] };
+
+export const comments: Comments = { "0": [] };
+
+export const addInformation = (posts: Post[]) => {
+  return posts.map((it) => {
+    const commentCount = comments[it.writerId].length;
+    const likeCount = likes[it.id].length;
+    return { ...it, likeCount: likeCount, commentCount: commentCount };
+  });
+};

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useToast from "@/hooks/useToast";
@@ -10,11 +10,25 @@ interface SearchProps {
 
 const Search = ({ options }: SearchProps) => {
   const router = useRouter();
+  const [searchOption, setSearchOption] = useState<
+    { value: string; text: string }[]
+  >([]);
   const [search, setSearch] = useState({
     type: options[0].value,
     keyword: "",
   });
   const { toast } = useToast();
+
+  useEffect(() => {
+    setSearchOption(options);
+  }, [options]);
+
+  useEffect(() => {
+    setSearch({
+      type: options[0].value,
+      keyword: "",
+    });
+  }, [router]);
 
   const handleSearchClick = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,7 +55,7 @@ const Search = ({ options }: SearchProps) => {
           })
         }
       >
-        {options.map((option) => {
+        {searchOption.map((option) => {
           return (
             <SearchOption key={option.value} value={option.value}>
               {option.text}
@@ -50,6 +64,7 @@ const Search = ({ options }: SearchProps) => {
         })}
       </SearchCategory>
       <SearchInput
+        value={search.keyword}
         onChange={(e) =>
           setSearch((prev) => {
             return { ...prev, keyword: e.target.value.trim() };

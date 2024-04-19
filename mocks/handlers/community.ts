@@ -1,5 +1,5 @@
 import { http, HttpResponse, PathParams } from "msw";
-import { users, posts } from "./data";
+import { users, posts, addInformation } from "./data";
 
 interface CreatePostRequest {
   writerId: number;
@@ -20,15 +20,11 @@ export const handler = [
     const url = new URL(request.url);
     const board = url.searchParams.get("board");
     if (board === "free" || board === "humor" || board === "championship") {
-      const result = posts[board].map((it) => {
-        const writerId = it.writerId;
-        const writer = users.find((user) => user.id === writerId);
-        return { ...it, user: { id: writer?.id, nickname: writer?.nickname } };
-      });
+      const result = addInformation(posts[board]);
 
       return HttpResponse.json({
         success: true,
-        result: { result: [...result] },
+        result: { result: [...result], totalCount: result.length },
       });
     }
 
@@ -39,15 +35,11 @@ export const handler = [
     const url = new URL(request.url);
     const board = url.searchParams.get("board");
     if (board === "free" || board === "humor" || board === "championship") {
-      const result = posts[board].map((it) => {
-        const writerId = it.writerId;
-        const writer = users.find((user) => user.id === writerId);
-        return { ...it, user: { id: writer?.id, nickname: writer?.nickname } };
-      });
+      const result = addInformation(posts[board]);
 
       return HttpResponse.json({
         success: true,
-        result: { result: [...result] },
+        result: { result: [...result], totalCount: result.length },
       });
     }
 
@@ -61,6 +53,7 @@ export const handler = [
     let category: "free" | "humor" | "championship";
     if (!postCategory) category = "free";
     else category = postCategory;
+    const user = users[writerId];
     posts[category].unshift({
       id: id,
       writerId: writerId,
@@ -70,6 +63,7 @@ export const handler = [
       likeCount: 0,
       likes: [],
       postCategory: category,
+      user: user,
       createdAt: createdAt,
       updatedAt: createdAt,
     });
@@ -90,7 +84,7 @@ export const handler = [
       const category = categories.find((k) =>
         posts[k].find((it) => it.id === parseInt(postId))
       );
-      if (!category) return HttpResponse.json({ status: 404 });
+      if (!category) return HttpResponse.json({}, { status: 404 });
 
       posts[category] = posts[category].map((it) => {
         if (it.id === parseInt(postId)) {
@@ -115,6 +109,39 @@ export const handler = [
     }
   ),
 
+  http.get("/posts/search", ({ request }) => {
+    const url = new URL(request.url);
+    const board = url.searchParams.get("board");
+    const searchType = url.searchParams.get("searchType");
+    const keyword = url.searchParams.get("keyword");
+    if (
+      (board === "free" || board === "humor" || board === "championship") &&
+      typeof keyword === "string"
+    ) {
+      const reg = new RegExp(`${keyword}`, "g");
+      let searchedResult;
+      if (searchType === "title") {
+        searchedResult = addInformation(
+          posts[board].filter((it) => it.title.match(reg))
+        );
+      } else if (searchType === "nickname") {
+        searchedResult = addInformation(
+          posts[board].filter((it) => it.user.nickname.match(reg))
+        );
+      }
+      searchedResult = !searchedResult ? [] : searchedResult;
+
+      return HttpResponse.json({
+        success: true,
+        result: {
+          searchedResult: searchedResult,
+          totalCount: [...searchedResult].length,
+        },
+      });
+    }
+    return HttpResponse.json({}, { status: 404 });
+  }),
+
   http.get<PostParams>("/posts/:postId", ({ params }) => {
     const { postId } = params;
     const result = Object.values(posts)
@@ -135,7 +162,7 @@ export const handler = [
     const category = categories.find((k) =>
       posts[k].find((it) => it.id === parseInt(postId))
     );
-    if (!category) return HttpResponse.json({ status: 404 });
+    if (!category) return HttpResponse.json({}, { status: 404 });
 
     posts[category] = posts[category].filter(
       (it) => it.id !== parseInt(postId)

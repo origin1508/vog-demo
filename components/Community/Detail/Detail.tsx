@@ -18,8 +18,9 @@ import {
 import { getTitle } from "@/utils/getTitle";
 import { getIcons } from "@/components/icons";
 import { CommunityQuery, ContentDetail } from "@/types/community";
+import { NextPageWithLayout } from "@/pages/_app";
 
-const Detail = () => {
+const Detail: NextPageWithLayout = () => {
   const [content, setContent] = useState<ContentDetail>();
   const [category, setCategory] = useState("");
   const [likes, setLikes] = useState<Number[]>([]);
@@ -98,37 +99,39 @@ const Detail = () => {
   };
 
   return (
-    <MainLayout>
-      <DetailWrapper>
-        <Navigation category={category} />
-        <DetailContainer>
-          <Header title={getTitle(query.category)}>
-            <Button
-              width={5}
-              bgColor="transparent"
-              onClick={handleListButtonClick}
-            >
-              <ListButton>{getIcons("list", 24)}목록</ListButton>
-            </Button>
-          </Header>
-          <Post
-            userId={userId}
-            content={content}
-            likes={likes}
-            handleDeletePostClick={handleDeletePostClick}
-            handleLikeButtonClick={handleLikeButtonClick}
-            handleUserProfileOpen={handleUserProfileOpen}
-          />
-        </DetailContainer>
-      </DetailWrapper>
-    </MainLayout>
+    <DetailWrapper>
+      <Navigation category={category} />
+      <DetailContainer>
+        <Header title={getTitle(query.category)}>
+          <Button
+            width={5}
+            bgColor="transparent"
+            onClick={handleListButtonClick}
+          >
+            <ListButton>{getIcons("list", 24)}목록</ListButton>
+          </Button>
+        </Header>
+        <Post
+          userId={userId}
+          content={content}
+          likes={likes}
+          handleDeletePostClick={handleDeletePostClick}
+          handleLikeButtonClick={handleLikeButtonClick}
+          handleUserProfileOpen={handleUserProfileOpen}
+        />
+      </DetailContainer>
+    </DetailWrapper>
   );
+};
+
+Detail.getLayout = function getLayout(page) {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export default Detail;
 
 const DetailWrapper = tw.article`
-  w-full ml-64 p-4
+  w-full p-4
 `;
 
 const DetailContainer = tw.section`

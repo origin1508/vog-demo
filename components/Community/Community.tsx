@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useToast from "@/hooks/useToast";
 import useLoadingState from "@/hooks/useLoadingState";
-import MainLayout from "../layout/MainLayout";
 import Header from "../common/Header";
 import Search from "../common/Search";
 import Navigation from "./Navigation";
@@ -16,8 +15,12 @@ import { getTitle } from "@/utils/getTitle";
 import { CommunityProps, CommunityQuery } from "@/types/community";
 import { getAccessToken } from "@/utils/tokenManager";
 import { COMMUNITY_SEARCH_OPTION } from "@/constants/search";
+import { NextPageWithLayout } from "@/pages/_app";
+import MainLayout from "../layout/MainLayout";
 
-const Community = ({ data }: CommunityProps) => {
+const Community: NextPageWithLayout<CommunityProps> = ({
+  data,
+}: CommunityProps) => {
   const [curPage, setCurPage] = useState(1);
   const [contents, setContents] = useState(data.result.result);
   const [totalCount, setTotalCount] = useState(data.result.totalCount);
@@ -25,8 +28,10 @@ const Community = ({ data }: CommunityProps) => {
   const { toast } = useToast();
   const { setLoadingFalse, setLoadingTrue } = useLoadingState();
   const query = useMemo(() => router.query as CommunityQuery, [router]);
-  const category = useMemo(() => query.category, [router]);
-  const title = useMemo(() => getTitle(query.category || ""), [router]);
+  const category = useMemo(() => query.category, [query]);
+  const title = useMemo(() => getTitle(query.category || ""), [query]);
+  const searchType = useMemo(() => query.type, [query]);
+  const keyword = useMemo(() => query.keyword, [query]);
 
   useEffect(() => {
     (async () => {
@@ -43,12 +48,9 @@ const Community = ({ data }: CommunityProps) => {
   }, [query]);
 
   useEffect(() => {
-    const searchType = query.type;
-    const keyword = query.keyword;
     if (searchType && keyword) {
       (async () => {
         setLoadingTrue();
-        setCurPage(1);
         const res = await searchPostRequest(
           category,
           searchType,
@@ -61,6 +63,7 @@ const Community = ({ data }: CommunityProps) => {
           } else {
             setContents(res.result.searchedResult);
             setTotalCount(res.result.totalCount);
+            setCurPage(1);
           }
         } else {
           toast.alert(res.error);
@@ -68,7 +71,7 @@ const Community = ({ data }: CommunityProps) => {
         setLoadingFalse();
       })();
     }
-  }, [query, curPage]);
+  }, [searchType, keyword, curPage]);
 
   const handleEditButtonClick = () => {
     router.push({
@@ -87,36 +90,35 @@ const Community = ({ data }: CommunityProps) => {
   };
 
   return (
-    <MainLayout>
-      <CommunityWrapper>
-        <Navigation category={category} />
-        <CommunityContainer>
-          <Header title={title ? title : ""}>
-            <Search options={COMMUNITY_SEARCH_OPTION} />
-          </Header>
-          <Contents
-            contents={contents}
-            handleContentClick={handleContentClick}
-          />
-        </CommunityContainer>
-        <CommunityButtonContainer>
-          <Pagination
-            curPage={curPage}
-            count={totalCount}
-            setCurPage={setCurPage}
-          />
-          <Button
-            width={6}
-            bgColor="primary"
-            position={{ type: "absolute", top: "0", right: "8rem" }}
-            onClick={handleEditButtonClick}
-          >
-            글쓰기
-          </Button>
-        </CommunityButtonContainer>
-      </CommunityWrapper>
-    </MainLayout>
+    <CommunityWrapper>
+      <Navigation category={category} />
+      <CommunityContainer>
+        <Header title={title ? title : ""}>
+          <Search options={COMMUNITY_SEARCH_OPTION} />
+        </Header>
+        <Contents contents={contents} handleContentClick={handleContentClick} />
+      </CommunityContainer>
+      <CommunityButtonContainer>
+        <Pagination
+          curPage={curPage}
+          count={totalCount}
+          setCurPage={setCurPage}
+        />
+        <Button
+          width={6}
+          bgColor="primary"
+          position={{ type: "absolute", top: "0", right: "8rem" }}
+          onClick={handleEditButtonClick}
+        >
+          글쓰기
+        </Button>
+      </CommunityButtonContainer>
+    </CommunityWrapper>
   );
+};
+
+Community.getLayout = function getLayout(page) {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export default Community;
@@ -146,7 +148,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const CommunityWrapper = tw.article`
-  w-full ml-64 p-4
+  w-full p-4
 `;
 
 const CommunityContainer = tw.section`

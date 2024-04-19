@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type ReactElement } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
@@ -12,6 +12,7 @@ import {
   editPostRequest,
 } from "@/apis/community";
 import { CommunityQuery } from "@/types/community";
+import { NextPageWithLayout } from "@/pages/_app";
 import "react-quill/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill"), {
@@ -24,7 +25,7 @@ const CATEGORY = [
   { value: "championship", text: "대회소식" },
 ];
 
-const Edit = () => {
+const Edit: NextPageWithLayout = () => {
   const router = useRouter();
   const { toast } = useToast();
   const query = router.query as CommunityQuery;
@@ -86,80 +87,82 @@ const Edit = () => {
   };
 
   return (
-    <MainLayout>
-      <EditWrapper>
-        <EditContainer>
-          <EditCategory
-            defaultValue={router.query.category}
-            disabled={editMode ? true : false}
-            onChange={(e) =>
+    <EditWrapper>
+      <EditContainer>
+        <EditCategory
+          defaultValue={router.query.category}
+          disabled={editMode ? true : false}
+          onChange={(e) =>
+            setPost((prev) => {
+              return { ...prev, category: e.target.value };
+            })
+          }
+        >
+          {CATEGORY.map((item) => {
+            return (
+              <option key={item.value} value={item.value}>
+                {item.text}
+              </option>
+            );
+          })}
+        </EditCategory>
+        <EditTitle
+          width={32}
+          placeholder="제목을 입력하세요"
+          value={post.title}
+          onChange={(e) => {
+            return setPost((prev) => {
+              return { ...prev, title: e.target.value };
+            });
+          }}
+        ></EditTitle>
+        <Editor>
+          <ReactQuill
+            theme="snow"
+            value={post.content}
+            onChange={(value) => {
               setPost((prev) => {
-                return { ...prev, category: e.target.value };
-              })
-            }
-          >
-            {CATEGORY.map((item) => {
-              return (
-                <option key={item.value} value={item.value}>
-                  {item.text}
-                </option>
-              );
-            })}
-          </EditCategory>
-          <EditTitle
-            width={32}
-            placeholder="제목을 입력하세요"
-            value={post.title}
-            onChange={(e) => {
-              return setPost((prev) => {
-                return { ...prev, title: e.target.value };
+                return { ...prev, content: value };
               });
             }}
-          ></EditTitle>
-          <Editor>
-            <ReactQuill
-              theme="snow"
-              value={post.content}
-              onChange={(value) => {
-                setPost((prev) => {
-                  return { ...prev, content: value };
-                });
-              }}
-            />
-          </Editor>
-          <EditButtonContainer>
-            <Button
-              type="button"
-              width={8}
-              bgColor="primary"
-              onClick={handlePostSumbit}
-            >
-              글쓰기
-            </Button>
-            <Button
-              type="button"
-              width={8}
-              bgColor="secondary"
-              onClick={() => {
-                router.push({
-                  pathname: "/community",
-                  query: { category: query.category },
-                });
-              }}
-            >
-              취소
-            </Button>
-          </EditButtonContainer>
-        </EditContainer>
-      </EditWrapper>
-    </MainLayout>
+          />
+        </Editor>
+        <EditButtonContainer>
+          <Button
+            type="button"
+            width={8}
+            bgColor="primary"
+            onClick={handlePostSumbit}
+          >
+            글쓰기
+          </Button>
+          <Button
+            type="button"
+            width={8}
+            bgColor="secondary"
+            onClick={() => {
+              router.push({
+                pathname: "/community",
+                query: { category: query.category },
+              });
+            }}
+          >
+            취소
+          </Button>
+        </EditButtonContainer>
+      </EditContainer>
+    </EditWrapper>
   );
+};
+
+Edit.getLayout = function getLayout(page: ReactElement) {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export default Edit;
 
 const EditWrapper = tw.section`
-  w-full h-full ml-64
+  w-full h-full
 `;
 
 const EditContainer = tw.div`

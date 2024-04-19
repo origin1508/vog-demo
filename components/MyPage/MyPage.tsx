@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, type ReactElement } from "react";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import useToast from "@/hooks/useToast";
@@ -20,8 +20,9 @@ import {
 import { NicknameEditValue, ProfilePicEditValue } from "@/types/myPage";
 import imageResize from "@/utils/imageResize";
 import { deleteAccessToken } from "@/utils/tokenManager";
+import { NextPageWithLayout } from "@/pages/_app";
 
-const MyPage = () => {
+const MyPage: NextPageWithLayout = () => {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const { toast } = useToast();
@@ -92,7 +93,7 @@ const MyPage = () => {
   };
 
   return (
-    <MainLayout>
+    <>
       <MyPageWrapper>
         <Header title="마이페이지" />
         <MyPageContainer>
@@ -116,14 +117,18 @@ const MyPage = () => {
           onChange={handlePasswordInputChange}
         ></Input>
       </Modal>
-    </MainLayout>
+    </>
   );
+};
+
+MyPage.getLayout = function getLayout(page: ReactElement) {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export default MyPage;
 
 const MyPageWrapper = tw.article`
-  w-full ml-64 py-4 px-4
+  w-full py-4 px-4
 `;
 
 const MyPageContainer = tw.div`

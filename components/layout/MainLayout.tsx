@@ -32,5 +32,5 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 export default MainLayout;
 
 const MainLayoutContainer = tw.div`
-  relative flex w-full h-full max-w-[120rem] m-auto overflow-x-hidden
+  relative flex flex-row w-screen h-full m-auto overflow-x-hidden
 `;

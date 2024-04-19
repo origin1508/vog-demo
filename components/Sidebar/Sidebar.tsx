@@ -86,7 +86,7 @@ const Sidebar = () => {
 export default Sidebar;
 
 const SidebarContainer = tw.nav`
-  fixed flex flex-col w-64 h-full p-4 border-r border-neutral-700 text-xl
+  flex flex-col w-64 h-full p-4 border-r border-neutral-700 text-xl
 `;
 
 const Profile = tw.div`

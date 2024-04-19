@@ -9,7 +9,7 @@ export const handler = [
   http.get<UserParams>("/users/:userId", ({ params }) => {
     const { userId } = params;
     const user = users.filter((it) => it.id === parseInt(userId));
-    return HttpResponse.json({ sucess: true, result: { ...user } });
+    return HttpResponse.json({ success: true, result: { ...user[0] } });
   }),
 
   http.patch("/uploads/users/:userId", async ({ request }) => {

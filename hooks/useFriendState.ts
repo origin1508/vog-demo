@@ -34,8 +34,7 @@ const useFriendState = () => {
     userId: number | null,
     targetId: number | null
   ) => {
-    if (!userId) return;
-    if (!targetId) return;
+    if (userId === null || targetId === null) return;
     const res = await removeFriendRequest(userId, targetId);
 
     if (res.success) {
@@ -49,8 +48,7 @@ const useFriendState = () => {
     userId: number | null,
     targetId: number | null
   ) => {
-    if (!userId) return;
-    if (!targetId) return;
+    if (userId === null || targetId === null) return;
     const res = await addFriendRequest(userId, targetId);
 
     if (res.success) {

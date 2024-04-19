@@ -8,8 +8,9 @@ import Header from "@/components/common/Header";
 import ChatMember from "./ChatMember";
 import ChatMessage from "./ChatMessage";
 import { sendMessageEmit, leaveRoomEmit } from "@/utils/socketClient";
+import { NextPageWithLayout } from "@/pages/_app";
 
-const ChatRoom = () => {
+const ChatRoom: NextPageWithLayout = () => {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const { user, userId } = useUser();
@@ -79,42 +80,44 @@ const ChatRoom = () => {
   };
 
   return (
-    <MainLayout>
-      <ChatRoomContainer>
-        <ChatMember
-          members={chatParticipant}
-          handleChatRoomLeave={handleChatRoomLeave}
-        />
-        <ChatText>
-          <Header title={title} />
-          <ChatLogs>
-            <FlexBox />
-            <ChatLog ref={scrollRef}>
-              <ChatMessage messages={messages} />
-            </ChatLog>
-          </ChatLogs>
-          <ChatTextAreaContainer>
-            <ChatTextArea
-              placeholder="메시지를 입력하세요"
-              onChange={handleTextAreaChange}
-              onKeyDown={handleTextAreaKeyDown}
-              rows={1}
-              ref={textareaRef}
-            ></ChatTextArea>
-            <ChatBntContainer>
-              <ChatSubmitBtn
-                type="button"
-                ref={buttonRef}
-                onClick={handleMessageSend}
-              >
-                SEND
-              </ChatSubmitBtn>
-            </ChatBntContainer>
-          </ChatTextAreaContainer>
-        </ChatText>
-      </ChatRoomContainer>
-    </MainLayout>
+    <ChatRoomContainer>
+      <ChatMember
+        members={chatParticipant}
+        handleChatRoomLeave={handleChatRoomLeave}
+      />
+      <ChatText>
+        <Header title={title} />
+        <ChatLogs>
+          <FlexBox />
+          <ChatLog ref={scrollRef}>
+            <ChatMessage messages={messages} />
+          </ChatLog>
+        </ChatLogs>
+        <ChatTextAreaContainer>
+          <ChatTextArea
+            placeholder="메시지를 입력하세요"
+            onChange={handleTextAreaChange}
+            onKeyDown={handleTextAreaKeyDown}
+            rows={1}
+            ref={textareaRef}
+          ></ChatTextArea>
+          <ChatBntContainer>
+            <ChatSubmitBtn
+              type="button"
+              ref={buttonRef}
+              onClick={handleMessageSend}
+            >
+              SEND
+            </ChatSubmitBtn>
+          </ChatBntContainer>
+        </ChatTextAreaContainer>
+      </ChatText>
+    </ChatRoomContainer>
   );
+};
+
+ChatRoom.getLayout = function getLayout(page) {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export default ChatRoom;

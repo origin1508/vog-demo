@@ -24,7 +24,7 @@ const Contents = ({ contents, handleContentClick }: ContentsProps) => {
             <ContentGame>발로란트</ContentGame>
             <ContentTitle>
               {content.title}
-              <CommentCount>[0]</CommentCount>
+              <CommentCount>{`[${content.commentCount}]`}</CommentCount>
             </ContentTitle>
             <ContentAuthor>{content.user.nickname}</ContentAuthor>
             <ContentHit>

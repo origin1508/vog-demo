@@ -1,5 +1,5 @@
 import { http, HttpResponse, PathParams } from "msw";
-import { users, posts, addInformation } from "./data";
+import { users, posts, likes, addInformation } from "./data";
 
 interface CreatePostRequest {
   writerId: number;
@@ -54,6 +54,7 @@ export const handler = [
     if (!postCategory) category = "free";
     else category = postCategory;
     const user = users[writerId];
+    likes[id] = [];
     posts[category].unshift({
       id: id,
       writerId: writerId,

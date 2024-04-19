@@ -26,6 +26,7 @@ export interface Content {
   writerId: number;
   title: string;
   likeCount: number;
+  commentCount: number;
   gameCategory: string;
   user: {
     id: number;

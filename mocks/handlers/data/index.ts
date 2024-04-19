@@ -1,6 +1,5 @@
-import { StaticImageData } from "next/image";
-import profilePic from "./profile.jpg";
 import { Comment, ContentDetail } from "@/types/community";
+import { Friend } from "@/types/friend";
 
 interface User {
   oauthId: string;
@@ -8,7 +7,7 @@ interface User {
   nickname: string;
   sex: "남" | "여";
   jwtAccessToken: string;
-  profileUrl: StaticImageData | string;
+  profileUrl: string;
 }
 interface Post extends Omit<ContentDetail, "user"> {
   likes: number[];
@@ -31,6 +30,10 @@ interface Likes {
   [key: string]: number[];
 }
 
+interface Friends {
+  [key: string]: Friend[];
+}
+
 export const users: User[] = [
   {
     oauthId: "test-oauth",
@@ -38,7 +41,7 @@ export const users: User[] = [
     nickname: "테스트",
     sex: "남",
     jwtAccessToken: "test-access-token",
-    profileUrl: profilePic,
+    profileUrl: "/_next/static/media/profile.74838f04.jpg",
   },
   {
     oauthId: "test-oauth",
@@ -46,7 +49,7 @@ export const users: User[] = [
     nickname: "테스트1",
     sex: "남",
     jwtAccessToken: "test-access-token",
-    profileUrl: profilePic,
+    profileUrl: "/_next/static/media/profile.74838f04.jpg",
   },
   {
     oauthId: "test-oauth",
@@ -54,7 +57,7 @@ export const users: User[] = [
     nickname: "테스트2",
     sex: "남",
     jwtAccessToken: "test-access-token",
-    profileUrl: profilePic,
+    profileUrl: "/_next/static/media/profile.74838f04.jpg",
   },
   {
     oauthId: "test-oauth",
@@ -62,7 +65,7 @@ export const users: User[] = [
     nickname: "테스트3",
     sex: "남",
     jwtAccessToken: "test-access-token",
-    profileUrl: profilePic,
+    profileUrl: "/_next/static/media/profile.74838f04.jpg",
   },
 ];
 
@@ -85,7 +88,7 @@ export const posts: Posts = {
         nickname: "테스트",
         sex: "남",
         jwtAccessToken: "test-access-token",
-        profileUrl: profilePic,
+        profileUrl: "/_next/static/media/profile.74838f04.jpg",
       },
     },
   ],
@@ -96,6 +99,8 @@ export const posts: Posts = {
 export const likes: Likes = { "0": [] };
 
 export const comments: Comments = { "0": [] };
+
+export const friends: Friends = { "0": [] };
 
 export const addInformation = (posts: Post[]) => {
   return posts.map((it) => {

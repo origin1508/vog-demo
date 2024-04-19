@@ -47,7 +47,7 @@ export const handler = [
       user: {
         id: user.id,
         nickname: user.nickname,
-        profileUrl: typeof user.profileUrl === "string" ? user.profileUrl : "",
+        profileUrl: user.profileUrl,
         sex: user.sex,
       },
     });

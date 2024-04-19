@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Image from "next/image";
 import tw from "twin.macro";
 import Button from "../common/Button";
 
@@ -6,6 +7,7 @@ const Home = () => {
   const router = useRouter();
   return (
     <HomeContainer>
+      <Image src="/image/home.jpg" alt="background image" fill />
       <HomeContent>
         <HomeTitle>Need A Communication?</HomeTitle>
         <HomeText>
@@ -46,7 +48,7 @@ const Home = () => {
 export default Home;
 
 const HomeContainer = tw.article`
-  relative flex justify-center items-center w-full h-full bg-[url("./image/home.jpg")] bg-cover
+  relative flex justify-center items-center w-full h-full
   after:absolute after:inset-0 after:bg-black after:opacity-20
 `;
 

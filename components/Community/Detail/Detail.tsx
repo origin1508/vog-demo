@@ -78,7 +78,7 @@ const Detail: NextPageWithLayout = () => {
   };
 
   const handleLikeButtonClick = async () => {
-    if (!userId) return;
+    if (userId === null) return;
     const postId = Number(query.id);
 
     if (likes.includes(userId)) {

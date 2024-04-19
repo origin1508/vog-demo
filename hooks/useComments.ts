@@ -83,6 +83,7 @@ const useComments = () => {
       : await deleteCommentRequest(commentId);
     if (res.success) {
       updateComments(curPage);
+      toast.success("댓글이 삭제되었습니다.");
     } else {
       toast.alert(res.error);
     }
@@ -105,7 +106,10 @@ const useComments = () => {
       : await editCommentRequest(commentId, content);
     if (res.success) {
       updateComments(curPage);
-      if (setIsEditing) setIsEditing(false);
+      if (setIsEditing) {
+        setIsEditing(false);
+        toast.success("댓글이 수정되었습니다.");
+      }
     } else {
       toast.alert(res.error);
     }

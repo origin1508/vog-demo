@@ -5,18 +5,14 @@ import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
 import useUserProfileState from "@/hooks/useUserProfileState";
 import ChatSocket from "./ChatSocket";
-import {
-  socketClient,
-  enterRoomEmit,
-  leaveRoomEmit,
-} from "@/utils/socketClient";
+import { leaveRoomEmit } from "@/utils/socketClient";
 import useMediaDevice from "@/hooks/useMediaDevice";
 
 const Socket = () => {
   const [isChatRoom, setIsChatRoom] = useState(false);
   const router = useRouter();
   const { chat, setChat, resetChat } = useChatState();
-  const { userId, user } = useUserState();
+  const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
   const {
     peerConnectionsRef,
@@ -46,7 +42,6 @@ const Socket = () => {
   const handleUnload = (e: BeforeUnloadEvent) => {
     if (roomId) {
       e.preventDefault();
-      e.returnValue = "";
       handleChatRoomLeave();
     }
   };
@@ -57,15 +52,8 @@ const Socket = () => {
     }
   };
 
-  const socketConnect = () => {
-    if (!userId) return;
-
-    socketClient.connect();
-    enterRoomEmit(userId, user.nickname, roomId);
-  };
-
   const handleChatRoomLeave = () => {
-    if (!userId) return;
+    if (userId === null) return;
 
     if (peerConnectionsRef.current) {
       Object.values(peerConnectionsRef.current).forEach((peerConnection) =>
@@ -86,7 +74,6 @@ const Socket = () => {
           peerConnectionsRef={peerConnectionsRef}
           localStreamRef={localStreamRef}
           setChat={setChat}
-          socketConnect={socketConnect}
           getLocalStream={getLocalStream}
           getDevices={getDevices}
           handleChatRoomLeave={handleChatRoomLeave}

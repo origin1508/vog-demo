@@ -15,7 +15,6 @@ const ChatSocket = ({
   peerConnectionsRef,
   localStreamRef,
   setChat,
-  socketConnect,
   getLocalStream,
   getDevices,
   handleChatRoomLeave,
@@ -87,7 +86,6 @@ const ChatSocket = ({
   };
 
   useEffect(() => {
-    socketConnect();
     (async () => {
       await getLocalStream();
     })();

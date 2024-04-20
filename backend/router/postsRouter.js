@@ -6,7 +6,9 @@ const Post = require("../models/PostSchema");
 router.get("/", async (req, res) => {
   const { board, page } = req.query;
 
-  const post = await Post.find({ postCategory: board }).populate("user");
+  const post = await Post.find({ postCategory: board })
+    .populate("user")
+    .sort({ createdAt: -1 });
 
   res.status(200).send({
     success: true,

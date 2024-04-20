@@ -6,7 +6,11 @@ const UserSchema = new Schema({
   oauthId: { type: String, required: true, unique: true },
   sex: { type: String, required: true, enum: ["남", "여"] },
   provider: { type: String, required: true },
-  profileUrl: { type: String, required: true, default: "" },
+  profileUrl: {
+    type: String,
+    required: true,
+    default: "/image/blank_profile.png",
+  },
   createdAt: { type: Date, required: true, default: Date.now },
   updatedAt: { type: Date, required: true, default: Date.now },
 });

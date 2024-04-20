@@ -1,16 +1,21 @@
 import Image from "next/image";
 import tw from "twin.macro";
+import useChatState from "@/hooks/useChatState";
 import Header from "@/components/common/Header";
 import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
 import { ChatMemberProps } from "@/types/chat";
 
-const ChatMember = ({ members, handleChatRoomLeave }: ChatMemberProps) => {
+const ChatMember = ({ handleChatRoomLeave }: ChatMemberProps) => {
+  const {
+    chat: { chatParticipant },
+  } = useChatState();
+
   return (
     <ChatMemberContainer>
       <Header title="Member" />
       <ChatMemberList>
-        {members.map((member) => {
+        {chatParticipant.map((member) => {
           return (
             <MemberInfo key={member.userId}>
               <MemberProfilePic

@@ -30,7 +30,6 @@ export interface ChatState {
 }
 
 export interface ChatMemberProps {
-  members: ChatParticipant[];
   handleChatRoomLeave: () => void;
 }
 
@@ -83,7 +82,6 @@ export interface ChatSocketProps {
   }>;
   localStreamRef: MutableRefObject<MediaStream | undefined>;
   setChat: SetterOrUpdater<ChatState>;
-  socketConnect: () => void;
   getLocalStream: (deviceId?: string) => Promise<void>;
   getDevices: () => Promise<MediaDeviceInfo[] | undefined>;
   handleChatRoomLeave: () => void;

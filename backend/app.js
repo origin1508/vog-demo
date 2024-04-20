@@ -10,9 +10,11 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
 const authRouter = require("./router/authRouter");
+const usersRouter = require("./router/usersRouter");
+const postsRouter = require("./router/postsRouter");
 
 mongoose
-  .connect(MONGO_URI)
+  .connect(MONGO_URI, { dbName: "main" })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
@@ -21,6 +23,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/auth", authRouter);
+app.use("/users", usersRouter);
+app.use("/posts", postsRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

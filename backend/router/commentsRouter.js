@@ -7,12 +7,13 @@ router.get("/", async (req, res) => {
   const { postId, page } = req.query;
 
   try {
-    const comments = await Comment.find({ postId: postId }).populate("user");
-    console.log(comments);
+    const comment = await Comment.find({ postId: postId })
+      .populate("user")
+      .populate({ path: "replies", populate: "user" });
 
     res.status(200).send({
       success: true,
-      result: { result: comments, totalCount: comments.length },
+      result: { result: comment, totalCount: comment.length },
     });
   } catch (err) {
     console.log(err);
@@ -23,7 +24,7 @@ router.post("/", async (req, res) => {
   const { writerId, postId, content } = req.body;
 
   try {
-    const comments = await Comment.create({
+    const comment = await Comment.create({
       writerId,
       postId,
       content,

@@ -1,10 +1,9 @@
-const { randomUUID } = require("crypto");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 const UserSchema = new Schema(
   {
-    id: { type: String, default: randomUUID() },
     nickname: { type: String, required: true, unique: true },
     oauthId: { type: String, required: true, unique: true },
     sex: { type: String, required: true, enum: ["남", "여"] },
@@ -16,8 +15,10 @@ const UserSchema = new Schema(
     },
   },
   {
-    timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" },
+    timestamps: true,
   }
 );
+
+UserSchema.plugin(AutoIncrement, { id: "user_seq", inc_field: "id" });
 
 module.exports = mongoose.model("User", UserSchema);

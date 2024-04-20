@@ -8,11 +8,22 @@ router.get("/", async (req, res) => {
 
   const post = await Post.find({ postCategory: board })
     .populate("user")
-    .sort({ createdAt: -1 });
+    .populate("comment")
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const modifiedPost = post.map((it) => {
+    const repliesCount = it.comment.reduce(
+      (acc, cur) => (acc += cur.repliesCount),
+      0
+    );
+    const commentCount = it.comment.length + repliesCount;
+    return { ...it, commentCount: commentCount };
+  });
 
   res.status(200).send({
     success: true,
-    result: { result: post, totalCount: post.length },
+    result: { result: modifiedPost, totalCount: post.length },
   });
 });
 

@@ -13,6 +13,8 @@ const PostSchema = new Schema(
       enum: ["free", "humor", "championship"],
     },
     view: { type: Number, default: 0 },
+    likes: [Number],
+    likeCount: { type: Number, default: 0 },
   },
   {
     toJSON: { virtuals: true },

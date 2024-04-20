@@ -12,6 +12,7 @@ const app = express();
 const authRouter = require("./router/authRouter");
 const usersRouter = require("./router/usersRouter");
 const postsRouter = require("./router/postsRouter");
+const likeRouter = require("./router/likeRouter");
 
 mongoose
   .connect(MONGO_URI, { dbName: "main" })
@@ -25,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/posts", postsRouter);
+app.use("/like", likeRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

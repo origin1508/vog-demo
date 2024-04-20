@@ -1,90 +1,33 @@
-import { useState, useRef, KeyboardEvent, ChangeEvent, useEffect } from "react";
-import { useRouter } from "next/router";
+import { useEffect } from "react";
 import tw from "twin.macro";
-import useChatState from "@/hooks/useChatState";
-import useUser from "@/hooks/useUserState";
+import useChatSocket from "@/hooks/useChatSocket";
 import MainLayout from "@/components/layout/MainLayout";
 import Header from "@/components/common/Header";
 import ChatMember from "./ChatMember";
 import ChatMessage from "./ChatMessage";
-import { sendMessageEmit, leaveRoomEmit } from "@/utils/socketClient";
 import { NextPageWithLayout } from "@/pages/_app";
 
 const ChatRoom: NextPageWithLayout = () => {
-  const router = useRouter();
-  const [message, setMessage] = useState("");
-  const { user, userId } = useUser();
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const {
-    setChat,
-    chat: { chatParticipant, roomId, title, messages },
-    resetChat,
-  } = useChatState();
+    title,
+    messages,
+    buttonRef,
+    textareaRef,
+    scrollRef,
+    socketConnect,
+    handleMessageSend,
+    handleChatRoomLeave,
+    handleTextAreaChange,
+    handleTextAreaKeyDown,
+  } = useChatSocket();
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "end",
-      inline: "nearest",
-    });
-  }, [messages]);
-
-  const handleTextAreaKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (!e.shiftKey && e.key === "Enter") {
-      e.preventDefault();
-      buttonRef.current?.click();
-    }
-    return;
-  };
-
-  const handleTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    e.target.style.height = "auto";
-    const scrollHeight = e.target.scrollHeight;
-    const message = e.target.value.trim();
-    if (message) {
-      setMessage(message);
-    }
-    e.target.style.height = scrollHeight + "px";
-  };
-
-  const handleMessageSend = () => {
-    if (!message) return;
-    setChat((prev) => {
-      return {
-        ...prev,
-        messages: [
-          ...prev.messages,
-          {
-            content: message,
-            roomId: roomId,
-            nickname: user.nickname,
-            isSender: true,
-          },
-        ],
-      };
-    });
-    sendMessageEmit(message, roomId, user.nickname);
-    if (textareaRef.current) {
-      textareaRef.current.value = "";
-    }
-    setMessage("");
-  };
-
-  const handleChatRoomLeave = () => {
-    if (!userId) return;
-    leaveRoomEmit(userId, roomId);
-    resetChat();
-    router.push("/chat");
-  };
+    socketConnect();
+  }, []);
 
   return (
     <ChatRoomContainer>
-      <ChatMember
-        members={chatParticipant}
-        handleChatRoomLeave={handleChatRoomLeave}
-      />
+      <ChatMember handleChatRoomLeave={handleChatRoomLeave} />
       <ChatText>
         <Header title={title} />
         <ChatLogs>
@@ -123,7 +66,7 @@ ChatRoom.getLayout = function getLayout(page) {
 export default ChatRoom;
 
 const ChatRoomContainer = tw.article`
-  flex w-full ml-64 p-4 gap-2
+  flex w-full p-4 gap-2
 `;
 
 const ChatText = tw.div`

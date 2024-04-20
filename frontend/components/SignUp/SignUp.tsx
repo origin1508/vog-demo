@@ -3,21 +3,29 @@ import tw from "twin.macro";
 import useSignUpForm from "@/hooks/useSignUpForm";
 import useUserState from "@/hooks/useUserState";
 import useToast from "@/hooks/useToast";
+import useFriendState from "@/hooks/useFriendState";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import ErrorMessage from "../common/ErrorMessage";
 import { signUpRequest } from "@/apis/user";
 import { SignUpValue } from "@/types/auth";
 import { setAccessToken } from "@/utils/tokenManager";
+import { ParsedUrlQuery } from "querystring";
+
+interface SignUpQuery extends ParsedUrlQuery {
+  oauthId: string;
+  provider: string;
+}
 
 const SignUp = () => {
   const { watchNickname, nicknameError, register, handleSubmit } =
     useSignUpForm();
-  const { user, setUser } = useUserState();
+  const { setUser } = useUserState();
   const { toast } = useToast();
+  const { updateFriendList } = useFriendState();
   const router = useRouter();
-  const oauthId = user.oauthId;
-  const provider = user.provider;
+  const { oauthId, provider } = router.query as SignUpQuery;
+
   const handleSignUp = async ({ nickname, gender }: SignUpValue) => {
     const res = await signUpRequest(oauthId, provider, nickname, gender);
     if (res.success) {
@@ -27,6 +35,7 @@ const SignUp = () => {
       const sex = res.result.sex;
       const accessToken = res.result.jwtAccessToken;
       setAccessToken(accessToken);
+      await updateFriendList(id);
       setUser((prev) => {
         return {
           ...prev,

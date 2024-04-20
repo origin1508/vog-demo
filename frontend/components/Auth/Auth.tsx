@@ -22,22 +22,25 @@ const Auth = () => {
         const provider = query.provider;
         const res = await oauthLoginRequest(code, state, provider);
         if (res.success) {
-          const result = res.result;
-          const oauthId = result.oauthId;
-          const id = result.id;
-          const nickname = result.nickname;
-          const profileUrl = result.profileUrl;
-          const sex = result.sex;
-          const accessToken = result.jwtAccessToken;
+          const {
+            oauthId,
+            id,
+            nickname,
+            profileUrl,
+            sex,
+            jwtAccessToken: accessToken,
+            redirectUrl,
+          } = res.result;
+
+          if (redirectUrl) {
+            return router.replace(
+              `${redirectUrl}?oauthId=${oauthId}&provider=${provider}`
+            );
+          }
+
           setAccessToken(accessToken);
           await updateFriendList(id);
-          setUser((prev) => {
-            return { ...prev, oauthId: oauthId, provider: provider };
-          });
-          if (result.redirectUrl) {
-            const redirectUrl = result.redirectUrl;
-            return router.replace(redirectUrl);
-          }
+
           setUser((prev) => {
             return {
               ...prev,
@@ -45,6 +48,8 @@ const Auth = () => {
               nickname: nickname,
               profileUrl: profileUrl,
               sex: sex,
+              oauthId: oauthId,
+              provider: provider,
             };
           });
           router.replace("/");

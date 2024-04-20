@@ -18,6 +18,19 @@ CommentSchema.virtual("user", {
   justOne: true,
 });
 
+CommentSchema.virtual("replies", {
+  ref: "Reply",
+  localField: "id",
+  foreignField: "commentId",
+});
+
+CommentSchema.virtual("repliesCount", {
+  ref: "Reply",
+  localField: "id",
+  foreignField: "commentId",
+  count: true,
+});
+
 CommentSchema.plugin(AutoIncrement, { id: "comment_seq", inc_field: "id" });
 
 module.exports = mongoose.model("Comment", CommentSchema);

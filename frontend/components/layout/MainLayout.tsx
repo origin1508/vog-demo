@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import dynamic from "next/dynamic";
 import tw from "twin.macro";
+import Socket from "../Socket";
+import Toast from "../Toast";
 
 const DynamicSidebar = dynamic(() => import("../Sidebar"), {
   ssr: false,
@@ -20,12 +22,16 @@ interface MainLayoutProps {
 
 const MainLayout = ({ children }: MainLayoutProps) => {
   return (
-    <MainLayoutContainer>
-      <DynamicSidebar />
-      {children}
-      <DynamicFriend />
-      <DynamicUserProfileModal />
-    </MainLayoutContainer>
+    <>
+      <Toast />
+      <Socket />
+      <MainLayoutContainer>
+        <DynamicSidebar />
+        {children}
+        <DynamicFriend />
+        <DynamicUserProfileModal />
+      </MainLayoutContainer>
+    </>
   );
 };
 

@@ -5,7 +5,6 @@ const { jwtDecode } = require("jwt-decode");
 const jwt = require("../utils/jwt-util");
 
 const User = require("../models/UserSchema");
-const UserSchema = require("../models/UserSchema");
 
 const {
   NAVER_CLIENT_ID,

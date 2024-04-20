@@ -16,6 +16,7 @@ const likeRouter = require("./router/likeRouter");
 const commentsRouter = require("./router/commentsRouter");
 const repliesRouter = require("./router/repliesRouter");
 const friendRouter = require("./router/friendRouter");
+const chatsRouter = require("./router/chatsRouter");
 
 mongoose
   .connect(MONGO_URI, { dbName: "main" })
@@ -33,6 +34,7 @@ app.use("/like", likeRouter);
 app.use("/comments", commentsRouter);
 app.use("/replies", repliesRouter);
 app.use("/friend", friendRouter);
+app.use("/chats", chatsRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

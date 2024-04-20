@@ -42,6 +42,26 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/search", async (req, res) => {
+  const { board, searchType, keyword } = req.query;
+
+  const reg = new RegExp(`${keyword}`, "g");
+
+  try {
+    const post = await Post.find({ postCategory: board, [searchType]: reg });
+
+    res.status(200).send({
+      success: true,
+      result: {
+        searchedResult: post,
+        totalCount: post.length,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 router.get("/:postId", async (req, res) => {
   const { postId } = req.params;
 

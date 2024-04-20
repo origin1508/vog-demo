@@ -8,7 +8,25 @@ const corsOption = {
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const { Server } = require("socket.io");
+const { createServer } = require("node:http");
+const { setupSocket } = require("./controllers/socketController");
+
+mongoose
+  .connect(MONGO_URI, { dbName: "main" })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.log(err));
+
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
+
+app.use(cors(corsOption));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+setupSocket(io);
+
 const authRouter = require("./router/authRouter");
 const usersRouter = require("./router/usersRouter");
 const postsRouter = require("./router/postsRouter");
@@ -17,15 +35,6 @@ const commentsRouter = require("./router/commentsRouter");
 const repliesRouter = require("./router/repliesRouter");
 const friendRouter = require("./router/friendRouter");
 const chatsRouter = require("./router/chatsRouter");
-
-mongoose
-  .connect(MONGO_URI, { dbName: "main" })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.log(err));
-
-app.use(cors(corsOption));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
@@ -40,6 +49,6 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running at: http://localhost:${PORT}`);
 });

@@ -3,10 +3,10 @@ const router = Router();
 const jwt = require("../utils/jwt-util");
 
 const User = require("../models/UserSchema");
+const Friend = require("../models/FriendSchema");
 
 router.post("/register", async (req, res) => {
   const { oauthId, provider, nickname, sex } = req.body;
-
   try {
     const newUser = await User.create({
       oauthId: oauthId,
@@ -14,7 +14,6 @@ router.post("/register", async (req, res) => {
       sex: sex,
       provider: provider,
     });
-
     const user = newUser.toJSON();
 
     const jwtAccessToken = jwt.sign({ id: user._id, nickname: user.nickname });
@@ -39,7 +38,16 @@ router.post("/register", async (req, res) => {
 router.get("/:userId", async (req, res) => {
   const { userId } = req.params;
 
-  const user = await User.findOne({ id: userId }).lean();
+  try {
+    const user = await User.findOne({ id: userId });
+
+    res.status(200).send({
+      success: true,
+      result: user,
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 router.patch("/:userId/nickname", async (req, res) => {

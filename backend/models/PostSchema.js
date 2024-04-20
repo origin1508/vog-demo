@@ -30,6 +30,13 @@ PostSchema.virtual("user", {
   justOne: true,
 });
 
+PostSchema.virtual("comment", {
+  ref: "Comment",
+  localField: "id",
+  foreignField: "postId",
+  options: { populate: { path: "repliesCount" } },
+});
+
 PostSchema.plugin(AutoIncrement, { id: "post_seq", inc_field: "id" });
 
 module.exports = mongoose.model("Post", PostSchema);

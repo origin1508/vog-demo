@@ -23,9 +23,14 @@ router.post("/rooms", async (req, res) => {
   const { title, description, maximumMember } = req.body;
 
   try {
-    const chat = await Chat.create({ title, description, maximumMember });
+    const chat = await Chat.create({
+      title,
+      description,
+      maximumMember,
+      currentMember: 1,
+    });
 
-    console.log(chat);
+    res.status(200).send({ success: true, result: { roomId: chat.roomId } });
   } catch (err) {
     console.log(err);
   }
@@ -44,7 +49,7 @@ router.get("/rooms/:roomId", async (req, res) => {
 
     res.status(200).send({
       success: true,
-      result: { canParticipant: true },
+      result: { title: chat.title, canParticipant: true },
     });
   } catch (err) {
     console.log(err);

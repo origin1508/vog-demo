@@ -19,12 +19,9 @@ function setupSocket(io) {
         roomId: roomId,
       }).populate("user");
 
-      const { title } = await Chat.findOne({ roomId: roomId });
-
       chatNamespace.to(roomId).emit("setChat", {
         roomId,
         chatParticipant,
-        title,
       });
 
       socket.to(roomId).emit("welcome", socket.id);

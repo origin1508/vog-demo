@@ -18,13 +18,13 @@ mongoose
   .catch((err) => console.log(err));
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server);
 
 app.use(cors(corsOption));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+const server = createServer(app);
+const io = new Server(server);
 setupSocket(io);
 
 const authRouter = require("./router/authRouter");

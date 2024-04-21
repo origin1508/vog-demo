@@ -15,7 +15,6 @@ export const chatState = atom<ChatState>({
     messages: [],
     title: "",
     roomId: "",
-    streams: [],
     isVolumeMuted: false,
     isMicMuted: false,
   },

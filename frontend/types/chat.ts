@@ -14,6 +14,11 @@ interface ChatParticipant {
   user: { nickname: string; profileUrl: string; sex: string };
 }
 
+export interface Streams {
+  socketId: string;
+  stream: MediaStream;
+}
+
 export interface ChatState {
   chatParticipant: ChatParticipant[];
   messages: {
@@ -24,7 +29,6 @@ export interface ChatState {
   }[];
   title: string;
   roomId: string;
-  streams: { socketId: string; stream: MediaStream }[];
   isVolumeMuted: boolean;
   isMicMuted: boolean;
 }

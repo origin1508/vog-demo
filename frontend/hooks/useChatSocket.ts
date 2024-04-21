@@ -47,14 +47,14 @@ const useChatSocket = () => {
           ...prev.messages,
           {
             content: message,
-            roomId: roomId,
             nickname: user.nickname,
+            profileUrl: user.profileUrl,
             isSender: true,
           },
         ],
       };
     });
-    sendMessageEmit(message, roomId, user.nickname);
+    sendMessageEmit(message, roomId, user.nickname, user.profileUrl);
     if (textareaRef.current) {
       textareaRef.current.value = "";
     }

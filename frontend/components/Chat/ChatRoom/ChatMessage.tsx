@@ -10,10 +10,10 @@ const ChatMessage = ({ messages }: ChatMessageProps) => {
           <ChatMessageContainer key={index} isSender={message.isSender}>
             <ChatProfilePic>
               <ProfilePic
-                src="/image/valorant_jett.jpg"
+                src={message.profileUrl}
                 alt="profilePic"
-                width={64}
-                height={64}
+                width={32}
+                height={32}
               />
             </ChatProfilePic>
             <ChatContent>
@@ -31,23 +31,23 @@ export default ChatMessage;
 
 const ChatMessageContainer = styled.div<{ isSender: boolean }>(
   ({ isSender }) => [
-    tw`flex gap-4`,
+    tw`flex gap-2 mt-8`,
     isSender && tw`flex-row-reverse [& div]:text-right`,
   ]
 );
 
 const ChatProfilePic = tw.div`
-  shrink-0
+  shrink-0 pt-1
 `;
 
 const ProfilePic = tw(Image)`
-  w-20 h-20 rounded-full
+  rounded-full
 `;
 
 const ChatContent = tw.div``;
 
 const Nickname = tw.div`
-  m-2
+  m-2 font-semibold
 `;
 
 const Content = tw.p`

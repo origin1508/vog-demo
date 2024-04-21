@@ -27,8 +27,8 @@ function setupSocket(io) {
       socket.to(roomId).emit("welcome", socket.id);
     });
 
-    socket.on("inputChat", ({ content, roomId, nickname }) => {
-      socket.to(roomId).emit("inputChat", { content, roomId, nickname });
+    socket.on("inputChat", ({ content, roomId, nickname, profileUrl }) => {
+      socket.to(roomId).emit("inputChat", { content, nickname, profileUrl });
     });
 
     socket.on("leaveChatRoom", async ({ userId, roomId }) => {

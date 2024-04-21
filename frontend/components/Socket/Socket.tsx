@@ -1,97 +1,54 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import tw, { styled } from "twin.macro";
-import useChatState from "@/hooks/useChatState";
+import { useEffect } from "react";
+// import useStreamState from "@/hooks/useStreamState";
 import useUserState from "@/hooks/useUserState";
-import useUserProfileState from "@/hooks/useUserProfileState";
-import ChatSocket from "./ChatSocket";
-import { leaveRoomEmit } from "@/utils/socketClient";
-import useMediaDevice from "@/hooks/useMediaDevice";
+import useChatState from "@/hooks/useChatState";
+import { socketClient } from "@/utils/socketClient";
 
 const Socket = () => {
-  const [isChatRoom, setIsChatRoom] = useState(false);
-  const router = useRouter();
-  const { chat, setChat, resetChat } = useChatState();
-  const { userId } = useUserState();
-  const { handleUserProfileOpen } = useUserProfileState();
   const {
-    peerConnectionsRef,
-    localStreamRef,
-    getLocalStream,
-    getDevices,
-    handleMicMuteClick,
-    handleVolumeMuteClick,
-  } = useMediaDevice();
+    userId,
+    user: { nickname },
+  } = useUserState();
+  const {
+    chat: { roomId },
+    setChat,
+  } = useChatState();
 
-  const roomId = chat.roomId;
+  // const localStreamRef = useRef<MediaStream>();
+  // const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
+
+  const socketConnect = () => {
+    if (!userId) return;
+
+    socketClient.connect();
+    socketClient.emit("enterChatRoom", { userId, nickname, roomId });
+  };
 
   useEffect(() => {
-    if (router.query.id === chat.roomId) {
-      setIsChatRoom(true);
-    } else {
-      setIsChatRoom(false);
-    }
-  }, [router]);
+    socketConnect();
 
-  useEffect(() => {
-    window.addEventListener("beforeunload", handleUnload);
+    socketClient.on("setChat", ({ roomId, chatParticipant }) => {
+      setChat((prev) => {
+        return { ...prev, roomId, chatParticipant };
+      });
+    });
 
-    return () => window.removeEventListener("beforeunload", handleUnload);
+    socketClient.on("inputChat", (data) => {
+      setChat((prev) => {
+        return {
+          ...prev,
+          messages: [...prev.messages, { ...data, isSender: false }],
+        };
+      });
+    });
+
+    return () => {
+      socketClient.removeAllListeners();
+      socketClient.disconnect();
+    };
   }, []);
 
-  const handleUnload = (e: BeforeUnloadEvent) => {
-    if (roomId) {
-      e.preventDefault();
-      handleChatRoomLeave();
-    }
-  };
-
-  const handleTitleClick = () => {
-    if (chat.roomId) {
-      router.push(`/chat/${roomId}`);
-    }
-  };
-
-  const handleChatRoomLeave = () => {
-    if (userId === null) return;
-
-    if (peerConnectionsRef.current) {
-      Object.values(peerConnectionsRef.current).forEach((peerConnection) =>
-        peerConnection.close()
-      );
-    }
-    leaveRoomEmit(userId, roomId);
-    resetChat();
-    router.back();
-  };
-
-  return (
-    <SocketContainer isChatRoom={isChatRoom}>
-      {roomId && (
-        <ChatSocket
-          chat={chat}
-          isChatRoom={isChatRoom}
-          peerConnectionsRef={peerConnectionsRef}
-          localStreamRef={localStreamRef}
-          setChat={setChat}
-          getLocalStream={getLocalStream}
-          getDevices={getDevices}
-          handleChatRoomLeave={handleChatRoomLeave}
-          handleMicMuteClick={handleMicMuteClick}
-          handleVolumeMuteClick={handleVolumeMuteClick}
-          handleTitleClick={handleTitleClick}
-          handleUserProfileOpen={handleUserProfileOpen}
-        />
-      )}
-    </SocketContainer>
-  );
+  return <></>;
 };
 
 export default Socket;
-
-const SocketContainer = styled.div<{ isChatRoom: boolean }>(
-  ({ isChatRoom }) => [
-    tw`fixed flex items-center justify-center left-1/2 bottom-0 -translate-x-1/2 w-full pl-64 max-w-[120rem] z-10`,
-    isChatRoom && tw`translate-y-16`,
-  ]
-);

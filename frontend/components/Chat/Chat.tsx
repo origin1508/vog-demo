@@ -97,7 +97,7 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
     if (res.success) {
       const { roomId } = res.result;
       setChat((prev) => {
-        return { ...prev, roomId: roomId };
+        return { ...prev, roomId: roomId, title: title };
       });
       router.push(`/chat/${roomId}`);
     } else {
@@ -115,7 +115,7 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
     if (res.success) {
       if (res.result.canParticipant) {
         setChat((prev) => {
-          return { ...prev, roomId: roomId };
+          return { ...prev, roomId: roomId, title: res.result.title };
         });
         router.push(`/chat/${roomId}`);
       }

@@ -15,7 +15,7 @@ const useChatSocket = () => {
   const { user, userId } = useUser();
   const {
     setChat,
-    chat: { roomId, title, messages },
+    chat: { roomId, messages },
     resetChat,
   } = useChatState();
 
@@ -32,6 +32,7 @@ const useChatSocket = () => {
   }, [messages]);
 
   const socketConnect = () => {
+    console.log("socket connect");
     if (userId === null) return;
     socketClient.connect();
     enterRoomEmit(userId, user.nickname, roomId);
@@ -86,8 +87,7 @@ const useChatSocket = () => {
   };
 
   return {
-    title,
-    messages,
+    socketClient,
     buttonRef,
     textareaRef,
     scrollRef,

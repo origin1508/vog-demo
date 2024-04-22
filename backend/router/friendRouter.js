@@ -24,7 +24,7 @@ router.get("/search/:nickname", async (req, res) => {
 
   try {
     const user = await User.findOne({ nickname: nickname });
-    console.log(user);
+
     res.status(200).send({
       success: true,
       result: user,

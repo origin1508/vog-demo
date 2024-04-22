@@ -1,7 +1,14 @@
 require("dotenv").config();
 const { PORT, MONGO_URI } = process.env;
+const whitelist = ["http://localhost:3002", "http://origin1508.iptime.org"];
 const corsOption = {
-  origin: "http://localhost:3002",
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not Allowed Origin!"));
+    }
+  },
   credentials: true,
 };
 

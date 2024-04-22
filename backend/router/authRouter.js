@@ -11,14 +11,14 @@ const {
   NAVER_CLIENT_SECRET,
   KAKAO_CLIENT_ID,
   KAKAO_CLIENT_SECRET,
-  REDIRECT_URI,
 } = process.env;
 
 router.post("/login/naver", async (req, res) => {
   const { code, state } = req.body;
+  const origin = req.get("origin");
 
   const result = await axios.get(
-    `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${NAVER_CLIENT_ID}&client_secret=${NAVER_CLIENT_SECRET}&redirect_uri=${REDIRECT_URI}/naver&code=${code}&state=${state}`,
+    `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${NAVER_CLIENT_ID}&client_secret=${NAVER_CLIENT_SECRET}&redirect_uri=${origin}/naver&code=${code}&state=${state}`,
     {
       headers: {
         "X-Naver-Client-Id": NAVER_CLIENT_ID,
@@ -42,7 +42,7 @@ router.post("/login/naver", async (req, res) => {
         "oauthId는 발급되었지만 해당하는 유저 데이터가 없습니다. 유저 데이터 입력 창으로 리다이렉트 해주세요",
       result: {
         oauthId: oauthId,
-        redirectUrl: "http://localhost:3002/sign-up",
+        redirectUrl: `${origin}/sign-up`,
       },
     });
   } else {
@@ -60,6 +60,7 @@ router.post("/login/naver", async (req, res) => {
 
 router.post("/login/kakao", async (req, res) => {
   const { code, state } = req.body;
+  const origin = req.origin;
 
   const result = await axios.post(
     `https://kauth.kakao.com/oauth/token`,
@@ -67,7 +68,7 @@ router.post("/login/kakao", async (req, res) => {
       grant_type: "authorization_code",
       client_id: KAKAO_CLIENT_ID,
       client_secret: KAKAO_CLIENT_SECRET,
-      redirect_uri: `${REDIRECT_URI}/kakao`,
+      redirect_uri: `${origin}/kakao`,
       code: code,
     },
     {
@@ -88,7 +89,7 @@ router.post("/login/kakao", async (req, res) => {
         "oauthId는 발급되었지만 해당하는 유저 데이터가 없습니다. 유저 데이터 입력 창으로 리다이렉트 해주세요",
       result: {
         oauthId: oauthId,
-        redirectUrl: "http://localhost:3002/sign-up",
+        redirectUrl: `${origin}/sign-up`,
       },
     });
   } else {

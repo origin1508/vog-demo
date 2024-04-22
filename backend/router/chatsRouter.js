@@ -23,16 +23,25 @@ router.post("/rooms", async (req, res) => {
   const { userId, title, description, maximumMember } = req.body;
 
   try {
-    const chat = await Chat.create({
-      title,
-      description,
-      maximumMember,
-      currentMember: 1,
-    });
+    const chatParticipant = await ChatParticipant.findOne({ userId: userId });
+    if (!chatParticipant) {
+      const chat = await Chat.create({
+        title,
+        description,
+        maximumMember,
+        currentMember: 1,
+      });
 
-    await ChatParticipant.create({ userId: userId, roomId: chat.roomId });
+      await ChatParticipant.create({ userId: userId, roomId: chat.roomId });
 
-    res.status(200).send({ success: true, result: { roomId: chat.roomId } });
+      res.status(200).send({ success: true, result: { roomId: chat.roomId } });
+    } else {
+      res.status(401).send({
+        success: false,
+        statusCode: 401,
+        error: "이미 참여 중인 채팅방이 존재합니다.",
+      });
+    }
   } catch (err) {
     console.log(err);
   }

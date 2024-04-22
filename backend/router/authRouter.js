@@ -60,7 +60,7 @@ router.post("/login/naver", async (req, res) => {
 
 router.post("/login/kakao", async (req, res) => {
   const { code, state } = req.body;
-  const origin = req.origin;
+  const origin = req.get("origin");
 
   const result = await axios.post(
     `https://kauth.kakao.com/oauth/token`,
@@ -68,7 +68,7 @@ router.post("/login/kakao", async (req, res) => {
       grant_type: "authorization_code",
       client_id: KAKAO_CLIENT_ID,
       client_secret: KAKAO_CLIENT_SECRET,
-      redirect_uri: `${origin}/kakao`,
+      redirect_uri: `${origin}/auth/login/kakao`,
       code: code,
     },
     {

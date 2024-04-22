@@ -9,7 +9,7 @@ router.get("/:userId", async (req, res) => {
 
   try {
     const friend = await Friend.find({ userId: userId }).populate("following");
-    console.log(friend);
+
     res.status(200).send({
       success: true,
       result: friend,

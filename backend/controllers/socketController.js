@@ -38,14 +38,15 @@ function setupSocket(io) {
       const { currentMember } = await Chat.findOne({ roomId: roomId });
       if (!currentMember) {
         await Chat.deleteOne({ roomId: roomId });
+      } else {
+        const chatParticipant = await ChatParticipant.find({
+          roomId: roomId,
+        }).populate("user");
+        const { title } = await Chat.findOne({ roomId: roomId });
+
+        socket.to(roomId).emit("setChat", { roomId, chatParticipant, title });
       }
 
-      const chatParticipant = await ChatParticipant.find({
-        roomId: roomId,
-      }).populate("user");
-      const { title } = await Chat.findOne({ roomId: roomId });
-
-      socket.to(roomId).emit("setChat", { roomId, chatParticipant, title });
       socket.disconnect();
     });
 

@@ -1,15 +1,14 @@
 require("dotenv").config();
 const { PORT, MONGO_URI } = process.env;
 const whitelist = ["http://localhost:3002", "http://origin1508.iptime.org"];
-const corsOption = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not Allowed Origin!"));
-    }
-  },
-  credentials: true,
+const corsOptionsDelegate = function (req, callback) {
+  let corsOptions;
+  if (whitelist.indexOf(req.header("Origin")) !== -1) {
+    corsOptions = { origin: true, credentials: true }; // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false }; // disable CORS for this request
+  }
+  callback(null, corsOptions); // callback expects two parameters: error and options
 };
 
 const express = require("express");
@@ -26,7 +25,7 @@ mongoose
 
 const app = express();
 
-app.use(cors(corsOption));
+app.use(cors(corsOptionsDelegate));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

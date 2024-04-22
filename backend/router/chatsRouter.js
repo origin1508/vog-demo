@@ -20,7 +20,7 @@ router.get("/rooms/list", async (req, res) => {
 });
 
 router.post("/rooms", async (req, res) => {
-  const { title, description, maximumMember } = req.body;
+  const { userId, title, description, maximumMember } = req.body;
 
   try {
     const chat = await Chat.create({
@@ -29,6 +29,8 @@ router.post("/rooms", async (req, res) => {
       maximumMember,
       currentMember: 1,
     });
+
+    await ChatParticipant.create({ userId: userId, roomId: chat.roomId });
 
     res.status(200).send({ success: true, result: { roomId: chat.roomId } });
   } catch (err) {
@@ -41,16 +43,24 @@ router.get("/rooms/:roomId", async (req, res) => {
   const { userId } = req.query;
 
   try {
-    await ChatParticipant.create({ userId: userId, roomId: roomId });
-
     const chat = await Chat.findOne({ roomId: roomId });
-    chat.currentMember++;
-    await chat.save();
+    if (!chat) {
+      res.status(400).send({
+        success: false,
+        statusCode: 400,
+        error: "존재하지 않는 방 입니다.",
+      });
+    } else {
+      chat.currentMember++;
+      await chat.save();
 
-    res.status(200).send({
-      success: true,
-      result: { title: chat.title, canParticipant: true },
-    });
+      await ChatParticipant.create({ userId: userId, roomId: roomId });
+
+      res.status(200).send({
+        success: true,
+        result: { title: chat.title, canParticipant: true },
+      });
+    }
   } catch (err) {
     console.log(err);
     if (err.name === "ValidationError") {

@@ -1,10 +1,17 @@
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 
-export const socketClient = io(`${process.env.NEXT_PUBLIC_SOCKET}/chat`, {
-  transports: ["websocket"],
-  autoConnect: false,
-  closeOnBeforeunload: false,
-});
+interface ExtendedSocket extends Socket {
+  socketId?: string;
+}
+
+export const socketClient: ExtendedSocket = io(
+  `${process.env.NEXT_PUBLIC_SOCKET}/chat`,
+  {
+    transports: ["websocket", "polling"],
+    autoConnect: false,
+    closeOnBeforeunload: true,
+  }
+);
 
 export const sendMessageEmit = (
   content: string,
@@ -27,14 +34,9 @@ export const leaveRoomEmit = (userId: number, roomId: string) => {
   });
 };
 
-export const enterRoomEmit = (
-  userId: number,
-  nickname: string,
-  roomId: string
-) => {
+export const enterRoomEmit = (userId: number, roomId: string) => {
   socketClient.emit("enterChatRoom", {
     userId,
-    nickname,
     roomId,
   });
 };

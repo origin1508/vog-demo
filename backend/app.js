@@ -30,7 +30,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3002",
+    methods: ["GET", "POST"],
+  },
+});
 setupSocket(io);
 
 const authRouter = require("./router/authRouter");

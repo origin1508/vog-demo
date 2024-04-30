@@ -1,6 +1,6 @@
+import { useEffect } from "react";
 import tw from "twin.macro";
 import useChatSocket from "@/hooks/useChatSocket";
-import useChatState from "@/hooks/useChatState";
 import MainLayout from "@/components/layout/MainLayout";
 import Header from "@/components/common/Header";
 import ChatMember from "./ChatMember";
@@ -9,17 +9,21 @@ import { NextPageWithLayout } from "@/pages/_app";
 
 const ChatRoom: NextPageWithLayout = () => {
   const {
+    title,
+    messages,
     buttonRef,
     textareaRef,
     scrollRef,
+    enterRoom,
     handleMessageSend,
     handleChatRoomLeave,
     handleTextAreaChange,
     handleTextAreaKeyDown,
   } = useChatSocket();
-  const {
-    chat: { title, messages },
-  } = useChatState();
+
+  useEffect(() => {
+    enterRoom();
+  }, []);
 
   return (
     <ChatRoomContainer>

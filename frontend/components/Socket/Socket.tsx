@@ -1,34 +1,45 @@
 import { useEffect, useRef } from "react";
 import useStreamState from "@/hooks/useStreamState";
-import useUserState from "@/hooks/useUserState";
 import useChatState from "@/hooks/useChatState";
+import useUserState from "@/hooks/useUserState";
 import { socketClient } from "@/utils/socketClient";
 import Audio from "../common/Audio";
+import { getLocalStorage, setLocalStorage } from "@/utils/localStorage";
 
 const Socket = () => {
-  const {
-    userId,
-    user: { nickname },
-  } = useUserState();
-  const {
-    chat: { roomId },
-    setChat,
-  } = useChatState();
+  const { userId } = useUserState();
+  const { setChat } = useChatState();
   const { streams, setStreams } = useStreamState();
 
   const localStreamRef = useRef<MediaStream>();
   const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
 
+  const getLocalStream = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      localStreamRef.current = stream;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const createPeerConnection = (socketId: string) => {
     const pc = new RTCPeerConnection({
-      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+      iceServers: [
+        {
+          urls: [
+            "stun:stun1.l.google.com:19302",
+            "stun:stun1.l.google.com:19302",
+          ],
+        },
+      ],
     });
 
     pc.addEventListener("icecandidate", (e) => {
+      console.log("onicecandidate", e.candidate);
       if (e.candidate) {
-        console.log("onicecandidate", e.candidate);
         socketClient.emit("iceCandidate", {
-          targetId: socketId,
+          to: socketId,
           iceCandidate: e.candidate,
         });
       }
@@ -38,15 +49,18 @@ const Socket = () => {
       console.log("ontrack", e.streams);
       const stream = e.streams[0];
       if (stream) {
-        setStreams((prev) => [...prev, { socketId, stream }]);
+        setStreams((prev) => [...prev, { [socketId]: stream }]);
       }
     });
 
+    pc.addEventListener("negotiationneeded", (e) => {
+      console.log(e);
+    });
+
     if (localStreamRef.current) {
-      const localStream = localStreamRef.current;
-      localStream.getAudioTracks().forEach((track) => {
-        if (!localStream) return;
-        pc.addTrack(track, localStream);
+      const stream = localStreamRef.current;
+      stream.getTracks().forEach((track) => {
+        pc.addTrack(track, stream);
       });
     }
 
@@ -58,15 +72,27 @@ const Socket = () => {
     return pc;
   };
 
-  const socketConnect = () => {
-    if (!userId) return;
+  const connectSocket = () => {
+    if (userId === null) return;
+
+    const sessionId = getLocalStorage("socketSessionId");
+    if (sessionId) {
+      socketClient.auth = { sessionId: sessionId };
+    }
 
     socketClient.connect();
-    socketClient.emit("enterChatRoom", { userId, nickname, roomId });
   };
 
   useEffect(() => {
-    socketConnect();
+    connectSocket();
+    getLocalStream();
+
+    socketClient.on("session", ({ sessionId, socketId }) => {
+      socketClient.auth = { sessionId };
+
+      setLocalStorage("socketSessionId", sessionId);
+      socketClient.socketId = socketId;
+    });
 
     socketClient.on("setChat", ({ roomId, chatParticipant }) => {
       setChat((prev) => {
@@ -91,45 +117,41 @@ const Socket = () => {
       peerConnectionsRef.current[socketId].close();
     });
 
-    // // webRTC 시그널링
-    // socketClient.on("welcome", async (socketId) => {
-    //   const pc = createPeerConnection(socketId);
-    //   const offer = await pc.createOffer({
-    //     offerToReceiveAudio: true,
-    //   });
-    //   pc.setLocalDescription(offer);
-    //   console.log("send offer: ", offer);
-    //   socketClient.emit("offer", { targetId: socketId, offer: offer });
-    // });
+    // webRTC 시그널링
+    socketClient.on("welcome", async (socketId) => {
+      const pc = createPeerConnection(socketId);
+      await pc.setLocalDescription();
+      const offer = pc.localDescription;
+      console.log("send offer: ", offer);
+      socketClient.emit("offer", { to: socketId, offer: offer });
+    });
 
-    // socketClient.on("offer", async (data) => {
-    //   const { socketId, offer } = data;
-    //   console.log("getOffer", socketId, offer);
-    //   const pc = createPeerConnection(socketId);
-    //   await pc.setRemoteDescription(offer);
-    //   const answer = await pc.createAnswer({
-    //     offerToReceiveAudio: true,
-    //   });
-    //   pc.setLocalDescription(answer);
-    //   console.log("send answer: ", answer);
-    //   socketClient.emit("answer", { targetId: socketId, answer: answer });
-    // });
+    socketClient.on("offer", async ({ from, offer }) => {
+      console.log("getOffer", from, offer);
+      const pc = createPeerConnection(from);
+      await pc.setRemoteDescription(new RTCSessionDescription(offer));
+      await pc.setLocalDescription();
+      const answer = pc.localDescription;
+      console.log("send answer: ", answer);
+      socketClient.emit("answer", { to: from, answer: answer });
+    });
 
-    // socketClient.on("answer", async (data) => {
-    //   const { socketId, answer } = data;
-    //   console.log("getAnswer", socketId, answer);
-    //   const pc = peerConnectionsRef.current[socketId];
+    socketClient.on("answer", async ({ from, answer }) => {
+      console.log("getAnswer", from, answer);
+      const pc = peerConnectionsRef.current[from];
+      await pc.setRemoteDescription(new RTCSessionDescription(answer));
+    });
 
-    //   await pc.setRemoteDescription(answer);
-    // });
-
-    // socketClient.on("iceCandidate", (data) => {
-    //   const { socketId } = data;
-    //   const iceCandidate = new RTCIceCandidate(data.iceCandidate);
-    //   const peerConnection = peerConnectionsRef.current[socketId];
-    //   console.log("getCandidate", socketId, iceCandidate, peerConnection);
-    //   peerConnection.addIceCandidate(iceCandidate);
-    // });
+    socketClient.on("iceCandidate", ({ from, iceCandidate }) => {
+      const peerConnection = peerConnectionsRef.current[from];
+      console.log(
+        "getCandidate",
+        from,
+        new RTCIceCandidate(iceCandidate),
+        peerConnection
+      );
+      peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate));
+    });
 
     return () => {
       socketClient.removeAllListeners();
@@ -139,8 +161,12 @@ const Socket = () => {
 
   return (
     <>
-      {streams.map(({ socketId, stream }) => (
-        <Audio key={socketId} stream={stream} isMuted={false} />
+      {streams.map((stream) => (
+        <Audio
+          key={Object.keys(stream)[0]}
+          stream={Object.values(stream)[0]}
+          isMuted={false}
+        />
       ))}
     </>
   );

@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { Streams } from "@/types/chat";
+import { Stream } from "@/types/chat";
 import { recoilPersist } from "recoil-persist";
 import { sessionStorage } from "@/utils/sessionStorage";
 
@@ -8,7 +8,7 @@ const { persistAtom } = recoilPersist({
   storage: sessionStorage,
 });
 
-export const streamState = atom<Streams[]>({
+export const streamState = atom<Stream[]>({
   key: "Stream",
   default: [],
   effects_UNSTABLE: [persistAtom],

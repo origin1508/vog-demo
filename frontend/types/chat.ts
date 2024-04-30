@@ -21,9 +21,8 @@ interface Message {
   isSender: boolean;
 }
 
-export interface Streams {
-  socketId: string;
-  stream: MediaStream;
+export interface Stream {
+  [socketId: string]: MediaStream;
 }
 
 export interface ChatState {

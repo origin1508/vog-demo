@@ -1,1 +1,1 @@
-export { default } from "./SocketContainer";
+export { default } from "./Socket";

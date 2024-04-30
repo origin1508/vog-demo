@@ -1,18 +1,55 @@
-const ChatParticipant = require("../models/ChatParticipantSchema");
+const { randomUUID } = require("crypto");
 const Chat = require("../models/ChatSchema");
+const ChatParticipant = require("../models/ChatParticipantSchema");
+const SocketSession = require("../models/SocketSessionSchema");
 
 function setupSocket(io) {
   const chatNamespace = io.of("/chat");
 
-  chatNamespace.on("connection", (socket) => {
+  chatNamespace.use(async (socket, next) => {
+    const sessionId = socket.handshake.auth.sessionId;
+
+    if (sessionId) {
+      try {
+        const session = await SocketSession.findOne({ sessionId: sessionId });
+        if (session) {
+          socket.sessionId = sessionId;
+          socket.socketId = session.socketId;
+
+          return next();
+        } else {
+        }
+      } catch (err) {
+        consol.log(err);
+      }
+    } else {
+      socket.sessionId = randomUUID();
+      socket.socketId = randomUUID();
+
+      await SocketSession.create({
+        sessionId: socket.sessionId,
+        socketId: socket.socketId,
+      });
+
+      return next();
+    }
+  });
+
+  chatNamespace.on("connection", async (socket) => {
     console.log(`${socket.id} socket connected`);
 
-    socket.on("enterChatRoom", async ({ userId, nickname, roomId }) => {
+    socket.emit("session", {
+      sessionId: socket.sessionId,
+      socketId: socket.socketId,
+    });
+
+    socket.on("enterChatRoom", async ({ userId, roomId }) => {
       socket.join(roomId);
+      socket.join(socket.socketId);
 
       await ChatParticipant.updateOne(
         { userId: userId, roomId: roomId },
-        { socketId: socket.id }
+        { socketId: socket.socketId }
       );
 
       const chatParticipant = await ChatParticipant.find({
@@ -24,7 +61,7 @@ function setupSocket(io) {
         chatParticipant,
       });
 
-      socket.to(roomId).emit("welcome", socket.id);
+      socket.to(roomId).emit("welcome", socket.socketId);
     });
 
     socket.on("inputChat", ({ content, roomId, nickname, profileUrl }) => {
@@ -46,25 +83,28 @@ function setupSocket(io) {
 
         socket.to(roomId).emit("setChat", { roomId, chatParticipant, title });
       }
-
-      socket.disconnect();
     });
 
     // webRTC
-    socket.on("offer", ({ targetId, offer }) => {
-      socket.to(targetId).emit("offer", { socketId: socket.id, offer: offer });
+    socket.on("offer", ({ to, offer }) => {
+      socket.to(to).emit("offer", {
+        from: socket.socketId,
+        offer: offer,
+      });
     });
 
-    socket.on("answer", ({ targetId, answer }) => {
-      socket
-        .to(targetId)
-        .emit("answer", { socketId: socket.id, answer: answer });
+    socket.on("answer", ({ to, answer }) => {
+      socket.to(to).emit("answer", {
+        from: socket.socketId,
+        answer: answer,
+      });
     });
 
-    socket.on("iceCandidate", ({ targetId, iceCandidate }) => {
-      socket
-        .to(targetId)
-        .emit({ socketId: socket.id, iceCandidate: iceCandidate });
+    socket.on("iceCandidate", ({ to, iceCandidate }) => {
+      socket.to(to).emit("iceCandidate", {
+        from: socket.socketId,
+        iceCandidate: iceCandidate,
+      });
     });
   });
 }

@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import tw from "twin.macro";
+import tw, { styled } from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
@@ -8,12 +9,18 @@ import UserCard from "../common/UserCard";
 import { getIcons } from "../icons";
 import { deleteAccessToken } from "@/utils/tokenManager";
 import { NAV_MENU } from "@/constants/nav";
+import { useEffect } from "react";
 
 const Sidebar = () => {
   const router = useRouter();
+  const [selected, setSelected] = useState("/");
   const { user, resetUser } = useUserState();
   const { resetFriend, handleFriendToggle } = useFriendState();
   const { handleUserProfileOpen } = useUserProfileState();
+
+  useEffect(() => {
+    setSelected(router.pathname);
+  }, [router]);
 
   const handleVogClick = () => {
     router.push("/");
@@ -34,10 +41,15 @@ const Sidebar = () => {
       </SidebarUser>
       <SidebarNavigation>
         {NAV_MENU.map((menu) => {
-          const { name, href, icon } = menu;
+          const { name, pathname, icon, query } = menu;
           return (
-            <SidebarItem key={name}>
-              <SidebarLink href={href}>
+            <SidebarItem key={name} isSelected={selected === pathname}>
+              <SidebarLink
+                href={{
+                  pathname: pathname,
+                  query: query,
+                }}
+              >
                 <ItemIcon>{icon}</ItemIcon>
                 {name}
               </SidebarLink>
@@ -83,10 +95,10 @@ const SidebarNavigation = tw.ul`
 
 const SidebarBtns = tw.ul``;
 
-const SidebarItem = tw.li`
-  h-12 py-2 px-4 rounded cursor-pointer
-  hover:(bg-primary text-black)
-`;
+const SidebarItem = styled.li<{ isSelected?: boolean }>(({ isSelected }) => [
+  tw`h-12 py-2 px-4 rounded cursor-pointer hover:(bg-primary text-black)`,
+  isSelected && tw`bg-primary text-black`,
+]);
 
 const SidebarBtn = tw.button`
   flex items-center

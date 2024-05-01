@@ -22,6 +22,7 @@ import {
   BsGenderFemale,
   BsGenderMale,
   BsSearch,
+  BsHouse,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import { BiTime, BiExit, BiUserPlus, BiUserMinus } from "react-icons/bi";
@@ -91,6 +92,8 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsGenderFemale size={size} color={color} />;
     case "search":
       return <BsSearch size={size} color={color} />;
+    case "home":
+      return <BsHouse size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;

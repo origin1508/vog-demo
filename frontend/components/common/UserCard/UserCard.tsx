@@ -23,11 +23,11 @@ const UserCard = ({ nickname, profilePic }: UserCardProps) => {
 export default UserCard;
 
 const UserCardContainer = tw.div`
-  flex items-center h-16 p-2
+  flex items-center h-8
 `;
 
 const UserProfile = tw(Image)`
-  w-12 h-12 rounded-full bg-white
+  w-8 h-8 rounded-full bg-white
 `;
 
 const UserName = tw.span`

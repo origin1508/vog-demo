@@ -1,37 +1,22 @@
-import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
-import { useRecoilValue } from "recoil";
 import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
-import Header from "../common/Header";
 import UserCard from "../common/UserCard";
-import { getGameLogo } from "@/utils/getGameLogo";
 import { getIcons } from "../icons";
 import { deleteAccessToken } from "@/utils/tokenManager";
-import { selectedGameState } from "@/recoil/atoms/selectedGameState";
 import { NAV_MENU } from "@/constants/nav";
 
 const Sidebar = () => {
   const router = useRouter();
-  const game = useRecoilValue(selectedGameState);
   const { user, resetUser } = useUserState();
   const { resetFriend, handleFriendToggle } = useFriendState();
   const { handleUserProfileOpen } = useUserProfileState();
-  const [gameLogo, setGameLogo] = useState<StaticImageData>();
-  useEffect(() => {
-    setGameLogo(getGameLogo(game));
-  }, [game]);
 
   const handleVogClick = () => {
     router.push("/");
-  };
-
-  const handleLogoClick = () => {
-    router.push("/select-game");
   };
 
   const handleLogout = async () => {
@@ -43,42 +28,35 @@ const Sidebar = () => {
 
   return (
     <SidebarContainer>
-      <VogLogo onClick={handleVogClick}>
-        <Header title="VOG" />
-      </VogLogo>
-      <Profile onClick={() => handleUserProfileOpen(user.id)}>
+      <SidebarLogo onClick={handleVogClick}>VOG</SidebarLogo>
+      <SidebarUser onClick={() => handleUserProfileOpen(user.id)}>
         <UserCard nickname={user.nickname} profilePic={user.profileUrl} />
-      </Profile>
-      <SidebarMenu>
+      </SidebarUser>
+      <SidebarNavigation>
         {NAV_MENU.map((menu) => {
           const { name, href, icon } = menu;
           return (
-            <SidebarItem key={name}>
+            <SidebarMenu key={name}>
               <SidebarLink href={href}>
                 <ItemIcon>{icon}</ItemIcon>
                 {name}
               </SidebarLink>
-            </SidebarItem>
+            </SidebarMenu>
           );
         })}
-        <SidebarItem>
+        <SidebarMenu>
           <SidebarBtn onClick={handleFriendToggle}>
             <ItemIcon>{getIcons("friends", 34)}</ItemIcon>
             친구목록
           </SidebarBtn>
-        </SidebarItem>
-        <SidebarItem>
+        </SidebarMenu>
+        <SidebarMenu>
           <SidebarBtn onClick={handleLogout}>
             <ItemIcon>{getIcons("exit", 34)}</ItemIcon>
             로그아웃
           </SidebarBtn>
-        </SidebarItem>
-      </SidebarMenu>
-      {gameLogo && (
-        <SidebarGameLogo onClick={handleLogoClick}>
-          <Image width={256} height={128} src={gameLogo} alt="gameLogo" />
-        </SidebarGameLogo>
-      )}
+        </SidebarMenu>
+      </SidebarNavigation>
     </SidebarContainer>
   );
 };
@@ -86,23 +64,24 @@ const Sidebar = () => {
 export default Sidebar;
 
 const SidebarContainer = tw.nav`
-  flex flex-col w-64 h-full p-4 border-r border-neutral-700 text-xl
+  flex flex-col w-80 h-full p-4 gap-5 border-r border-neutral-700 text-xl
 `;
 
-const Profile = tw.div`
-  relative border-b border-neutral-700
+const SidebarLogo = tw.div`
+  py-2 px-4 text-4xl font-bold cursor-pointer
 `;
 
-const VogLogo = tw.div`
-  cursor-pointer
+const SidebarUser = tw.div`
+  relative py-2 px-4 cursor-pointer
 `;
 
-const SidebarMenu = tw.ul`
-  h-full p-4 font-semibold
+const SidebarNavigation = tw.ul`
+  font-semibold
 `;
 
-const SidebarItem = tw.li`
-  w-full my-2
+const SidebarMenu = tw.li`
+  h-12 py-2 px-4 rounded cursor-pointer
+  hover:(bg-primary text-black)
 `;
 
 const SidebarBtn = tw.button`
@@ -115,8 +94,4 @@ const SidebarLink = tw(Link)`
 
 const ItemIcon = tw.div`
   mr-4
-`;
-
-const SidebarGameLogo = tw.div`
-  flex flex-col justify-end cursor-pointer
 `;

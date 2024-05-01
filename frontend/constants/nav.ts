@@ -7,11 +7,12 @@ export const COMMUNITY_NAV_MENU = [
 ];
 
 export const NAV_MENU = [
-  { name: "채팅", href: "/chat", icon: getIcons("chat", 34) },
+  { name: "홈", href: "/", icon: getIcons("home", 34) },
   {
     name: "커뮤니티",
     href: "/community?category=free",
     icon: getIcons("cardList", 34),
   },
+  { name: "채팅", href: "/chat", icon: getIcons("chat", 34) },
   { name: "마이페이지", href: "/mypage", icon: getIcons("avatar", 34) },
 ];

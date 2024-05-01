@@ -3,9 +3,8 @@ import tw, { css, theme, GlobalStyles as BaseStyles } from "twin.macro";
 
 const global = css({
   html: {
-    fontFamily: "Pretendard, system-ui, sans-serif",
-    color: theme`colors.white`,
-    backgroundColor: theme`colors.black`,
+    fontFamily: "Noto Sans KR, system-ui, sans-serif",
+    backgroundColor: theme`colors.gray.200`,
     height: "100%",
   },
   body: {

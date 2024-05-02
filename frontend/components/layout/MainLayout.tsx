@@ -38,5 +38,5 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 export default MainLayout;
 
 const MainLayoutContainer = tw.div`
-  relative flex max-w-[1440px] h-full m-auto overflow-x-hidden
+  relative flex max-w-[1920px] h-full m-auto overflow-x-hidden
 `;

@@ -78,7 +78,7 @@ const Sidebar = () => {
 export default Sidebar;
 
 const SidebarContainer = tw.nav`
-  shrink-0 flex flex-col w-64 h-full p-4 gap-8 border-r border-neutral-700 text-xl
+  shrink-0 flex flex-col w-64 h-full p-4 gap-8 bg-primary text-white text-xl
 `;
 
 const SidebarLogo = tw.div`
@@ -90,14 +90,13 @@ const SidebarUser = tw.div`
 `;
 
 const SidebarNavigation = tw.ul`
-  font-semibold
 `;
 
 const SidebarBtns = tw.ul``;
 
 const SidebarItem = styled.li<{ isSelected?: boolean }>(({ isSelected }) => [
-  tw`h-12 py-2 px-4 rounded cursor-pointer hover:(bg-primary text-black)`,
-  isSelected && tw`bg-primary text-black`,
+  tw`h-12 py-2 px-4 rounded cursor-pointer hover:(bg-white/20 text-white)`,
+  isSelected && tw`bg-white text-primary`,
 ]);
 
 const SidebarBtn = tw.button`

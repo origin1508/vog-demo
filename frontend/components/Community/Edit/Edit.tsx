@@ -5,7 +5,7 @@ import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
-import Button from "@/components/common/Button";
+import { Button } from "@/components/common";
 import {
   createPostRequest,
   getPostRequest,

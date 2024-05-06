@@ -41,7 +41,7 @@ export const Contents = ({ contents, handleContentClick }: ContentsProps) => {
 };
 
 const ContentsContainer = tw.ul`
-  w-full mt-4 rounded-md bg-white
+  w-full rounded-md bg-white
 `;
 
 const Blank = tw.div`

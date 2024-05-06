@@ -3,7 +3,7 @@ import useComments from "@/hooks/useComments";
 import Comment from "./Comment";
 import CommentEdit from "./CommentEdit";
 import { CommentsProps } from "@/types/community";
-import Pagination from "@/components/Pagination";
+import { Pagination } from "@/components/common";
 
 const Comments = ({ userId, handleUserProfileOpen }: CommentsProps) => {
   const {

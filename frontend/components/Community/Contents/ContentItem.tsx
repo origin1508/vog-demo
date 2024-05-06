@@ -43,7 +43,7 @@ export const ContentItem = ({
 };
 
 const ContentItemContainer = tw.li`
-  flex items-center w-full h-10 px-4 text-center border-b
+  flex items-center w-full h-10 px-4 text-center border-b cursor-pointer
   first:(font-medium)
 `;
 

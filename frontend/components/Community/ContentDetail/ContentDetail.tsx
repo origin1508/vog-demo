@@ -6,8 +6,8 @@ import useUserProfileState from "@/hooks/useUserProfileState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
-import { Header, Button } from "@/components/common";
-import Post from "./Post";
+import { MainCard, Header } from "@/components/common";
+import { Content, ContentHeader } from "./Content";
 import { getPostRequest, deletePostRequest } from "@/apis/community";
 import {
   getLikeListRequest,
@@ -15,12 +15,15 @@ import {
   cancelLikePostRequset,
 } from "@/apis/like";
 import { getTitle } from "@/utils/getTitle";
-import { getIcons } from "@/components/icons";
-import { CommunityQuery, ContentDetail } from "@/types/community";
+import {
+  CommunityQuery,
+  ContentDetail as ContentDetailType,
+} from "@/types/community";
 import { NextPageWithLayout } from "@/pages/_app";
+import timeDifference from "@/utils/timeDifference";
 
-const Detail: NextPageWithLayout = () => {
-  const [content, setContent] = useState<ContentDetail>();
+const ContentDetail: NextPageWithLayout = () => {
+  const [content, setContent] = useState<ContentDetailType>();
   const [category, setCategory] = useState("");
   const [likes, setLikes] = useState<Number[]>([]);
   const { userId } = useUserState();
@@ -57,7 +60,17 @@ const Detail: NextPageWithLayout = () => {
     }
   };
 
-  const handleDeletePostClick = async (postId: number) => {
+  const handleEditContent = () => {
+    router.push({
+      pathname: "/community/edit",
+      query: {
+        ...router.query,
+        editMode: "true",
+      },
+    });
+  };
+
+  const handleDeleteContent = async (postId: number) => {
     const res = await deletePostRequest(postId);
 
     if (res.success) {
@@ -70,10 +83,6 @@ const Detail: NextPageWithLayout = () => {
     } else {
       toast.alert(res.error);
     }
-  };
-
-  const handleListButtonClick = () => {
-    router.push(`/community?category=${category}`);
   };
 
   const handleLikeButtonClick = async () => {
@@ -97,46 +106,49 @@ const Detail: NextPageWithLayout = () => {
     }
   };
 
+  if (content === undefined) return null;
+
   return (
-    <DetailWrapper>
-      <Navigation category={category} />
-      <DetailContainer>
-        <Header title={getTitle(query.category)}>
-          <Button
-            width={5}
-            bgColor="transparent"
-            onClick={handleListButtonClick}
-          >
-            <ListButton>{getIcons("list", 24)}목록</ListButton>
-          </Button>
-        </Header>
-        <Post
-          userId={userId}
-          content={content}
-          likes={likes}
-          handleDeletePostClick={handleDeletePostClick}
-          handleLikeButtonClick={handleLikeButtonClick}
-          handleUserProfileOpen={handleUserProfileOpen}
-        />
-      </DetailContainer>
-    </DetailWrapper>
+    <ContentDetailContainer>
+      <ContentDetailHeader>
+        <Navigation category={category} />
+        <Header title={getTitle(query.category)} />
+      </ContentDetailHeader>
+      <ContentDetailBody>
+        <MainCard>
+          <ContentHeader
+            title={content.title}
+            isOwner={content.user.id === userId}
+            onEdit={handleEditContent}
+            onRemove={() => handleDeleteContent(content.id)}
+          />
+          <Content
+            nickname={content.user.nickname}
+            text={content.content}
+            viewCount={content.view}
+            likeCount={likes.length}
+            createdAt={timeDifference(content.createdAt)}
+            onOpenProfile={() => handleUserProfileOpen(userId)}
+            onClickLike={handleLikeButtonClick}
+          />
+        </MainCard>
+      </ContentDetailBody>
+    </ContentDetailContainer>
   );
 };
 
-Detail.getLayout = function getLayout(page) {
+ContentDetail.getLayout = function getLayout(page) {
   return <MainLayout>{page}</MainLayout>;
 };
 
-export default Detail;
+export default ContentDetail;
 
-const DetailWrapper = tw.article`
-  w-full p-4
+const ContentDetailContainer = tw.article`
+  w-full
 `;
 
-const DetailContainer = tw.section`
-  w-full px-10 pb-24
-`;
+const ContentDetailHeader = tw.header``;
 
-const ListButton = tw.div`
-  flex items-center justify-center
+const ContentDetailBody = tw.section`
+  px-9
 `;

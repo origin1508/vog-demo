@@ -73,7 +73,7 @@ export const Search = ({ options }: SearchProps) => {
           }
         />
         <SearchSumbitButton type="submit">
-          <SearchIcon>{getIcons("search", 22)}</SearchIcon>
+          <SearchIcon>{getIcons("search", 20)}</SearchIcon>
         </SearchSumbitButton>
       </SeacrhInputContainer>
     </SearchContainer>
@@ -81,25 +81,26 @@ export const Search = ({ options }: SearchProps) => {
 };
 
 const SearchContainer = tw.form`
-  flex gap-2 h-10
+  flex gap-2 h-8
 `;
 
 const SearchCategory = tw.select`
-  w-20 h-full outline-none
+  w-20 h-full border rounded outline-none focus:(ring-2 ring-primary)
 `;
 
 const SearchOption = tw.option``;
 
 const SeacrhInputContainer = tw.div`
-  flex border rounded shadow
+  flex border rounded
 `;
 
 const SearchInput = tw.input`
-  h-full p-2 bg-transparent outline-none
+  shrink h-full p-2 bg-transparent
 `;
 
 const SearchSumbitButton = tw.button`
-  w-10 h-10 text-white border-none bg-primary rounded
+  w-8 h-full text-white bg-secondary rounded-r
+  hover:brightness-125
 `;
 
 const SearchIcon = tw.div`

@@ -60,13 +60,13 @@ const Sidebar = () => {
       <SidebarBtns>
         <SidebarItem onClick={handleFriendToggle}>
           <SidebarBtn>
-            <ItemIcon>{getIcons("friends", 34)}</ItemIcon>
+            <ItemIcon>{getIcons("friends", 24)}</ItemIcon>
             친구목록
           </SidebarBtn>
         </SidebarItem>
         <SidebarItem onClick={handleLogout}>
           <SidebarBtn>
-            <ItemIcon>{getIcons("exit", 34)}</ItemIcon>
+            <ItemIcon>{getIcons("exit", 24)}</ItemIcon>
             로그아웃
           </SidebarBtn>
         </SidebarItem>
@@ -78,7 +78,7 @@ const Sidebar = () => {
 export default Sidebar;
 
 const SidebarContainer = tw.nav`
-  shrink-0 flex flex-col w-64 h-full p-4 gap-8 bg-primary text-white text-xl
+  shrink-0 flex flex-col w-64 h-full p-4 gap-8 bg-primary text-white text-lg
 `;
 
 const SidebarLogo = tw.div`

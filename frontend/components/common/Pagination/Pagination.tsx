@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import tw, { styled } from "twin.macro";
 import usePagination from "@/hooks/usePagination";
-import { getIcons } from "../icons";
+import { getIcons } from "../../icons";
 
 interface PaginationProps {
   count: number;
@@ -9,7 +9,7 @@ interface PaginationProps {
   setCurPage: Dispatch<SetStateAction<number>>;
 }
 
-const Pagination = ({ count, curPage, setCurPage }: PaginationProps) => {
+export const Pagination = ({ count, curPage, setCurPage }: PaginationProps) => {
   const {
     pageList,
     handleNextPageClick,
@@ -25,7 +25,9 @@ const Pagination = ({ count, curPage, setCurPage }: PaginationProps) => {
 
   return (
     <PaginationContainer>
-      <PrevPage onClick={handlePrevPageClick}>{getIcons("left", 20)}</PrevPage>
+      <PrevOrNextPageButton onClick={handlePrevPageClick}>
+        {getIcons("left", 16)}
+      </PrevOrNextPageButton>
       {pageList.map((page, index) => {
         return (
           <PageButton
@@ -37,26 +39,23 @@ const Pagination = ({ count, curPage, setCurPage }: PaginationProps) => {
           </PageButton>
         );
       })}
-      <NextPage onClick={handleNextPageClick}>{getIcons("right", 20)}</NextPage>
+      <PrevOrNextPageButton onClick={handleNextPageClick}>
+        {getIcons("right", 16)}
+      </PrevOrNextPageButton>
     </PaginationContainer>
   );
 };
 
-export default Pagination;
-
 const PaginationContainer = tw.div`
-  flex items-center justify-center w-full h-12
+  flex gap-2 items-center justify-center w-full h-10
+  [> button]:(border border-zinc-200 rounded-md)
 `;
 
 const PageButton = styled.button<{ isActive: boolean }>(({ isActive }) => [
-  tw`w-6 h-6 mx-2 font-bold`,
-  isActive && tw`text-secondary`,
+  tw`w-6 h-6`,
+  isActive && tw`bg-primary border-none text-white `,
 ]);
 
-const PrevPage = tw.button`
-  flex items-center justify-center w-6 h-6 border border-primary text-primary
-`;
-
-const NextPage = tw.button`
-  flex items-center justify-center w-6 h-6 border border-primary text-primary
+const PrevOrNextPageButton = tw.button`
+  flex items-center justify-center w-6 h-6 text-primary 
 `;

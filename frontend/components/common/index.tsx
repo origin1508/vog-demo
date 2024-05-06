@@ -17,3 +17,5 @@ export * from "./Modal";
 export * from "./Search";
 
 export * from "./Textarea";
+
+export * from "./Pagination";

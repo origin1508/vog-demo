@@ -5,7 +5,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   width?: number;
   height?: number;
   margin?: number;
-  bgColor: "primary" | "secondary" | "transparent";
+  bgColor: "primary" | "secondary" | "transparent" | "warning" | "caution";
   position?: {
     type: "relative" | "absolute";
     top?: string;
@@ -48,7 +48,7 @@ const StyledButton = styled.button<{
   width?: number;
   height?: number;
   margin?: number;
-  bgColor: "primary" | "secondary" | "transparent";
+  bgColor: "primary" | "secondary" | "transparent" | "warning" | "caution";
   position?: {
     type: "relative" | "absolute";
     top?: string;
@@ -57,7 +57,8 @@ const StyledButton = styled.button<{
     right?: string;
   };
 }>(({ width, height, margin, bgColor, position }) => [
-  tw`my-4 h-10 w-full rounded
+  tw`h-10 w-full rounded text-white
+    enabled:hover:brightness-110
     disabled:(bg-stone-500 text-stone-400)
   `,
   width &&
@@ -76,10 +77,14 @@ const StyledButton = styled.button<{
     `,
   bgColor &&
     (bgColor === "primary"
-      ? tw`bg-primary enabled:hover:bg-[#c3a888]`
+      ? tw`bg-primary `
       : bgColor === "secondary"
-      ? tw`bg-secondary enabled:hover:bg-[#ff1d53]`
-      : tw`bg-transparent enabled:hover:bg-neutral-600`),
+      ? tw`bg-secondary`
+      : bgColor === "warning"
+      ? tw`bg-warning`
+      : bgColor === "caution"
+      ? tw`bg-caution`
+      : tw`bg-transparent text-black enabled:hover:bg-neutral-600`),
   position &&
     css`
       position: ${position.type};

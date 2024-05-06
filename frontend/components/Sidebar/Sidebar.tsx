@@ -78,7 +78,7 @@ const Sidebar = () => {
 export default Sidebar;
 
 const SidebarContainer = tw.nav`
-  shrink-0 flex flex-col w-64 h-full p-4 gap-8 bg-primary text-white text-lg
+  shrink-0 flex flex-col w-60 h-full p-4 gap-8 bg-primary text-white text-lg
 `;
 
 const SidebarLogo = tw.div`

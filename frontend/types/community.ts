@@ -74,15 +74,6 @@ export interface CommunityProps {
   };
 }
 
-export interface PostProps {
-  userId: number | null;
-  content?: ContentDetail;
-  likes: Number[];
-  handleDeletePostClick: (postId: number) => Promise<void>;
-  handleLikeButtonClick: () => void;
-  handleUserProfileOpen: HandleUserProfileOpen;
-}
-
 export interface CommentsProps {
   userId: number | null;
   handleUserProfileOpen: HandleUserProfileOpen;

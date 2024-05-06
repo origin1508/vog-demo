@@ -1,6 +1,6 @@
 import tw from "twin.macro";
-import { getIcons } from "@/components/icons";
-import { Content } from "@/types/community";
+import { ContentItem } from "./ContentItem";
+import type { Content } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";
 
 interface ContentsProps {
@@ -8,74 +8,42 @@ interface ContentsProps {
   handleContentClick: (postId: number) => void;
 }
 
-const Contents = ({ contents, handleContentClick }: ContentsProps) => {
+export const Contents = ({ contents, handleContentClick }: ContentsProps) => {
   return (
     <ContentsContainer>
-      {contents.map((content) => {
-        return (
-          <ContentContainer
-            key={content.id}
-            onClick={() => handleContentClick(content.id)}
-          >
-            <ContentLikeCount>
-              {getIcons("thumb", 18)}
-              {content.likeCount}
-            </ContentLikeCount>
-            <ContentGame>발로란트</ContentGame>
-            <ContentTitle>
-              {content.title}
-              <CommentCount>{`[${content.commentCount}]`}</CommentCount>
-            </ContentTitle>
-            <ContentAuthor>{content.user.nickname}</ContentAuthor>
-            <ContentHit>
-              {getIcons("eye", 14)}
-              {content.view}
-            </ContentHit>
-            <ContentTime>
-              {getIcons("time", 18)}
-              {timeDifference(content.createdAt)}
-            </ContentTime>
-          </ContentContainer>
-        );
-      })}
+      <ContentItem
+        likeCount={"추천 수"}
+        title="제목"
+        author="작성자"
+        viewCount="조회수"
+        createdAt="작성일"
+      />
+      {contents.length > 0 ? (
+        contents.map((content) => {
+          return (
+            <ContentItem
+              key={content.id}
+              likeCount={content.likeCount}
+              title={content.title}
+              author={content.user.nickname}
+              viewCount={content.view}
+              createdAt={timeDifference(content.createdAt)}
+              commentCount={content.commentCount}
+              onClick={() => handleContentClick(content.id)}
+            />
+          );
+        })
+      ) : (
+        <Blank>작성된 글이 없습니다.</Blank>
+      )}
     </ContentsContainer>
   );
 };
 
-export default Contents;
-
-const ContentsContainer = tw.section`
-  w-full h-64 rounded-md bg-white
+const ContentsContainer = tw.ul`
+  w-full mt-4 rounded-md bg-white
 `;
 
-const ContentContainer = tw.div`
-  flex items-center w-full h-12 px-4 text-center
-`;
-
-const ContentGame = tw.span`
-  w-1/12
-`;
-
-const ContentTitle = tw.span`
-  grow text-left
-`;
-
-const CommentCount = tw.span`
-  text-primary 
-`;
-
-const ContentAuthor = tw.span`
-  w-1/12
-`;
-
-const ContentLikeCount = tw.span`
-  flex w-[5%] justify-center items-center px-2
-`;
-
-const ContentHit = tw.span`
-  flex w-[8%] justify-center items-center gap-1 px-2
-`;
-
-const ContentTime = tw.div`
-  flex justify-center items-center w-1/12
+const Blank = tw.div`
+  flex justify-center items-center w-full h-64
 `;

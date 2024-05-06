@@ -2,20 +2,15 @@ import { useEffect, useState, useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
-
 import useToast from "@/hooks/useToast";
 import useLoadingState from "@/hooks/useLoadingState";
-
-import { Header, Search, Button } from "@/components/common";
+import { Header, Button } from "@/components/common";
 import Navigation from "./Navigation";
-import Contents from "./Contents";
-import Pagination from "../Pagination";
+import { Contents, ContentsFilter } from "./Contents";
 import MainLayout from "../layout/MainLayout";
-
+import { MainCard, Pagination } from "@/components/common";
 import { getPostsRequest, searchPostRequest } from "@/apis/community";
 import { getAccessToken } from "@/utils/tokenManager";
-import { COMMUNITY_SEARCH_OPTION } from "@/constants/search";
-
 import type { CommunityProps, CommunityQuery } from "@/types/community";
 import type { NextPageWithLayout } from "@/pages/_app";
 
@@ -96,24 +91,29 @@ const Community: NextPageWithLayout<CommunityProps> = ({
         <Header title="커뮤니티" />
       </CommunityHeader>
       <CommunityBody>
-        <Search options={COMMUNITY_SEARCH_OPTION} />
-        <Contents contents={contents} handleContentClick={handleContentClick} />
+        <MainCard>
+          <ContentsFilter />
+          <Contents
+            contents={contents}
+            handleContentClick={handleContentClick}
+          />
+          <CommunityButtonContainer>
+            <Pagination
+              curPage={curPage}
+              count={totalCount}
+              setCurPage={setCurPage}
+            />
+            <Button
+              width={6}
+              bgColor="secondary"
+              position={{ type: "absolute", right: "0", bottom: "0" }}
+              onClick={handleEditButtonClick}
+            >
+              글쓰기
+            </Button>
+          </CommunityButtonContainer>
+        </MainCard>
       </CommunityBody>
-      <CommunityButtonContainer>
-        <Pagination
-          curPage={curPage}
-          count={totalCount}
-          setCurPage={setCurPage}
-        />
-        <Button
-          width={6}
-          bgColor="primary"
-          position={{ type: "absolute", top: "0", right: "8rem" }}
-          onClick={handleEditButtonClick}
-        >
-          글쓰기
-        </Button>
-      </CommunityButtonContainer>
     </CommunityContainer>
   );
 };
@@ -155,9 +155,9 @@ const CommunityContainer = tw.article`
 const CommunityHeader = tw.header``;
 
 const CommunityBody = tw.section`
-  w-full p-9
+  w-full px-9
 `;
 
 const CommunityButtonContainer = tw.div`
-  relative p-4
+  relative w-full
 `;

@@ -1,9 +1,14 @@
+import { ReactNode } from "react";
 import tw from "twin.macro";
 
-export const MainCard = () => {
-  return <MainCardStyle />;
+interface MainCardProps {
+  children: ReactNode;
+}
+
+export const MainCard = ({ children }: MainCardProps) => {
+  return <MainCardStyle>{children}</MainCardStyle>;
 };
 
 const MainCardStyle = tw.section`
-  w-full p-4 bg-white shadow-md rounded-xl
+  flex flex-col gap-4 w-full p-6 bg-white shadow-md rounded-xl
 `;

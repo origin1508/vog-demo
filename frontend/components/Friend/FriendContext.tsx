@@ -2,7 +2,7 @@ import { MouseEvent, useState } from "react";
 import tw, { styled, css } from "twin.macro";
 import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
-import UserCard from "../common/UserCard";
+import { UserCard } from "@/components/common";
 import { CONTEXT_MENU_WIDTH } from "@/constants/friend";
 import { INITIAL_STATE, FriendContextProps } from "@/types/friend";
 

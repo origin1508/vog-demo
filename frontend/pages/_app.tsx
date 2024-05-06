@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import GlobalStyle from "@/styles/GlobalStyle";
-import Loading from "@/components/common/Loading";
+import { Loading } from "@/components/common/";
 if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
   import("../mocks");
 }

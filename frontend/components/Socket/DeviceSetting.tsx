@@ -1,6 +1,6 @@
 import { useEffect, useState, MutableRefObject } from "react";
 import tw, { styled } from "twin.macro";
-import Button from "@/components/common/Button";
+import { Button } from "@/components/common/";
 
 interface DeviceSettingModalProps {
   isChatRoom: boolean;

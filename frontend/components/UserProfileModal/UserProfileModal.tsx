@@ -3,8 +3,7 @@ import tw from "twin.macro";
 import useUserProfileState from "@/hooks/useUserProfileState";
 import useFriendState from "@/hooks/useFriendState";
 import useUserState from "@/hooks/useUserState";
-import Modal from "../common/Modal";
-import Button from "../common/Button";
+import { Modal, Button } from "../common";
 import { getIcons } from "../icons";
 
 const UserProfileModal = () => {

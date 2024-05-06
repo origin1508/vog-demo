@@ -1,14 +1,12 @@
 import tw from "twin.macro";
-import Left from "@/components/common/MyPageCard/Left";
-import Right from "@/components/common/MyPageCard/Right";
-import Button from "@/components/common/Button";
+import { MyPageCardLeft, MyPageCardRight, Button } from "@/components/common";
 import { DeleteAccountProps } from "@/types/myPage";
 
 const DeleteAccount = ({ handleModalOpen }: DeleteAccountProps) => {
   return (
     <DeleteAccountContainer>
-      <Left title="회원탈퇴" />
-      <Right>
+      <MyPageCardLeft title="회원탈퇴" />
+      <MyPageCardRight>
         <DeleteAccountButton>
           <Button
             type="button"
@@ -19,7 +17,7 @@ const DeleteAccount = ({ handleModalOpen }: DeleteAccountProps) => {
             회원탈퇴
           </Button>
         </DeleteAccountButton>
-      </Right>
+      </MyPageCardRight>
     </DeleteAccountContainer>
   );
 };

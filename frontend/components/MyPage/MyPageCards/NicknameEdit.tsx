@@ -1,10 +1,12 @@
 import tw from "twin.macro";
 import useNicknameEditForm from "@/hooks/useNicknameEditForm";
-import Left from "@/components/common/MyPageCard/Left";
-import Right from "@/components/common/MyPageCard/Right";
-import Input from "@/components/common/Input";
-import Button from "@/components/common/Button";
-import ErrorMessage from "@/components/common/ErrorMessage";
+import {
+  MyPageCardLeft,
+  MyPageCardRight,
+  Button,
+  Input,
+  ErrorMessage,
+} from "@/components/common";
 import { NicknameEditProps } from "@/types/myPage";
 
 const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
@@ -13,8 +15,8 @@ const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
 
   return (
     <NicknameEditContainer>
-      <Left title="닉네임 변경" />
-      <Right>
+      <MyPageCardLeft title="닉네임 변경" />
+      <MyPageCardRight>
         <NicknameEditForm
           onSubmit={async (e) => {
             await handleSubmit(handleNicknameEditSubmit)(e);
@@ -47,7 +49,7 @@ const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
             </Button>
           </NicknameEditSumbit>
         </NicknameEditForm>
-      </Right>
+      </MyPageCardRight>
     </NicknameEditContainer>
   );
 };

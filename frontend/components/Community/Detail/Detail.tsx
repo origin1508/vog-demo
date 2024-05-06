@@ -6,8 +6,7 @@ import useUserProfileState from "@/hooks/useUserProfileState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
-import Header from "@/components/common/Header";
-import Button from "@/components/common/Button";
+import { Header, Button } from "@/components/common";
 import Post from "./Post";
 import { getPostRequest, deletePostRequest } from "@/apis/community";
 import {

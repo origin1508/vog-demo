@@ -45,7 +45,7 @@ const Contents = ({ contents, handleContentClick }: ContentsProps) => {
 export default Contents;
 
 const ContentsContainer = tw.section`
-  border-y-2 border-neutral-700 divide-y divide-neutral-700
+  w-full h-64 rounded-md bg-white
 `;
 
 const ContentContainer = tw.div`

@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import tw from "twin.macro";
-import Textarea from "@/components/common/Textarea";
+import { Textarea } from "@/components/common/";
 import { CommentEditProps } from "@/types/community";
 
 const CommentEdit = ({

@@ -2,21 +2,22 @@ import { useEffect, useState, useMemo } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import tw from "twin.macro";
+
 import useToast from "@/hooks/useToast";
 import useLoadingState from "@/hooks/useLoadingState";
-import Header from "../common/Header";
-import Search from "../common/Search";
+
+import { Header, Search, Button } from "@/components/common";
 import Navigation from "./Navigation";
 import Contents from "./Contents";
 import Pagination from "../Pagination";
-import Button from "../common/Button";
+import MainLayout from "../layout/MainLayout";
+
 import { getPostsRequest, searchPostRequest } from "@/apis/community";
-import { getTitle } from "@/utils/getTitle";
-import { CommunityProps, CommunityQuery } from "@/types/community";
 import { getAccessToken } from "@/utils/tokenManager";
 import { COMMUNITY_SEARCH_OPTION } from "@/constants/search";
-import { NextPageWithLayout } from "@/pages/_app";
-import MainLayout from "../layout/MainLayout";
+
+import type { CommunityProps, CommunityQuery } from "@/types/community";
+import type { NextPageWithLayout } from "@/pages/_app";
 
 const Community: NextPageWithLayout<CommunityProps> = ({
   data,
@@ -29,7 +30,6 @@ const Community: NextPageWithLayout<CommunityProps> = ({
   const { setLoadingFalse, setLoadingTrue } = useLoadingState();
   const query = useMemo(() => router.query as CommunityQuery, [router]);
   const category = useMemo(() => query.category, [query]);
-  const title = useMemo(() => getTitle(query.category || ""), [query]);
   const searchType = useMemo(() => query.type, [query]);
   const keyword = useMemo(() => query.keyword, [query]);
 
@@ -90,14 +90,15 @@ const Community: NextPageWithLayout<CommunityProps> = ({
   };
 
   return (
-    <CommunityWrapper>
-      <Navigation category={category} />
-      <CommunityContainer>
-        <Header title={title ? title : ""}>
-          <Search options={COMMUNITY_SEARCH_OPTION} />
-        </Header>
+    <CommunityContainer>
+      <CommunityHeader>
+        <Navigation category={category} />
+        <Header title="커뮤니티" />
+      </CommunityHeader>
+      <CommunityBody>
+        <Search options={COMMUNITY_SEARCH_OPTION} />
         <Contents contents={contents} handleContentClick={handleContentClick} />
-      </CommunityContainer>
+      </CommunityBody>
       <CommunityButtonContainer>
         <Pagination
           curPage={curPage}
@@ -113,7 +114,7 @@ const Community: NextPageWithLayout<CommunityProps> = ({
           글쓰기
         </Button>
       </CommunityButtonContainer>
-    </CommunityWrapper>
+    </CommunityContainer>
   );
 };
 
@@ -147,12 +148,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const CommunityWrapper = tw.article`
-  w-full p-4
+const CommunityContainer = tw.article`
+  w-full
 `;
 
-const CommunityContainer = tw.section`
-  w-full px-10
+const CommunityHeader = tw.header``;
+
+const CommunityBody = tw.section`
+  w-full p-9
 `;
 
 const CommunityButtonContainer = tw.div`

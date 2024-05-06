@@ -5,7 +5,7 @@ import tw, { styled } from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
-import UserCard from "../common/UserCard";
+import { UserCard } from "../common/";
 import { getIcons } from "../icons";
 import { deleteAccessToken } from "@/utils/tokenManager";
 import { NAV_MENU } from "@/constants/nav";

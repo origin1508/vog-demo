@@ -1,6 +1,6 @@
 import { useState } from "react";
 import tw, { styled } from "twin.macro";
-import Button from "@/components/common/Button";
+import { Button } from "@/components/common";
 
 const History = () => {
   const [isOpen, setIsOpen] = useState(false);

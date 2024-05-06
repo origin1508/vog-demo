@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import tw, { styled, css } from "twin.macro";
 import useProfilePicEditForm from "@/hooks/useProfilePicEditForm";
-import Left from "@/components/common/MyPageCard/Left";
-import Right from "@/components/common/MyPageCard/Right";
+import Left from "@/components/common/Card/MyPageCard/Left";
+import Right from "@/components/common/Card/MyPageCard/Right";
 import Button from "@/components/common/Button";
 import { getIcons } from "@/components/icons";
 import imageResize from "@/utils/imageResize";

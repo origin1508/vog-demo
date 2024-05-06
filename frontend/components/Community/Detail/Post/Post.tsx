@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import tw from "twin.macro";
 import Comments from "../Comments";
-import Button from "@/components/common/Button";
+import { Button } from "@/components/common";
 import { getIcons } from "@/components/icons";
 import { PostProps } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";

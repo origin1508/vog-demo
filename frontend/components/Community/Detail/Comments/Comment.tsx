@@ -1,7 +1,7 @@
 import { useState } from "react";
 import tw from "twin.macro";
 import CommentEdit from "./CommentEdit";
-import Button from "@/components/common/Button";
+import { Button } from "@/components/common";
 import Reply from "./Reply";
 import { CommentProps } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";

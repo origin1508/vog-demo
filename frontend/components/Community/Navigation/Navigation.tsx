@@ -36,17 +36,16 @@ export default memo(Navigation, (prevProps, nextProps) => {
 });
 
 const NavConatiner = tw.nav`
-  w-full border-b border-neutral-700
+  w-full px-9 py-6 bg-white shadow-md
 `;
 
 const NavMenu = tw.div`
-  flex items-center gap-12 h-16 ml-4
+  flex items-center gap-20
 `;
 
 const NavLink = styled.div<{ isActive: boolean }>(({ isActive }) => [
   tw`
-  relative flex items-center h-full align-middle text-3xl font-semibold
-  hover:text-primary
+  relative flex items-center h-full align-middle text-xl font-medium
   after:(absolute bottom-0
     hover:(w-full border-b-2 border-primary)
     )

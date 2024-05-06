@@ -3,7 +3,7 @@ import useStreamState from "@/hooks/useStreamState";
 import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
 import { socketClient } from "@/utils/socketClient";
-import Audio from "../common/Audio";
+import { Audio } from "../common/";
 import { getLocalStorage, setLocalStorage } from "@/utils/localStorage";
 
 const Socket = () => {

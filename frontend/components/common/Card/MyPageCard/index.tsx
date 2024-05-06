@@ -1,3 +1,3 @@
-export * from "./Left";
+export * from "./MyPageCardLeft";
 
-export * from "./Right";
+export * from "./MyPageCardRight";

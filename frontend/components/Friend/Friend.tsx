@@ -3,7 +3,7 @@ import tw, { styled } from "twin.macro";
 import useToast from "@/hooks/useToast";
 import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
-import Header from "../common/Header";
+import { Header } from "@/components/common";
 import FriendContext from "./FriendContext";
 import { getIcons } from "../icons";
 import { searchFriendRequest } from "@/apis/friend";

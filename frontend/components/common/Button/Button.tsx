@@ -1,8 +1,7 @@
 import tw, { styled, css } from "twin.macro";
-import { ReactNode } from "react";
+import { ButtonHTMLAttributes } from "react";
 
-interface ButtonProps {
-  type?: "button" | "submit";
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   width?: number;
   height?: number;
   margin?: number;
@@ -14,12 +13,9 @@ interface ButtonProps {
     left?: string;
     right?: string;
   };
-  disabled?: boolean;
-  children: ReactNode;
-  onClick?: () => void | Promise<void>;
 }
 
-const Button = ({
+export const Button = ({
   type = "button",
   width,
   height,
@@ -47,8 +43,6 @@ const Button = ({
     </>
   );
 };
-
-export default Button;
 
 const StyledButton = styled.button<{
   width?: number;

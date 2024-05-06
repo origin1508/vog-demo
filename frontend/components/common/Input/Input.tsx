@@ -25,7 +25,7 @@ interface InputProps {
   onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
-const Input = ({
+export const Input = ({
   register,
   placeholder,
   value,
@@ -67,8 +67,6 @@ const Input = ({
     </>
   );
 };
-
-export default Input;
 
 const StyledInput = styled.input<{
   width?: number;

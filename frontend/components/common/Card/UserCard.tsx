@@ -6,7 +6,7 @@ interface UserCardProps {
   profilePic: string;
 }
 
-const UserCard = ({ nickname, profilePic }: UserCardProps) => {
+export const UserCard = ({ nickname, profilePic }: UserCardProps) => {
   return (
     <UserCardContainer>
       <UserProfile
@@ -19,8 +19,6 @@ const UserCard = ({ nickname, profilePic }: UserCardProps) => {
     </UserCardContainer>
   );
 };
-
-export default UserCard;
 
 const UserCardContainer = tw.div`
   flex items-center h-8

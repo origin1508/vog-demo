@@ -8,7 +8,7 @@ interface SearchProps {
   options: { value: string; text: string }[];
 }
 
-const Search = ({ options }: SearchProps) => {
+export const Search = ({ options }: SearchProps) => {
   const router = useRouter();
   const [searchOption, setSearchOption] = useState<
     { value: string; text: string }[]
@@ -63,40 +63,43 @@ const Search = ({ options }: SearchProps) => {
           );
         })}
       </SearchCategory>
-      <SearchInput
-        value={search.keyword}
-        onChange={(e) =>
-          setSearch((prev) => {
-            return { ...prev, keyword: e.target.value.trim() };
-          })
-        }
-      />
-      <SearchSumbitButton type="submit">
-        <SearchIcon>{getIcons("search", 22)}</SearchIcon>
-      </SearchSumbitButton>
+      <SeacrhInputContainer>
+        <SearchInput
+          value={search.keyword}
+          onChange={(e) =>
+            setSearch((prev) => {
+              return { ...prev, keyword: e.target.value };
+            })
+          }
+        />
+        <SearchSumbitButton type="submit">
+          <SearchIcon>{getIcons("search", 22)}</SearchIcon>
+        </SearchSumbitButton>
+      </SeacrhInputContainer>
     </SearchContainer>
   );
 };
 
-export default Search;
-
 const SearchContainer = tw.form`
-  relative h-12 p-2 border border-neutral-700
-  [> *]:(border border-neutral-700)
+  flex gap-2 h-10
 `;
 
 const SearchCategory = tw.select`
-  w-20 h-full bg-black outline-none
+  w-20 h-full outline-none
 `;
 
 const SearchOption = tw.option``;
 
+const SeacrhInputContainer = tw.div`
+  flex border rounded shadow
+`;
+
 const SearchInput = tw.input`
-  h-full px-2 pr-8 bg-transparent outline-none
+  h-full p-2 bg-transparent outline-none
 `;
 
 const SearchSumbitButton = tw.button`
-  absolute top-3 right-3 border-none
+  w-10 h-10 text-white border-none bg-primary rounded
 `;
 
 const SearchIcon = tw.div`

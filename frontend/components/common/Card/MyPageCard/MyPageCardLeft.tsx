@@ -5,7 +5,7 @@ interface LeftProps {
   description?: string;
 }
 
-const Left = ({ title, description }: LeftProps) => {
+export const MyPageCardLeft = ({ title, description }: LeftProps) => {
   return (
     <LeftContainer>
       <Title>{title}</Title>
@@ -13,8 +13,6 @@ const Left = ({ title, description }: LeftProps) => {
     </LeftContainer>
   );
 };
-
-export default Left;
 
 const LeftContainer = tw.div`
   shrink-0 w-72 p-8 bg-zinc-900

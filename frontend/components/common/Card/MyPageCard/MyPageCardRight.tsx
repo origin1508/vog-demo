@@ -5,11 +5,9 @@ interface RightProps {
   children: ReactNode;
 }
 
-const Right = ({ children }: RightProps) => {
+export const MyPageCardRight = ({ children }: RightProps) => {
   return <RightContainer>{children}</RightContainer>;
 };
-
-export default Right;
 
 const RightContainer = tw.div`
   w-full p-16 bg-stone-800

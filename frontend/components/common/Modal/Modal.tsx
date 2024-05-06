@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import tw, { styled } from "twin.macro";
-import Button from "../Button";
+import { Button } from "../index";
 import { getIcons } from "@/components/icons";
 
 interface ModalProps {
@@ -13,7 +13,7 @@ interface ModalProps {
   handleConfirm?: () => void;
 }
 
-const Modal = ({
+export const Modal = ({
   isOpen,
   hasFooter = true,
   title,
@@ -59,8 +59,6 @@ const Modal = ({
     </ModalWrapper>
   );
 };
-
-export default Modal;
 
 const ModalWrapper = styled.div<{ isOpen: boolean }>(({ isOpen }) => [
   tw`hidden`,

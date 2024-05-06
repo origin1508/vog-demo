@@ -5,7 +5,7 @@ interface AudioProps {
   isMuted: boolean;
 }
 
-const Audio = ({ stream, isMuted }: AudioProps) => {
+export const Audio = ({ stream, isMuted }: AudioProps) => {
   const streamRef = useRef<HTMLAudioElement>(null);
   useEffect(() => {
     if (stream instanceof MediaStream) {
@@ -16,5 +16,3 @@ const Audio = ({ stream, isMuted }: AudioProps) => {
   }, [stream]);
   return <audio ref={streamRef} muted={isMuted} autoPlay></audio>;
 };
-
-export default Audio;

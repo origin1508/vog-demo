@@ -4,8 +4,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#2D3047",
-        secondary: "#CB1944",
+        primary: "#001C30",
+        secondary: "#176B87",
+        warning: "#FC4100",
+        caution: "#FFC55A",
       },
       keyframes: {
         slideRight: {

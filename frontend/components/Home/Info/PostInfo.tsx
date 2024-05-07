@@ -37,6 +37,7 @@ export default PostInfo;
 
 const PostInfoContainer = tw.article`
   flex gap-6
+  max-lg:flex-col
 `;
 
 const LatestPosts = tw.section`

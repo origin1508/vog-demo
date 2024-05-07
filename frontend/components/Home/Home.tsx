@@ -21,7 +21,7 @@ Home.getLayout = function getLayout(page) {
 export default Home;
 
 const HomeContainer = tw.div`
-  w-full p-9
+  w-full p-9 overflow-auto
 `;
 
 const HomeHeader = tw.header`

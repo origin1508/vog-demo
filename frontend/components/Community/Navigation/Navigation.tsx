@@ -40,15 +40,16 @@ const NavConatiner = tw.nav`
 `;
 
 const NavMenu = tw.div`
-  flex items-center gap-20
+  flex items-center gap-20 text-xl
+  max-md:(gap-10 text-base)
 `;
 
 const NavLink = styled.div<{ isActive: boolean }>(({ isActive }) => [
   tw`
-  relative flex items-center h-full align-middle text-xl font-medium
+  relative flex items-center h-full align-middle  font-medium
   after:(absolute bottom-0
-    hover:(w-full border-b-2 border-primary)
+    hover:(w-full border-b-2 border-caution)
     )
 `,
-  isActive && tw`text-primary`,
+  isActive && tw`text-primary border-b-2 border-caution`,
 ]);

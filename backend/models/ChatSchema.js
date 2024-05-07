@@ -6,6 +6,7 @@ const ChatSchema = new Schema(
   {
     roomId: { type: String, default: () => randomUUID() },
     title: { type: String, required: true },
+    game: { type: String, requried: true },
     maximumMember: { type: Number, required: true, min: 2 },
     currentMember: {
       type: Number,

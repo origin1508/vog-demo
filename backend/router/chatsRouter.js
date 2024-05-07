@@ -20,14 +20,14 @@ router.get("/rooms/list", async (req, res) => {
 });
 
 router.post("/rooms", async (req, res) => {
-  const { userId, title, description, maximumMember } = req.body;
+  const { userId, title, game, maximumMember } = req.body;
 
   try {
     const chatParticipant = await ChatParticipant.findOne({ userId: userId });
     if (!chatParticipant) {
       const chat = await Chat.create({
         title,
-        description,
+        game,
         maximumMember,
         currentMember: 1,
       });

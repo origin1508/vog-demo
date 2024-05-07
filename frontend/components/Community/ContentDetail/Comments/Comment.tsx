@@ -113,7 +113,7 @@ const CommentTime = tw.div`
 `;
 
 const CommentText = tw.p`
-  my-2 px-2
+  my-2 px-2 whitespace-pre-wrap
 `;
 
 const CommentButtonContainer = tw.div`

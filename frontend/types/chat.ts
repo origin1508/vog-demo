@@ -32,6 +32,7 @@ export interface ChatState {
   roomId: string;
   isVolumeMuted: boolean;
   isMicMuted: boolean;
+  isConnected: boolean;
 }
 
 export interface ChatMemberProps {

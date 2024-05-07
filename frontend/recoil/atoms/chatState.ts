@@ -17,6 +17,7 @@ export const chatState = atom<ChatState>({
     roomId: "",
     isVolumeMuted: false,
     isMicMuted: false,
+    isConnected: false,
   },
   effects_UNSTABLE: [persistAtom],
 });

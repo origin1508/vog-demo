@@ -95,9 +95,8 @@ const Socket = () => {
     });
 
     socketClient.on("setChat", ({ roomId, chatParticipant }) => {
-      console.log(chatParticipant);
       setChat((prev) => {
-        return { ...prev, roomId, chatParticipant };
+        return { ...prev, roomId, chatParticipant, isConnected: true };
       });
     });
 
@@ -116,6 +115,9 @@ const Socket = () => {
     socketClient.on("leaveMember", ({ socketId }) => {
       console.log("유저나감", socketId, peerConnectionsRef.current);
       peerConnectionsRef.current[socketId].close();
+      setStreams((prev) =>
+        prev.filter((it) => Object.keys(it)[0] !== socketId)
+      );
     });
 
     // webRTC 시그널링

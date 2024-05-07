@@ -15,7 +15,7 @@ export const MyPageCardLeft = ({ title, description }: LeftProps) => {
 };
 
 const LeftContainer = tw.div`
-  shrink-0 w-72 p-8 bg-zinc-900
+  shrink-0 flex items-center w-72 p-8 border-r
 `;
 
 const Title = tw.h2`

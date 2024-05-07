@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import tw, { styled, css } from "twin.macro";
 import useProfilePicEditForm from "@/hooks/useProfilePicEditForm";
-import Left from "@/components/common/Card/MyPageCard/Left";
-import Right from "@/components/common/Card/MyPageCard/Right";
-import Button from "@/components/common/Button";
+import { MyPageCard, Button } from "@/components/common";
 import { getIcons } from "@/components/icons";
 import imageResize from "@/utils/imageResize";
 import { ProfilePicEditProps } from "@/types/myPage";
@@ -37,8 +35,7 @@ const ProfilePicEdit = ({ handleProfilePicUpload }: ProfilePicEditProps) => {
 
   return (
     <ProfilePicEditContainer>
-      <Left title="프로필이미지 변경" />
-      <Right>
+      <MyPageCard title="프로필이미지 변경">
         <ProfilePicEditForm
           acceptCharset="UTF-8"
           onSubmit={async (e) => {
@@ -53,7 +50,7 @@ const ProfilePicEdit = ({ handleProfilePicUpload }: ProfilePicEditProps) => {
               accept="image/*"
             ></ProfilePicInput>
             {!preview && (
-              <ProfilePicIcon>{getIcons("plus", 64)}</ProfilePicIcon>
+              <ProfilePicIcon>{getIcons("plus", 64, "white")}</ProfilePicIcon>
             )}
           </ProfilePicUpload>
           <ProfilePicSumbitButton>
@@ -76,7 +73,7 @@ const ProfilePicEdit = ({ handleProfilePicUpload }: ProfilePicEditProps) => {
             </Button>
           </ProfilePicSumbitButton>
         </ProfilePicEditForm>
-      </Right>
+      </MyPageCard>
     </ProfilePicEditContainer>
   );
 };
@@ -91,8 +88,8 @@ const ProfilePicEditForm = tw.form`
 `;
 
 const ProfilePicUpload = styled.div<{ preview?: string }>(({ preview }) => [
-  tw`relative flex items-center justify-center h-48 w-48 m-auto rounded-full bg-stone-700 bg-cover
-  hover:bg-stone-600`,
+  tw`relative flex items-center justify-center h-48 w-48 m-auto rounded-full bg-secondary/20 bg-cover
+  hover:brightness-125`,
   preview &&
     css`
       background-image: url(${preview});
@@ -108,5 +105,5 @@ const ProfilePicInput = tw.input`
 `;
 
 const ProfilePicSumbitButton = tw.div`
-  float-right space-x-4
+  flex justify-end gap-6 w-full mt-6
 `;

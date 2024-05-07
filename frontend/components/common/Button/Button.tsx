@@ -59,7 +59,7 @@ const StyledButton = styled.button<{
 }>(({ width, height, margin, bgColor, position }) => [
   tw`h-10 w-full rounded text-white
     enabled:hover:brightness-110
-    disabled:(bg-stone-500 text-stone-400)
+    disabled:(bg-zinc-300 text-stone-400)
   `,
   width &&
     css`

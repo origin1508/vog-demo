@@ -1,12 +1,6 @@
 import tw from "twin.macro";
 import useNicknameEditForm from "@/hooks/useNicknameEditForm";
-import {
-  MyPageCardLeft,
-  MyPageCardRight,
-  Button,
-  Input,
-  ErrorMessage,
-} from "@/components/common";
+import { MyPageCard, Button, Input, ErrorMessage } from "@/components/common";
 import { NicknameEditProps } from "@/types/myPage";
 
 const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
@@ -15,8 +9,7 @@ const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
 
   return (
     <NicknameEditContainer>
-      <MyPageCardLeft title="닉네임 변경" />
-      <MyPageCardRight>
+      <MyPageCard title="닉네임 변경">
         <NicknameEditForm
           onSubmit={async (e) => {
             await handleSubmit(handleNicknameEditSubmit)(e);
@@ -24,14 +17,11 @@ const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
           }}
         >
           <NicknameEditInput>
-            <NicknameEditLabel>
-              새 닉네임
-              <Input
-                height={3}
-                bgColor={"gray"}
-                register={register("nickname")}
-              />
-            </NicknameEditLabel>
+            <Input
+              height={3}
+              register={register("nickname")}
+              placeholder="닉네임을 입력해주세요"
+            />
             {isDirty && errorsNickname && (
               <ErrorMessage>
                 닉네임은 2글자 이상 10글자이하로 작성해주세요.
@@ -49,7 +39,7 @@ const NicknameEdit = ({ handleNicknameEditSubmit }: NicknameEditProps) => {
             </Button>
           </NicknameEditSumbit>
         </NicknameEditForm>
-      </MyPageCardRight>
+      </MyPageCard>
     </NicknameEditContainer>
   );
 };
@@ -60,13 +50,12 @@ const NicknameEditContainer = tw.div`
   flex w-full
 `;
 
-const NicknameEditForm = tw.form``;
-
-const NicknameEditInput = tw.div`
-  m-auto
+const NicknameEditForm = tw.form`
+  flex items-center w-full gap-6
 `;
 
-const NicknameEditLabel = tw.label`
+const NicknameEditInput = tw.div`
+  m-auto w-full
 `;
 
 const NicknameEditSumbit = tw.div`

@@ -1,33 +1,20 @@
-import { useState, ChangeEvent, type ReactElement } from "react";
-import { useRouter } from "next/router";
+import { type ReactElement } from "react";
 import tw from "twin.macro";
 import useToast from "@/hooks/useToast";
 import useUserState from "@/hooks/useUserState";
-import useModal from "@/hooks/useModal";
 import MainLayout from "../layout/MainLayout";
-import Header from "../common/Header";
 import Profile from "./Profile";
-import Modal from "../common/Modal";
-import Input from "../common/Input";
+import { Header, MainCard } from "@/components/common";
 import ProfilePicEdit from "./MyPageCards/ProfilePicEdit";
 import NicknameEdit from "./MyPageCards/NicknameEdit";
-import DeleteAccount from "./MyPageCards/DeleteAccount";
-import {
-  uploadProfilePicRequest,
-  changeNicknameRequest,
-  withdrawalRequest,
-} from "@/apis/user";
+import { uploadProfilePicRequest, changeNicknameRequest } from "@/apis/user";
 import { NicknameEditValue, ProfilePicEditValue } from "@/types/myPage";
 import imageResize from "@/utils/imageResize";
-import { deleteAccessToken } from "@/utils/tokenManager";
 import { NextPageWithLayout } from "@/pages/_app";
 
 const MyPage: NextPageWithLayout = () => {
-  const router = useRouter();
-  const [password, setPassword] = useState("");
   const { toast } = useToast();
-  const { user, userId, resetUser, setUser } = useUserState();
-  const { isOpen, handleModalClose, handleModalOpen } = useModal();
+  const { user, userId, setUser } = useUserState();
 
   const handleProfilePicUpload = async (data: ProfilePicEditValue) => {
     if (userId === null) return;
@@ -70,54 +57,17 @@ const MyPage: NextPageWithLayout = () => {
     }
   };
 
-  const handlePasswordInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const password = e.target.value;
-    setPassword(password);
-  };
-
-  const handleDeleteAccount = async () => {
-    if (userId === null) return;
-    if (!password) {
-      toast.alert("비밀번호를 입력하세요.");
-      return;
-    }
-
-    const res = await withdrawalRequest(userId, password);
-    if (res.success) {
-      resetUser();
-      deleteAccessToken();
-      router.replace("/");
-    } else {
-      toast.alert(res.error);
-    }
-  };
-
   return (
-    <>
-      <MyPageWrapper>
-        <Header title="마이페이지" />
-        <MyPageContainer>
+    <MyPageContainer>
+      <Header title="마이페이지" />
+      <MyPageCardsContainer>
+        <MainCard>
           <Profile user={user} />
           <ProfilePicEdit handleProfilePicUpload={handleProfilePicUpload} />
           <NicknameEdit handleNicknameEditSubmit={handleNicknameChangeSubmit} />
-          <DeleteAccount handleModalOpen={handleModalOpen} />
-        </MyPageContainer>
-      </MyPageWrapper>
-      <Modal
-        isOpen={isOpen}
-        title="회원탈퇴"
-        content="정말로 탈퇴하시겠습까?"
-        handleClose={handleModalClose}
-        handleConfirm={handleDeleteAccount}
-      >
-        <Input
-          type="password"
-          bgColor="gray"
-          placeholder="비밀번호를 입력하세요."
-          onChange={handlePasswordInputChange}
-        ></Input>
-      </Modal>
-    </>
+        </MainCard>
+      </MyPageCardsContainer>
+    </MyPageContainer>
   );
 };
 
@@ -127,10 +77,10 @@ MyPage.getLayout = function getLayout(page: ReactElement) {
 
 export default MyPage;
 
-const MyPageWrapper = tw.article`
-  w-full py-4 px-4
+const MyPageContainer = tw.article`
+  w-full
 `;
 
-const MyPageContainer = tw.div`
-  flex flex-col items-center gap-4 w-full h-[calc(100% - 4rem)] m-auto py-16 px-64 overflow-auto
+const MyPageCardsContainer = tw.div`
+  p-9
 `;

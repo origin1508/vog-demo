@@ -67,7 +67,7 @@ const ModalWrapper = styled.div<{ isOpen: boolean }>(({ isOpen }) => [
 ]);
 
 const ModalContainer = tw.div`
-  relative min-w-[20rem] shadow bg-zinc-800 rounded-lg
+  relative min-w-[20rem] shadow bg-zinc-100 rounded-lg
 `;
 
 const ModalTitle = tw.h3`
@@ -77,16 +77,16 @@ const ModalTitle = tw.h3`
 const ModalText = tw.p``;
 
 const ModalHeader = tw.div`
-  flex items-start justify-between p-4 border-b border-neutral-700
+  flex items-start justify-between p-4
 `;
 
 const ModalCloseButton = tw.button`
   flex items-center justify-center w-8 h-8 rounded
-  hover:bg-neutral-600
+  hover:bg-secondary/10
 `;
 
 const ModalBody = tw.div`
-  flex flex-col items-center justify-center p-6
+  flex flex-col items-center justify-center p-4
 `;
 
 const ModalFooter = tw.div`

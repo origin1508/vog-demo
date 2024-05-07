@@ -12,10 +12,13 @@ import useToast from "@/hooks/useToast";
 import MainLayout from "../layout/MainLayout";
 import RoomList from "./RoomList";
 import ChatEdit from "./ChatEdit";
-import Header from "../common/Header";
-import Search from "../common/Search";
-import Pagination from "../Pagination";
-import Button from "../common/Button";
+import {
+  Header,
+  Search,
+  Pagination,
+  Button,
+  MainCard,
+} from "@/components/common";
 
 import {
   createChatRoomRequest,
@@ -90,13 +93,8 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
       return;
     }
 
-    const { title, description, maximumMember } = data;
-    const res = await createChatRoomRequest(
-      userId,
-      title,
-      description,
-      maximumMember
-    );
+    const { title, game, maximumMember } = data;
+    const res = await createChatRoomRequest(userId, title, game, maximumMember);
     if (res.success) {
       const { roomId } = res.result;
       setChat((prev) => {
@@ -129,34 +127,36 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
 
   return (
     <>
-      <ChatWrapper>
+      <ChatContainer>
         <Header title="채팅" />
-        <ChatContainer>
-          <SearchContainer>
-            <ChatButtonContainer>
-              <Button width={6} bgColor="primary" onClick={handleModalOpen}>
-                방생성
-              </Button>
-              <RefreshButton onClick={() => updateChatRooms(curPage)}>
-                <RefreshIcon>{getIcons("reload", 30)}</RefreshIcon>
-              </RefreshButton>
-            </ChatButtonContainer>
-            {CHAT_SEARCH_OPTION && <Search options={CHAT_SEARCH_OPTION} />}
-          </SearchContainer>
-          {roomList.length !== 0 ? (
-            <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
-          ) : (
-            <div>생성된 방이 없습니다.</div>
-          )}
-        </ChatContainer>
-        <PaginationContainer>
-          <Pagination
-            curPage={curPage}
-            count={totalCount}
-            setCurPage={setCurPage}
-          />
-        </PaginationContainer>
-      </ChatWrapper>
+        <ChatBody>
+          <MainCard>
+            <SearchContainer>
+              <ChatButtonContainer>
+                <Button width={6} bgColor="primary" onClick={handleModalOpen}>
+                  방생성
+                </Button>
+                <RefreshButton onClick={() => updateChatRooms(curPage)}>
+                  <RefreshIcon>{getIcons("reload", 30)}</RefreshIcon>
+                </RefreshButton>
+              </ChatButtonContainer>
+              {CHAT_SEARCH_OPTION && <Search options={CHAT_SEARCH_OPTION} />}
+            </SearchContainer>
+            {roomList.length !== 0 ? (
+              <RoomList roomList={roomList} handleRoomClick={handleRoomClick} />
+            ) : (
+              <Blank>생성된 방이 없습니다.</Blank>
+            )}
+            <PaginationContainer>
+              <Pagination
+                curPage={curPage}
+                count={totalCount}
+                setCurPage={setCurPage}
+              />
+            </PaginationContainer>
+          </MainCard>
+        </ChatBody>
+      </ChatContainer>
       <ChatEdit
         isOpen={isOpen}
         handleModalClose={handleModalClose}
@@ -193,12 +193,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const ChatWrapper = tw.article`
-  w-full h-full p-4
+const ChatContainer = tw.article`
+  w-full h-full
 `;
 
-const ChatContainer = tw.div`
-  w-full px-10
+const ChatBody = tw.div`
+  w-full px-9
 `;
 
 const ChatButtonContainer = tw.div`
@@ -218,4 +218,8 @@ const SearchContainer = tw.div`
 
 const PaginationContainer = tw.div`
   relative p-4 clear-both
+`;
+
+const Blank = tw.div`
+  flex justify-center items-center
 `;

@@ -1,4 +1,6 @@
+import Image from "next/image";
 import tw from "twin.macro";
+import { getIcons } from "@/components/icons";
 import { RoomListProps } from "@/types/chat";
 
 const RoomList = ({ roomList, handleRoomClick }: RoomListProps) => {
@@ -8,12 +10,22 @@ const RoomList = ({ roomList, handleRoomClick }: RoomListProps) => {
         return (
           <Room key={room.roomId} onClick={() => handleRoomClick(room.roomId)}>
             <RoomInfo>
+              <RoomMemberCount>
+                {new Array(room.currentMember).fill(
+                  getIcons("person", 40, "green")
+                )}
+                {new Array(room.maximumMember - room.currentMember).fill(
+                  getIcons("person", 40, "lightgray")
+                )}
+              </RoomMemberCount>
               <RoomTitle>{room.title}</RoomTitle>
-              <RoomDescription>{room.description}</RoomDescription>
             </RoomInfo>
-            <RoomMemberCount>
-              {room.currentMember} / {room.maximumMember}
-            </RoomMemberCount>
+            <Image
+              src="/image/room/valorant.jpg"
+              alt="lol"
+              fill={true}
+              style={{ objectFit: "cover", objectPosition: "center" }}
+            />
           </Room>
         );
       })}
@@ -24,25 +36,21 @@ const RoomList = ({ roomList, handleRoomClick }: RoomListProps) => {
 export default RoomList;
 
 const RoomListContainer = tw.ul`
-  grid grid-cols-2 gap-8 w-full
+  grid grid-cols-4 gap-8 w-full
 `;
 
 const Room = tw.li`
-  inline-block flex w-full h-28 text-center cursor-pointer shadow
+  relative inline-block h-36 border rounded-md overflow-hidden cursor-pointer
 `;
 
 const RoomInfo = tw.div`
-  items-center justify-center w-full h-full bg-zinc-900
+  absolute z-1 flex flex-col justify-center w-full h-full p-2  text-white bg-black/50
 `;
 
 const RoomTitle = tw.div`
-  flex items-center justify-center w-full h-2/3 text-3xl
-`;
-
-const RoomDescription = tw.div`
-  flex items-center w-full h-1/3 text-left px-4 shadow bg-zinc-700
+  grow flex items-center justify-center w-full text-3xl
 `;
 
 const RoomMemberCount = tw.div`
-  shrink-0 flex items-center justify-center w-1/5 text-4xl bg-stone-800
+  flex
 `;

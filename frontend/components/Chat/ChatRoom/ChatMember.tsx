@@ -1,8 +1,7 @@
 import Image from "next/image";
 import tw from "twin.macro";
 import useChatState from "@/hooks/useChatState";
-import Header from "@/components/common/Header";
-import Button from "@/components/common/Button";
+import { Header, Button } from "@/components/common";
 import { getIcons } from "@/components/icons";
 import { ChatMemberProps } from "@/types/chat";
 

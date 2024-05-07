@@ -25,8 +25,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     <>
       <Toast />
       <Socket />
+      <DynamicSidebar />
       <MainLayoutContainer>
-        <DynamicSidebar />
         {children}
         <DynamicFriend />
         <DynamicUserProfileModal />
@@ -38,5 +38,5 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 export default MainLayout;
 
 const MainLayoutContainer = tw.div`
-  relative flex max-w-[1920px] h-full m-auto overflow-x-hidden text-sm
+  relative ml-60 flex max-w-[1920px] h-full m-auto overflow-x-hidden text-sm
 `;

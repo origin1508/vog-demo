@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import tw from "twin.macro";
-import { Textarea } from "@/components/common/";
+import { Textarea, Button } from "@/components/common/";
 import { CommentEditProps } from "@/types/community";
 
 const CommentEdit = ({
@@ -29,8 +29,13 @@ const CommentEdit = ({
   return (
     <CommentEditContainer>
       {setReply && (
-        <CommentEditBtn onClick={handleIsShowToggle}>답글</CommentEditBtn>
+        <CommentEditButton>
+          <Button bgColor="transparent" height={2} onClick={handleIsShowToggle}>
+            답글
+          </Button>
+        </CommentEditButton>
       )}
+
       {isShow && (
         <CommentTextarea>
           <Textarea
@@ -40,12 +45,9 @@ const CommentEdit = ({
           />
           <CommentBntContainer>
             {setReply && (
-              <CommentCancelBtn onClick={handleIsShowToggle}>
-                취소
-              </CommentCancelBtn>
+              <CommentButton onClick={handleIsShowToggle}>취소</CommentButton>
             )}
-
-            <CommentSubmitBtn
+            <CommentButton
               ref={buttonRef}
               onClick={async () => {
                 handleEditCommentSubmit
@@ -59,11 +61,14 @@ const CommentEdit = ({
                       textareaRef.current?.value,
                       commentId
                     );
-                if (textareaRef.current) textareaRef.current.value = "";
+                if (textareaRef.current) {
+                  textareaRef.current.value = "";
+                  textareaRef.current.style.height = "auto";
+                }
               }}
             >
               댓글
-            </CommentSubmitBtn>
+            </CommentButton>
           </CommentBntContainer>
         </CommentTextarea>
       )}
@@ -74,11 +79,11 @@ const CommentEdit = ({
 export default CommentEdit;
 
 const CommentEditContainer = tw.div`
-  w-full mb-2
+  w-full mb-6
 `;
 
-const CommentEditBtn = tw.button`
-  text-blue-500
+const CommentEditButton = tw.div`
+  w-16 mt-6 mb-2
 `;
 
 const CommentTextarea = tw.div`
@@ -86,13 +91,9 @@ const CommentTextarea = tw.div`
 `;
 
 const CommentBntContainer = tw.div`
-  flex h-auto border-t border-neutral-700
+  flex h-auto rounded-br overflow-hidden
 `;
 
-const CommentSubmitBtn = tw.button`
-  w-16 h-full border border-neutral-700 bg-primary
-`;
-
-const CommentCancelBtn = tw.button`
-  w-16 h-full border border-neutral-700 bg-secondary
+const CommentButton = tw.button`
+  w-16 h-full bg-secondary text-white hover:brightness-110
 `;

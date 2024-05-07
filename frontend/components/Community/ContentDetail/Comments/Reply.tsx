@@ -65,12 +65,11 @@ const Reply = ({
 export default Reply;
 
 const ReplyContainer = tw.div`
-  relative px-8 mb-2
-  before:(content-[""] absolute top-4 left-2 w-6 h-8 border-l border-b border-neutral-700)
+  relative px-4 mb-2
 `;
 
 const ReplyAuthor = tw.div`
-  flex items-center w-full px-4 h-8 bg-zinc-900
+  flex justify-between items-center w-full px-4 h-8 bg-caution/20 rounded
 `;
 
 const ReplyNickname = tw.span`
@@ -78,7 +77,7 @@ const ReplyNickname = tw.span`
 `;
 
 const ReplyTime = tw.div`
-  ml-2 px-2 rounded-full text-zinc-400 bg-zinc-600/40
+  ml-2 px-2
 `;
 
 const ReplyText = tw.p`

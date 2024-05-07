@@ -84,7 +84,7 @@ const StyledButton = styled.button<{
       ? tw`bg-warning`
       : bgColor === "caution"
       ? tw`bg-caution`
-      : tw`bg-transparent text-black enabled:hover:bg-neutral-600`),
+      : tw`bg-transparent text-black border enabled:hover:bg-primary/10`),
   position &&
     css`
       position: ${position.type};

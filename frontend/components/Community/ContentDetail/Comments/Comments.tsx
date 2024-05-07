@@ -49,9 +49,9 @@ const Comments = ({ userId, handleUserProfileOpen }: CommentsProps) => {
 export default Comments;
 
 const CommentsContainer = tw.div`
-  relative divide-y divide-neutral-700
+  relative
 `;
 
 const CommentsTitle = tw.div`
-  flex items-center px-4 h-8 bg-zinc-900
+  flex items-center px-4 h-8 bg-zinc-200 rounded-t
 `;

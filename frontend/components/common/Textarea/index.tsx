@@ -38,6 +38,6 @@ export const Textarea = ({
 };
 
 const StyledTextarea = tw.textarea`
-  shrink grow px-4 py-2 w-full max-h-96 bg-stone-800 resize-none 
+  shrink grow px-4 py-2 w-full max-h-96 border resize-none rounded-bl
   focus:(outline-none placeholder-transparent)
 `;

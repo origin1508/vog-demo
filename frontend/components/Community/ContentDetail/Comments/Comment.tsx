@@ -70,7 +70,10 @@ const Comment = ({
       />
       {replies.length > 0 && (
         <ReplyToggle onClick={() => setReplyToggle((prev) => !prev)}>
-          {replyToggle ? getIcons("on", 24) : getIcons("off", 24)}답글
+          {replyToggle
+            ? getIcons("on", 24, "gray")
+            : getIcons("off", 24, "gray")}
+          답글
           {replies.length}개
         </ReplyToggle>
       )}
@@ -95,11 +98,10 @@ const Comment = ({
 export default Comment;
 
 const CommentContainer = tw.div`
-  px-4 py-2
 `;
 
 const CommentAuthor = tw.div`
-  flex items-center w-full px-4 h-8 bg-zinc-900
+  flex justify-between items-center w-full px-4 h-8 bg-secondary/10 rounded
 `;
 
 const CommentNickname = tw.span`
@@ -107,7 +109,7 @@ const CommentNickname = tw.span`
 `;
 
 const CommentTime = tw.div`
-  ml-2 px-2 rounded-full text-zinc-400 bg-zinc-600/40
+  ml-2 px-2
 `;
 
 const CommentText = tw.p`
@@ -119,5 +121,5 @@ const CommentButtonContainer = tw.div`
 `;
 
 const ReplyToggle = tw.div`
-  flex gap-1 text-primary cursor-pointer
+  flex gap-1 mb-2 text-primary cursor-pointer
 `;

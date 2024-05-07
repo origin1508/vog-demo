@@ -8,6 +8,7 @@ import MainLayout from "@/components/layout/MainLayout";
 import Navigation from "../Navigation";
 import { MainCard, Header } from "@/components/common";
 import { Content, ContentHeader } from "./Content";
+import Comments from "./Comments";
 import { getPostRequest, deletePostRequest } from "@/apis/community";
 import {
   getLikeListRequest,
@@ -131,6 +132,10 @@ const ContentDetail: NextPageWithLayout = () => {
             onOpenProfile={() => handleUserProfileOpen(userId)}
             onClickLike={handleLikeButtonClick}
           />
+          <Comments
+            userId={content.user.id}
+            handleUserProfileOpen={() => handleUserProfileOpen(userId)}
+          />
         </MainCard>
       </ContentDetailBody>
     </ContentDetailContainer>
@@ -150,5 +155,5 @@ const ContentDetailContainer = tw.article`
 const ContentDetailHeader = tw.header``;
 
 const ContentDetailBody = tw.section`
-  px-9
+  px-9 pb-9
 `;

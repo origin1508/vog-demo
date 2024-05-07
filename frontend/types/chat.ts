@@ -93,6 +93,6 @@ export interface ChatSocketProps {
 
 export interface ChatEditValue {
   title: string;
-  description: string;
+  game: string;
   maximumMember: number;
 }

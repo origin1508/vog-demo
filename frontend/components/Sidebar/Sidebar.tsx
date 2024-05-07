@@ -34,8 +34,16 @@ const Sidebar = () => {
   };
 
   return (
-    <SidebarContainer>
-      <SidebarLogo onClick={handleVogClick}>VOG</SidebarLogo>
+    <SidebarContainer className="group">
+      <SidebarLogo onClick={handleVogClick}>
+        <Logo src="/image/VOG.png" width={128} height={128} alt="VOG" />
+        <SmallLogo
+          src="/image/VOG_small.png"
+          width={128}
+          height={128}
+          alt="VOG"
+        />
+      </SidebarLogo>
       <SidebarUser onClick={() => handleUserProfileOpen(user.id)}>
         <UserImage
           src={user.profileUrl}
@@ -84,13 +92,24 @@ const Sidebar = () => {
 export default Sidebar;
 
 const SidebarContainer = tw.nav`
-  fixed shrink-0 flex flex-col w-16 h-full p-2 gap-8 bg-primary text-white text-lg overflow-hidden transition-all z-1
+  fixed shrink-0 flex flex-col w-16 h-full p-2 gap-8 bg-primary text-white text-lg overflow-hidden transition-all z-1 
   hover:w-60
   xl:(w-60)
 `;
 
 const SidebarLogo = tw.div`
-  py-2 px-4 text-4xl font-bold cursor-pointer
+  flex justify-center items-center h-14 py-2 cursor-pointer
+`;
+
+const Logo = tw(Image)`
+  hidden
+  group-hover:block
+  xl:(block)
+`;
+const SmallLogo = tw(Image)`
+  shrink-0 w-8 h-8
+  group-hover:hidden
+  xl:(hidden)
 `;
 
 const SidebarUser = tw.div`

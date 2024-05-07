@@ -2,6 +2,7 @@ import Image from "next/image";
 import tw from "twin.macro";
 import { getIcons } from "@/components/icons";
 import { RoomListProps } from "@/types/chat";
+import { ROOM_IMAGE } from "@/constants/chat";
 
 const RoomList = ({ roomList, handleRoomClick }: RoomListProps) => {
   return (
@@ -21,8 +22,8 @@ const RoomList = ({ roomList, handleRoomClick }: RoomListProps) => {
               <RoomTitle>{room.title}</RoomTitle>
             </RoomInfo>
             <Image
-              src="/image/room/valorant.jpg"
-              alt="lol"
+              src={ROOM_IMAGE[room.game]}
+              alt={room.game}
               fill={true}
               style={{ objectFit: "cover", objectPosition: "center" }}
             />

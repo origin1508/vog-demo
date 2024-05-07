@@ -53,7 +53,7 @@ export interface ChatRoom {
   updatedAt: string;
   roomId: string;
   title: string;
-  description: string;
+  game: "lol" | "valorant" | "etc";
   currentMember: number;
   maximumMember: number;
   no: number;

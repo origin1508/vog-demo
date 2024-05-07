@@ -10,7 +10,7 @@ const useChatEditForm = () => {
     maximumMember: yup.number().min(2).max(5).required(),
   });
 
-  const { register, handleSubmit } = useForm<ChatEditValue>({
+  const { register, handleSubmit, reset } = useForm<ChatEditValue>({
     mode: "onChange",
     defaultValues: {
       title: "",
@@ -20,7 +20,7 @@ const useChatEditForm = () => {
     resolver: yupResolver(chatSchema),
   });
 
-  return { register, handleSubmit };
+  return { register, handleSubmit, reset };
 };
 
 export default useChatEditForm;

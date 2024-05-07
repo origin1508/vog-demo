@@ -5,7 +5,7 @@ export const CHAT_GAME = [
 ];
 
 export const ROOM_IMAGE = {
-  lol: "/image/room/lol.jpg",
-  valorant: "/image/room/valorant.png",
+  lol: "/image/room/lol.png",
+  valorant: "/image/room/valorant.jpg",
   etc: "/image/room/etc.jpg",
 };

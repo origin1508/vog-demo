@@ -9,7 +9,7 @@ const ChatEdit = ({
   handleModalClose,
   handleChatRoomCreate,
 }: ChatEditProps) => {
-  const { register, handleSubmit } = useChatEditForm();
+  const { register, handleSubmit, reset } = useChatEditForm();
 
   return (
     <Modal
@@ -54,7 +54,10 @@ const ChatEdit = ({
             type="button"
             bgColor="secondary"
             width={4}
-            onClick={handleModalClose}
+            onClick={() => {
+              reset();
+              handleModalClose();
+            }}
           >
             취소
           </Button>

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import tw from "twin.macro";
 import useChatSocket from "@/hooks/useChatSocket";
 import MainLayout from "@/components/layout/MainLayout";
-import Header from "@/components/common/Header";
+import { Header } from "@/components/common";
 import ChatMember from "./ChatMember";
 import ChatMessage from "./ChatMessage";
 import { NextPageWithLayout } from "@/pages/_app";

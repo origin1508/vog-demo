@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import tw from "twin.macro";
 import Socket from "../Socket";
 import Toast from "../Toast";
@@ -23,6 +24,10 @@ interface MainLayoutProps {
 const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <>
+      <Head>
+        <title>VOG</title>
+        <link rel="icon" href="/image/VOG_small.png"></link>
+      </Head>
       <Toast />
       <Socket />
       <DynamicSidebar />

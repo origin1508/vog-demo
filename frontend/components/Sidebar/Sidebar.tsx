@@ -92,7 +92,7 @@ const Sidebar = () => {
 export default Sidebar;
 
 const SidebarContainer = tw.nav`
-  fixed shrink-0 flex flex-col w-16 h-full p-2 gap-8 bg-primary text-white text-lg overflow-hidden transition-all z-1 
+  fixed shrink-0 flex flex-col w-16 h-full p-2 gap-8 bg-primary text-white text-lg overflow-hidden transition-all z-10 
   hover:w-60
   xl:(w-60)
 `;

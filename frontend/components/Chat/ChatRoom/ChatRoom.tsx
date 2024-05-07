@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import tw from "twin.macro";
 import useChatSocket from "@/hooks/useChatSocket";
 import MainLayout from "@/components/layout/MainLayout";
-import { Header } from "@/components/common";
+import { Header, MainCard } from "@/components/common";
 import ChatMember from "./ChatMember";
 import ChatMessage from "./ChatMessage";
 import { NextPageWithLayout } from "@/pages/_app";
@@ -27,34 +27,38 @@ const ChatRoom: NextPageWithLayout = () => {
 
   return (
     <ChatRoomContainer>
-      <ChatMember handleChatRoomLeave={handleChatRoomLeave} />
-      <ChatText>
-        <Header title={title} />
-        <ChatLogs>
-          <FlexBox />
-          <ChatLog ref={scrollRef}>
-            <ChatMessage messages={messages} />
-          </ChatLog>
-        </ChatLogs>
-        <ChatTextAreaContainer>
-          <ChatTextArea
-            placeholder="메시지를 입력하세요"
-            onChange={handleTextAreaChange}
-            onKeyDown={handleTextAreaKeyDown}
-            rows={1}
-            ref={textareaRef}
-          ></ChatTextArea>
-          <ChatBntContainer>
-            <ChatSubmitBtn
-              type="button"
-              ref={buttonRef}
-              onClick={handleMessageSend}
-            >
-              SEND
-            </ChatSubmitBtn>
-          </ChatBntContainer>
-        </ChatTextAreaContainer>
-      </ChatText>
+      <MainCard>
+        <ChatMember handleChatRoomLeave={handleChatRoomLeave} />
+      </MainCard>
+      <MainCard>
+        <ChatText>
+          <Header title={title} />
+          <ChatLogs>
+            <FlexBox />
+            <ChatLog ref={scrollRef}>
+              <ChatMessage messages={messages} />
+            </ChatLog>
+          </ChatLogs>
+          <ChatTextAreaContainer>
+            <ChatTextArea
+              placeholder="메시지를 입력하세요"
+              onChange={handleTextAreaChange}
+              onKeyDown={handleTextAreaKeyDown}
+              rows={1}
+              ref={textareaRef}
+            ></ChatTextArea>
+            <ChatBntContainer>
+              <ChatSubmitBtn
+                type="button"
+                ref={buttonRef}
+                onClick={handleMessageSend}
+              >
+                보내기
+              </ChatSubmitBtn>
+            </ChatBntContainer>
+          </ChatTextAreaContainer>
+        </ChatText>
+      </MainCard>
     </ChatRoomContainer>
   );
 };
@@ -66,11 +70,11 @@ ChatRoom.getLayout = function getLayout(page) {
 export default ChatRoom;
 
 const ChatRoomContainer = tw.article`
-  flex w-full p-4 gap-2
+  grid grid-cols-[1fr, 3fr] grid-rows-1 gap-6 w-full p-9  
 `;
 
 const ChatText = tw.div`
-  flex flex-col w-full h-full px-2 bg-white/5
+  flex flex-col w-full h-full
 `;
 
 const ChatLogs = tw.div`
@@ -86,11 +90,11 @@ const FlexBox = tw.div`
 `;
 
 const ChatTextAreaContainer = tw.div`
-  flex p-4 border-t border-neutral-700
+  flex
 `;
 
 const ChatTextArea = tw.textarea`
-  shrink grow p-4 w-full max-h-96 rounded-l-lg bg-stone-800 resize-none 
+  shrink grow px-4 py-2 w-full h-10 max-h-96 rounded-l bg-zinc-200 resize-none
   focus:(outline-none placeholder-transparent)
 `;
 
@@ -98,5 +102,5 @@ const ChatBntContainer = tw.div`
 `;
 
 const ChatSubmitBtn = tw.button`
-  float-right w-20 h-full rounded-r-lg bg-primary
+  float-right w-20 h-full rounded-r bg-primary text-white
 `;

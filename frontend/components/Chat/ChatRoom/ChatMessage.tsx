@@ -51,5 +51,5 @@ const Nickname = tw.div`
 `;
 
 const Content = tw.p`
-  w-auto p-4 border border-primary rounded-lg bg-zinc-800 break-all whitespace-pre-wrap
+  w-auto p-4 rounded-xl bg-zinc-100 break-all whitespace-pre-wrap
 `;

@@ -12,7 +12,7 @@ const ChatMember = ({ handleChatRoomLeave }: ChatMemberProps) => {
 
   return (
     <ChatMemberContainer>
-      <Header title="Member" />
+      <Header title="멤버" />
       <ChatMemberList>
         {chatParticipant.map((member) => {
           return (
@@ -29,7 +29,7 @@ const ChatMember = ({ handleChatRoomLeave }: ChatMemberProps) => {
         })}
       </ChatMemberList>
       <ChatButtonContainer>
-        <Button type="button" bgColor="secondary" onClick={handleChatRoomLeave}>
+        <Button type="button" bgColor="caution" onClick={handleChatRoomLeave}>
           <ExitIcon>{getIcons("exit", 32)}나가기</ExitIcon>
         </Button>
       </ChatButtonContainer>
@@ -40,11 +40,11 @@ const ChatMember = ({ handleChatRoomLeave }: ChatMemberProps) => {
 export default ChatMember;
 
 const ChatMemberContainer = tw.div`
-  flex flex-col shrink-0 w-80 px-2 bg-zinc-900
+  flex flex-col h-full
 `;
 
 const ChatMemberList = tw.div`
-  flex flex-col h-full
+  grow flex flex-col overflow-auto
 `;
 
 const MemberInfo = tw.div`

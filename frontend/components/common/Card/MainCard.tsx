@@ -10,5 +10,5 @@ export const MainCard = ({ children }: MainCardProps) => {
 };
 
 const MainCardStyle = tw.section`
-  flex flex-col gap-4 w-full p-6 bg-white shadow-md rounded-xl
+  flex flex-col gap-4 w-full h-full p-6 bg-white shadow-md rounded-xl
 `;

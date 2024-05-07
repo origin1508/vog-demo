@@ -95,6 +95,7 @@ const Socket = () => {
     });
 
     socketClient.on("setChat", ({ roomId, chatParticipant }) => {
+      console.log(chatParticipant);
       setChat((prev) => {
         return { ...prev, roomId, chatParticipant };
       });

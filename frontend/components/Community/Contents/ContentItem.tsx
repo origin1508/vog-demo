@@ -60,12 +60,12 @@ text-blue-600
 `;
 
 const ContentAuthor = tw.span`
-w-1/12
+  w-1/12 min-w-[80px]
 `;
 
 const ContentViewCount = tw.span`
-  flex w-[8%] justify-center items-center gap-1 px-2
+  flex w-[8%] min-w-[60px] justify-center items-center gap-1 px-2
 `;
 const ContentTime = tw.div`
-  flex justify-center items-center w-1/12
+  flex justify-center items-center w-1/12 min-w-[80px]
 `;

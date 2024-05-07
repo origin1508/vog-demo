@@ -44,14 +44,16 @@ export const Content = ({
       </ContentInfoContainer>
       <ContentTextContainer>
         <ContentText dangerouslySetInnerHTML={{ __html: text }} />
-        <ContentLike>
-          <Button bgColor="secondary" width={6} onClick={onClickLike}>
-            <LikeButton>
-              {getIcons("thumb", 20)}
-              <LikeCount>{likeCount}</LikeCount>
-            </LikeButton>
-          </Button>
-        </ContentLike>
+        <ContentLikeButtonContainer>
+          <ContentLikeButton>
+            <Button bgColor="secondary" onClick={onClickLike}>
+              <ButtonContent>
+                {getIcons("thumb", 20)}
+                <LikeCount>{likeCount}</LikeCount>
+              </ButtonContent>
+            </Button>
+          </ContentLikeButton>
+        </ContentLikeButtonContainer>
       </ContentTextContainer>
     </ContentContainer>
   );
@@ -68,6 +70,7 @@ const ContentInfoLeft = tw.div``;
 
 const ContentInfoRight = tw.div`
   flex gap-16
+  max-md:gap-8
 `;
 
 const ContentInfo = tw.div`
@@ -82,14 +85,19 @@ const ContentText = tw.div`
   py-8 px-4
 `;
 
-const ContentLike = tw.div`
-  w-full text-center
+const ContentLikeButtonContainer = tw.div`
+  flex justify-center
 `;
 
-const LikeButton = tw.div`
+const ContentLikeButton = tw.div`
+  w-16
+`;
+
+const ButtonContent = tw.div`
   flex gap-2 items-center justify-center
 `;
 
 const LikeCount = tw.div`
   text-xl font-medium
+  max-md:text-lg
 `;

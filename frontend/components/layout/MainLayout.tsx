@@ -40,4 +40,5 @@ export default MainLayout;
 const MainLayoutContainer = tw.div`
   relative ml-60 flex max-w-[1920px] h-full overflow-x-hidden text-sm
   max-xl:ml-16
+  max-md:text-xs
 `;

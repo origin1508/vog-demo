@@ -73,7 +73,7 @@ const StyledInput = styled.input<{
   height?: number;
   bgColor?: string;
 }>(({ width, height, bgColor }) => [
-  tw`px-2 w-full h-10 bg-transparent outline-0
+  tw`px-2 w-full h-10 bg-transparent outline-0 border rounded
   placeholder:(text-stone-600)`,
   width &&
     css`

@@ -32,7 +32,7 @@ const ToastText = ({ type, text, uuid }: ToastTextProps) => {
 export default ToastText;
 
 const StyledToastText = styled.p<{ type: string }>(({ type }) => [
-  tw`fixed flex items-center justify-center top-24 h-8 px-2 min-w-[10rem] rounded shadow select-none animate-[slideInOut_2.5s_forwards] z-[100]`,
+  tw`fixed flex items-center justify-center top-24 h-8 px-2 min-w-[10rem] text-white rounded shadow select-none animate-[slideInOut_2.5s_forwards] z-[100]`,
   type === "success" && tw` bg-green-600`,
   type === "alert" && tw`bg-red-600`,
 ]);

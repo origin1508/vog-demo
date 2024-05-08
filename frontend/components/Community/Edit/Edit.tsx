@@ -5,7 +5,7 @@ import tw from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useToast from "@/hooks/useToast";
 import MainLayout from "@/components/layout/MainLayout";
-import { Button } from "@/components/common";
+import { Button, MainCard } from "@/components/common";
 import {
   createPostRequest,
   getPostRequest,
@@ -87,8 +87,8 @@ const Edit: NextPageWithLayout = () => {
   };
 
   return (
-    <EditWrapper>
-      <EditContainer>
+    <EditContainer>
+      <MainCard>
         <EditCategory
           defaultValue={router.query.category}
           disabled={editMode ? true : false}
@@ -131,7 +131,7 @@ const Edit: NextPageWithLayout = () => {
           <Button
             type="button"
             width={8}
-            bgColor="primary"
+            bgColor="secondary"
             onClick={handlePostSumbit}
           >
             글쓰기
@@ -139,7 +139,7 @@ const Edit: NextPageWithLayout = () => {
           <Button
             type="button"
             width={8}
-            bgColor="secondary"
+            bgColor="caution"
             onClick={() => {
               router.push({
                 pathname: "/community",
@@ -150,8 +150,8 @@ const Edit: NextPageWithLayout = () => {
             취소
           </Button>
         </EditButtonContainer>
-      </EditContainer>
-    </EditWrapper>
+      </MainCard>
+    </EditContainer>
   );
 };
 
@@ -161,34 +161,25 @@ Edit.getLayout = function getLayout(page: ReactElement) {
 
 export default Edit;
 
-const EditWrapper = tw.section`
-  w-full h-full
-`;
-
 const EditContainer = tw.div`
-  relative flex flex-col w-full h-[900px] m-auto p-12
-`;
-
-const Editor = tw.div`
-  grow-0 shrink-0 h-[600px]
-  [& .quill]:(h-full w-full bg-black text-white fill-blue-100)
-  [& .ql-container]:(overflow-auto)
-  [& .ql-fill]:fill-white
-  [& .ql-stroke]:stroke-white
-  [& .ql-picker]:text-white
-  [& .ql-picker-options]:text-black
+  flex flex-col w-full p-9
 `;
 
 const EditTitle = tw.input`
-  mb-4 p-2 border-b border-neutral-700 text-xl bg-transparent outline-none
+  p-2 border-b-2 border-caution text-2xl outline-none
   placeholder:text-neutral-700
 `;
 
+const Editor = tw.div`
+  relative h-full
+  [& .quill]:(absolute flex flex-col h-full w-full)
+  [& .ql-container]:(overflow-auto)
+`;
+
 const EditCategory = tw.select`
-  w-32 mb-4 bg-secondary rounded p-2 text-xl
-  [& option]:bg-black
+  w-32 p-2 border rounded text-base
 `;
 
 const EditButtonContainer = tw.div`
-  absolute flex items-center justify-around w-96 -bottom-8 right-16
+  flex gap-8 items-center justify-end
 `;

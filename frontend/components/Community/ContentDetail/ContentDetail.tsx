@@ -26,7 +26,7 @@ import timeDifference from "@/utils/timeDifference";
 const ContentDetail: NextPageWithLayout = () => {
   const [content, setContent] = useState<ContentDetailType>();
   const [category, setCategory] = useState("");
-  const [likes, setLikes] = useState<Number[]>([]);
+  const [likeList, setLikeList] = useState<Number[]>([]);
   const { userId } = useUserState();
   const { handleUserProfileOpen } = useUserProfileState();
   const { toast } = useToast();
@@ -38,14 +38,14 @@ const ContentDetail: NextPageWithLayout = () => {
     const postId = Number(query.id);
     setCategory(query.category);
     updatePostDetail(postId);
-    updateLikes(postId);
+    updateLikeList(postId);
   }, [query]);
 
-  const updateLikes = async (postId: number) => {
+  const updateLikeList = async (postId: number) => {
     const res = await getLikeListRequest(postId);
 
     if (res.success) {
-      setLikes(res.result.userIds);
+      setLikeList(res.result.userIds);
     } else {
       toast.alert(res.error);
     }
@@ -90,17 +90,17 @@ const ContentDetail: NextPageWithLayout = () => {
     if (userId === null) return;
     const postId = Number(query.id);
 
-    if (likes.includes(userId)) {
+    if (likeList.includes(userId)) {
       const res = await cancelLikePostRequset(userId, postId);
       if (res.success) {
-        updateLikes(postId);
+        updateLikeList(postId);
       } else {
         toast.alert(res.error);
       }
     } else {
       const res = await addLikePostRequest(userId, postId);
       if (res.success) {
-        updateLikes(postId);
+        updateLikeList(postId);
       } else {
         toast.alert(res.error);
       }
@@ -127,7 +127,7 @@ const ContentDetail: NextPageWithLayout = () => {
             nickname={content.user.nickname}
             text={content.content}
             viewCount={content.view}
-            likeCount={likes.length}
+            likeCount={likeList.length}
             createdAt={timeDifference(content.createdAt)}
             onOpenProfile={() => handleUserProfileOpen(userId)}
             onClickLike={handleLikeButtonClick}

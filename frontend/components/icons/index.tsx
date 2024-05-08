@@ -25,7 +25,13 @@ import {
   BsHouse,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
-import { BiTime, BiExit, BiUserPlus, BiUserMinus } from "react-icons/bi";
+import {
+  BiTime,
+  BiExit,
+  BiLogIn,
+  BiUserPlus,
+  BiUserMinus,
+} from "react-icons/bi";
 import { IoClose, IoReload, IoMan } from "react-icons/io5";
 
 export function getIcons(name: string, size: number, color?: string) {
@@ -96,6 +102,8 @@ export function getIcons(name: string, size: number, color?: string) {
       return <BsHouse size={size} color={color} />;
     case "person":
       return <IoMan size={size} color={color} style={{ width: size / 2 }} />;
+    case "login":
+      return <BiLogIn size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;

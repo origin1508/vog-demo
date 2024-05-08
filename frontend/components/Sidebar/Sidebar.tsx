@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,10 +6,10 @@ import tw, { styled } from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useFriendState from "@/hooks/useFriendState";
 import useUserProfileState from "@/hooks/useUserProfileState";
+import { Button } from "../common";
 import { getIcons } from "../icons";
 import { deleteAccessToken } from "@/utils/tokenManager";
 import { NAV_MENU } from "@/constants/nav";
-import { useEffect } from "react";
 
 const Sidebar = () => {
   const router = useRouter();
@@ -22,6 +22,10 @@ const Sidebar = () => {
     setSelected(router.pathname);
   }, [router]);
 
+  const handleLoginClick = () => {
+    router.push("/login");
+  };
+
   const handleVogClick = () => {
     router.push("/");
   };
@@ -30,7 +34,7 @@ const Sidebar = () => {
     deleteAccessToken();
     resetUser();
     resetFriend();
-    router.replace("/login");
+    router.replace("/");
   };
 
   return (
@@ -44,15 +48,25 @@ const Sidebar = () => {
           alt="VOG"
         />
       </SidebarLogo>
-      <SidebarUser onClick={() => handleUserProfileOpen(user.id)}>
-        <UserImage
-          src={user.profileUrl}
-          width={128}
-          height={128}
-          alt="profileImage"
-        />
-        <SidebarText>{user.nickname}</SidebarText>
-      </SidebarUser>
+      {user.id !== null ? (
+        <SidebarUser onClick={() => handleUserProfileOpen(user.id)}>
+          <UserImage
+            src={user.profileUrl}
+            width={128}
+            height={128}
+            alt="profileImage"
+          />
+          <SidebarText>{user.nickname}</SidebarText>
+        </SidebarUser>
+      ) : (
+        <SidebarLogin onClick={handleLoginClick}>
+          <Button bgColor="secondary">
+            <ItemIcon>{getIcons("login", 24)}</ItemIcon>
+            <SidebarText>로그인</SidebarText>
+          </Button>
+        </SidebarLogin>
+      )}
+
       <SidebarNavigation>
         {NAV_MENU.map((menu) => {
           const { name, pathname, icon, query } = menu;
@@ -71,20 +85,22 @@ const Sidebar = () => {
           );
         })}
       </SidebarNavigation>
-      <SidebarBtns>
-        <SidebarItem onClick={handleFriendToggle}>
-          <SidebarBtn>
-            <ItemIcon>{getIcons("friends", 24)}</ItemIcon>
-            <SidebarText>친구목록</SidebarText>
-          </SidebarBtn>
-        </SidebarItem>
-        <SidebarItem onClick={handleLogout}>
-          <SidebarBtn>
-            <ItemIcon>{getIcons("exit", 24)}</ItemIcon>
-            <SidebarText>로그아웃</SidebarText>
-          </SidebarBtn>
-        </SidebarItem>
-      </SidebarBtns>
+      {user.id !== null && (
+        <SidebarBtns>
+          <SidebarItem onClick={handleFriendToggle}>
+            <SidebarBtn>
+              <ItemIcon>{getIcons("friends", 24)}</ItemIcon>
+              <SidebarText>친구목록</SidebarText>
+            </SidebarBtn>
+          </SidebarItem>
+          <SidebarItem onClick={handleLogout}>
+            <SidebarBtn>
+              <ItemIcon>{getIcons("exit", 24)}</ItemIcon>
+              <SidebarText>로그아웃</SidebarText>
+            </SidebarBtn>
+          </SidebarItem>
+        </SidebarBtns>
+      )}
     </SidebarContainer>
   );
 };
@@ -114,6 +130,11 @@ const SmallLogo = tw(Image)`
 
 const SidebarUser = tw.div`
   flex items-center gap-4 h-12 px-2 cursor-pointer rounded hover:bg-white/20
+`;
+
+const SidebarLogin = tw.div`
+  h-12
+  [> button]:(flex items-center h-full p-2)
 `;
 
 const UserImage = tw(Image)`

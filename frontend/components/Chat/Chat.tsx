@@ -39,17 +39,11 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
   const [curPage, setCurPage] = useState(1);
   const [totalCount, setTotalCount] = useState(result.totalCount);
   const { userId } = useUserState();
-  const { chat, setChat } = useChatState();
+  const { setChat } = useChatState();
   const { setLoadingTrue, setLoadingFalse } = useLoadingState();
   const { toast } = useToast();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
   const query = router.query as ChatQuery;
-
-  useEffect(() => {
-    if (chat.roomId) {
-      router.push(`/chat/${chat.roomId}`);
-    }
-  }, []);
 
   useEffect(() => {
     const keyword = query.keyword;

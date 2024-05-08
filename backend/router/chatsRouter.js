@@ -60,10 +60,10 @@ router.get("/rooms/:roomId", async (req, res) => {
         error: "존재하지 않는 방 입니다.",
       });
     } else {
+      await ChatParticipant.create({ userId: userId, roomId: roomId });
+
       chat.currentMember++;
       await chat.save();
-
-      await ChatParticipant.create({ userId: userId, roomId: roomId });
 
       res.status(200).send({
         success: true,

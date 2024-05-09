@@ -8,8 +8,8 @@ const { persistAtom } = recoilPersist({
   storage: sessionStorage,
 });
 
-export const streamState = atom<Stream[]>({
+export const streamState = atom<Stream>({
   key: "Stream",
-  default: [],
+  default: {},
   effects_UNSTABLE: [persistAtom],
 });

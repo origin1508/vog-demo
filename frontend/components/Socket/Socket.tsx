@@ -49,7 +49,9 @@ const Socket = () => {
       console.log("ontrack", e.streams);
       const stream = e.streams[0];
       if (stream) {
-        setStreams((prev) => [...prev, { [socketId]: stream }]);
+        setStreams((prev) => {
+          return { ...prev, socketId: stream };
+        });
       }
     });
 
@@ -115,9 +117,10 @@ const Socket = () => {
     socketClient.on("leaveMember", ({ socketId }) => {
       console.log("유저나감", socketId, peerConnectionsRef.current);
       peerConnectionsRef.current[socketId].close();
-      setStreams((prev) =>
-        prev.filter((it) => Object.keys(it)[0] !== socketId)
-      );
+      setStreams((prev) => {
+        delete prev.sokcetId;
+        return prev;
+      });
     });
 
     // webRTC 시그널링
@@ -164,13 +167,9 @@ const Socket = () => {
 
   return (
     <>
-      {streams.map((stream) => (
-        <Audio
-          key={Object.keys(stream)[0]}
-          stream={Object.values(stream)[0]}
-          isMuted={false}
-        />
-      ))}
+      {Object.entries(streams).map(([socketId, stream]) => {
+        return <Audio key={socketId} stream={stream} isMuted={false} />;
+      })}
     </>
   );
 };

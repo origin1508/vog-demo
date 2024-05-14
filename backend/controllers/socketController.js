@@ -43,6 +43,30 @@ function setupSocket(io) {
       socketId: socket.socketId,
     });
 
+    socket.on("participantRecord", async () => {
+      try {
+        const participationRecord = await ChatParticipant.findOne({
+          socketId: socket.socketId,
+        });
+        if (participationRecord) {
+          const chat = await Chat.findOne({
+            roomId: participationRecord.roomId,
+          });
+          const chatParticipant = await ChatParticipant.find({
+            roomId: participationRecord.roomId,
+          }).populate("user");
+
+          socket.emit("participantRecord", {
+            roomId: chat.roomId,
+            title: chat.title,
+            chatParticipant,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    });
+
     socket.on("enterChatRoom", async ({ userId, roomId }) => {
       socket.join(roomId);
       socket.join(socket.socketId);

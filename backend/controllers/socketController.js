@@ -60,7 +60,9 @@ function setupSocket(io) {
         roomId,
         chatParticipant,
       });
+    });
 
+    socket.on("enterVoiceChat", (roomId) => {
       socket.to(roomId).emit("welcome", socket.socketId);
     });
 

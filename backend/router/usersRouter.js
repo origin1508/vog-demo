@@ -3,7 +3,6 @@ const router = Router();
 const jwt = require("../utils/jwt-util");
 
 const User = require("../models/UserSchema");
-const Friend = require("../models/FriendSchema");
 
 router.post("/register", async (req, res) => {
   const { oauthId, provider, nickname, sex } = req.body;

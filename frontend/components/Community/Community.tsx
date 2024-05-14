@@ -29,7 +29,7 @@ const Community: NextPageWithLayout<CommunityProps> = ({
   const keyword = useMemo(() => query.keyword, [query]);
 
   useEffect(() => {
-    (async () => {
+    const initContent = async () => {
       setLoadingTrue();
       try {
         const res = await getPostsRequest(category, 1);
@@ -39,7 +39,9 @@ const Community: NextPageWithLayout<CommunityProps> = ({
         console.log(error);
       }
       setLoadingFalse();
-    })();
+    };
+
+    initContent();
   }, [query]);
 
   useEffect(() => {

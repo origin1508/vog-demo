@@ -1,13 +1,15 @@
 import { useState, useRef, KeyboardEvent, ChangeEvent, useEffect } from "react";
 import { useRouter } from "next/router";
 import useChatState from "@/hooks/useChatState";
+import useUser from "@/hooks/useUserState";
+import useStreamState from "./useStreamState";
 import {
   socketClient,
   enterRoomEmit,
+  enterVoiceChat,
   sendMessageEmit,
   leaveRoomEmit,
 } from "@/utils/socketClient";
-import useUser from "@/hooks/useUserState";
 
 const useChatSocket = () => {
   const router = useRouter();
@@ -18,6 +20,7 @@ const useChatSocket = () => {
     chat: { title, roomId, messages },
     resetChat,
   } = useChatState();
+  const { resetStreams } = useStreamState();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -35,6 +38,10 @@ const useChatSocket = () => {
     if (userId === null) return;
 
     enterRoomEmit(userId, roomId);
+  };
+
+  const emitEnterVoiceChat = () => {
+    enterVoiceChat(roomId);
   };
 
   const handleMessageSend = () => {
@@ -64,6 +71,7 @@ const useChatSocket = () => {
     if (userId === null) return;
     leaveRoomEmit(userId, roomId);
     resetChat();
+    resetStreams();
     router.push("/chat");
   };
 
@@ -93,6 +101,7 @@ const useChatSocket = () => {
     textareaRef,
     scrollRef,
     enterRoom,
+    emitEnterVoiceChat,
     handleMessageSend,
     handleChatRoomLeave,
     handleTextAreaKeyDown,

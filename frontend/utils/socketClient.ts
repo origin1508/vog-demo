@@ -40,3 +40,7 @@ export const enterRoomEmit = (userId: number, roomId: string) => {
     roomId,
   });
 };
+
+export const enterVoiceChat = (roomId: string) => {
+  socketClient.emit("enterVoiceChat", roomId);
+};

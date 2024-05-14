@@ -2,26 +2,18 @@ import { useEffect, useRef } from "react";
 import useStreamState from "@/hooks/useStreamState";
 import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
+import { useLocalStreamContext } from "@/context/LocalStreamContext";
 import { socketClient } from "@/utils/socketClient";
 import { Audio } from "../common/";
 import { getLocalStorage, setLocalStorage } from "@/utils/localStorage";
 
 const Socket = () => {
   const { userId } = useUserState();
-  const { setChat } = useChatState();
+  const { chat, setChat } = useChatState();
   const { streams, setStreams } = useStreamState();
+  const { ref: localStreamRef } = useLocalStreamContext();
 
-  const localStreamRef = useRef<MediaStream>();
   const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
-
-  const getLocalStream = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      localStreamRef.current = stream;
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const createPeerConnection = (socketId: string) => {
     const pc = new RTCPeerConnection({
@@ -83,11 +75,14 @@ const Socket = () => {
     }
 
     socketClient.connect();
+
+    if (!chat.roomId) {
+      socketClient.emit("participantRecord");
+    }
   };
 
   useEffect(() => {
     connectSocket();
-    getLocalStream();
 
     socketClient.on("session", ({ sessionId, socketId }) => {
       socketClient.auth = { sessionId };
@@ -95,6 +90,15 @@ const Socket = () => {
       setLocalStorage("socketSessionId", sessionId);
       socketClient.socketId = socketId;
     });
+
+    socketClient.on(
+      "participantRecord",
+      ({ roomId, title, chatParticipant }) => {
+        setChat((prev) => {
+          return { ...prev, roomId, title, chatParticipant };
+        });
+      }
+    );
 
     socketClient.on("setChat", ({ roomId, chatParticipant }) => {
       setChat((prev) => {
@@ -124,7 +128,9 @@ const Socket = () => {
     });
 
     // webRTC 시그널링
-    socketClient.on("welcome", async (socketId) => {
+    socketClient.on("welcome", async (socketId: string) => {
+      if (!localStreamRef.current) return;
+
       const pc = createPeerConnection(socketId);
       await pc.setLocalDescription();
       const offer = pc.localDescription;

@@ -15,6 +15,7 @@ const ChatRoom: NextPageWithLayout = () => {
     textareaRef,
     scrollRef,
     enterRoom,
+    emitEnterVoiceChat,
     handleMessageSend,
     handleChatRoomLeave,
     handleTextAreaChange,
@@ -28,7 +29,10 @@ const ChatRoom: NextPageWithLayout = () => {
   return (
     <ChatRoomContainer>
       <MainCard>
-        <ChatMember handleChatRoomLeave={handleChatRoomLeave} />
+        <ChatMember
+          emitEnterVoiceChat={emitEnterVoiceChat}
+          handleChatRoomLeave={handleChatRoomLeave}
+        />
       </MainCard>
       <MainCard>
         <ChatText>

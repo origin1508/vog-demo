@@ -1,14 +1,31 @@
+import { useState } from "react";
 import Image from "next/image";
 import tw from "twin.macro";
+import { useLocalStreamContext } from "@/context/LocalStreamContext";
 import useChatState from "@/hooks/useChatState";
 import { Header, Button } from "@/components/common";
 import { getIcons } from "@/components/icons";
 import { ChatMemberProps } from "@/types/chat";
 
-const ChatMember = ({ handleChatRoomLeave }: ChatMemberProps) => {
+const ChatMember = ({
+  emitEnterVoiceChat,
+  handleChatRoomLeave,
+}: ChatMemberProps) => {
+  const {
+    ref: localStreamRef,
+    getLocalStream,
+    stopLocalStream,
+  } = useLocalStreamContext();
+  const [isEntered, setIsEnterd] = useState(!!localStreamRef.current);
   const {
     chat: { chatParticipant },
   } = useChatState();
+
+  const handleEnterVoiceChatClick = async () => {
+    await getLocalStream();
+    setIsEnterd(true);
+    emitEnterVoiceChat();
+  };
 
   return (
     <ChatMemberContainer>
@@ -29,7 +46,35 @@ const ChatMember = ({ handleChatRoomLeave }: ChatMemberProps) => {
         })}
       </ChatMemberList>
       <ChatButtonContainer>
-        <Button type="button" bgColor="caution" onClick={handleChatRoomLeave}>
+        {isEntered ? (
+          <Button
+            type="button"
+            bgColor="warning"
+            onClick={() => {
+              stopLocalStream();
+              setIsEnterd(false);
+            }}
+          >
+            <ExitIcon>{getIcons("mic", 24)}음성채팅 퇴장</ExitIcon>
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            bgColor="secondary"
+            onClick={handleEnterVoiceChatClick}
+          >
+            <ExitIcon>{getIcons("mic", 24)}음성채팅 입장</ExitIcon>
+          </Button>
+        )}
+
+        <Button
+          type="button"
+          bgColor="caution"
+          onClick={() => {
+            stopLocalStream();
+            handleChatRoomLeave();
+          }}
+        >
           <ExitIcon>{getIcons("exit", 32)}나가기</ExitIcon>
         </Button>
       </ChatButtonContainer>
@@ -64,5 +109,5 @@ const ExitIcon = tw.div`
 `;
 
 const ChatButtonContainer = tw.div`
-  justify-end w-full
+  flex flex-col gap-4 justify-end w-full
 `;

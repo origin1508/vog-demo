@@ -36,6 +36,7 @@ export interface ChatState {
 }
 
 export interface ChatMemberProps {
+  emitEnterVoiceChat: () => void;
   handleChatRoomLeave: () => void;
 }
 

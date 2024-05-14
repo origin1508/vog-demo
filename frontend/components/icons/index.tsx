@@ -27,7 +27,7 @@ import {
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import {
   BiTime,
-  BiExit,
+  BiLogOut,
   BiLogIn,
   BiUserPlus,
   BiUserMinus,
@@ -69,7 +69,7 @@ export function getIcons(name: string, size: number, color?: string) {
     case "alert":
       return <BsExclamationTriangle size={size} color={color} />;
     case "exit":
-      return <BiExit size={size} color={color} />;
+      return <BiLogOut size={size} color={color} />;
     case "off":
       return <BsToggleOff size={size} color={color} />;
     case "on":

@@ -11,13 +11,22 @@ function setupSocket(io) {
 
     if (sessionId) {
       try {
-        const session = await SocketSession.findOne({ sessionId: sessionId });
+        const session = await SocketSession.findOneAndUpdate(
+          { sessionId: sessionId },
+          { online: true }
+        );
         if (session) {
           socket.sessionId = sessionId;
           socket.socketId = session.socketId;
 
           return next();
         } else {
+          socket.socketId = randomUUID();
+
+          await SocketSession.create({
+            sessionId: sessionId,
+            socketId: socket.socketId,
+          });
         }
       } catch (err) {
         consol.log(err);
@@ -131,6 +140,54 @@ function setupSocket(io) {
         from: socket.socketId,
         iceCandidate: iceCandidate,
       });
+    });
+
+    socket.on("disconnect", async () => {
+      try {
+        await SocketSession.updateOne(
+          { sessionId: socket.sessionId },
+          { online: false }
+        );
+
+        setTimeout(async () => {
+          try {
+            const session = await SocketSession.findOne({
+              sessionId: socket.sessionId,
+            });
+
+            if (!session.online) {
+              const chatParticipant = await ChatParticipant.findOneAndDelete({
+                socketId: session.socketId,
+              });
+
+              const roomId = chatParticipant.roomId;
+
+              await Chat.updateOne(
+                { roomId: roomId },
+                { $inc: { currentMember: -1 } }
+              );
+
+              const { currentMember } = await Chat.findOne({ roomId: roomId });
+              if (!currentMember) {
+                await Chat.deleteOne({ roomId: roomId });
+              } else {
+                const chatParticipant = await ChatParticipant.find({
+                  roomId: roomId,
+                }).populate("user");
+                const { title } = await Chat.findOne({ roomId: roomId });
+
+                socket
+                  .to(roomId)
+                  .emit("setChat", { roomId, chatParticipant, title });
+              }
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }, 3000);
+      } catch (err) {
+        console.log(err);
+      }
     });
   });
 }

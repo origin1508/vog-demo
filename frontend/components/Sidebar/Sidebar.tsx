@@ -5,6 +5,7 @@ import Image from "next/image";
 import tw, { styled } from "twin.macro";
 import useUserState from "@/hooks/useUserState";
 import useFriendState from "@/hooks/useFriendState";
+import useChatState from "@/hooks/useChatState";
 import useUserProfileState from "@/hooks/useUserProfileState";
 import { Button } from "../common";
 import { getIcons } from "../icons";
@@ -15,6 +16,7 @@ const Sidebar = () => {
   const router = useRouter();
   const [selected, setSelected] = useState("/");
   const { user, resetUser } = useUserState();
+  const { chat } = useChatState();
   const { resetFriend, handleFriendToggle } = useFriendState();
   const { handleUserProfileOpen } = useUserProfileState();
 
@@ -35,6 +37,10 @@ const Sidebar = () => {
     resetUser();
     resetFriend();
     router.replace("/");
+  };
+
+  const handleCurChatClick = () => {
+    router.push(`/chat/${chat.roomId}`);
   };
 
   return (
@@ -66,7 +72,6 @@ const Sidebar = () => {
           </Button>
         </SidebarLogin>
       )}
-
       <SidebarNavigation>
         {NAV_MENU.map((menu) => {
           const { name, pathname, icon, query } = menu;
@@ -85,6 +90,17 @@ const Sidebar = () => {
           );
         })}
       </SidebarNavigation>
+      {chat.roomId && (
+        <SidebarBtns>
+          <SidebarItem onClick={handleCurChatClick}>
+            <SidebarBtn>
+              <ItemIcon>{getIcons("chatDots", 24)}</ItemIcon>
+              <SidebarText>참여중인 채팅</SidebarText>
+            </SidebarBtn>
+          </SidebarItem>
+        </SidebarBtns>
+      )}
+
       {user.id !== null && (
         <SidebarBtns>
           <SidebarItem onClick={handleFriendToggle}>

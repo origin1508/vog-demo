@@ -23,6 +23,7 @@ import {
   BsGenderMale,
   BsSearch,
   BsHouse,
+  BsChatDots,
 } from "react-icons/bs";
 import { RxTriangleDown, RxAvatar } from "react-icons/rx";
 import {
@@ -104,6 +105,8 @@ export function getIcons(name: string, size: number, color?: string) {
       return <IoMan size={size} color={color} style={{ width: size / 2 }} />;
     case "login":
       return <BiLogIn size={size} color={color} />;
+    case "chatDots":
+      return <BsChatDots size={size} color={color} />;
     default:
       console.log("Not implemented!");
       return;

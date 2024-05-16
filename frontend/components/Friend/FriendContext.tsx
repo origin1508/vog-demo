@@ -40,7 +40,15 @@ const FriendContext = ({ friend }: FriendContextProps) => {
   };
 
   return (
-    <ContextWrapper onContextMenu={(e) => handleRightClick(e)}>
+    <ContextWrapper
+      onContextMenu={(e) => handleRightClick(e)}
+      onBlur={() =>
+        setContextMenuState((prev) => {
+          return { ...prev, isShow: false };
+        })
+      }
+      tabIndex={-1}
+    >
       {contextMenuState.isShow && (
         <ContextMenus
           x={contextMenuState.x}
@@ -80,7 +88,7 @@ const ContextWrapper = tw.div``;
 
 const ContextMenus = styled.ul<{ x: number; y: number; reverse: boolean }>(
   ({ x, y, reverse }) => [
-    tw`fixed w-24 divide-y bg-white text-black `,
+    tw`fixed w-24 divide-y border border-zinc-100 bg-white`,
     reverse
       ? css`
           top: ${y}px;

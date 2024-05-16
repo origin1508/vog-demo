@@ -4,11 +4,16 @@ const router = Router();
 const Chat = require("../models/ChatSchema");
 const ChatParticipant = require("../models/ChatParticipantSchema");
 
+const chatPerPage = 20;
+
 router.get("/rooms/list", async (req, res) => {
   const { page } = req.query;
 
   try {
-    const chat = await Chat.find();
+    const chat = await Chat.find()
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * chatPerPage)
+      .limit(chatPerPage);
 
     res.status(200).send({
       success: true,

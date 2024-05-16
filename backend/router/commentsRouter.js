@@ -3,17 +3,23 @@ const router = Router();
 
 const Comment = require("../models/CommentSchema");
 
+const commentPerPage = 10;
+
 router.get("/", async (req, res) => {
   const { postId, page } = req.query;
 
   try {
     const comment = await Comment.find({ postId: postId })
+      .skip((page - 1) * commentPerPage)
+      .limit(commentPerPage)
       .populate("user")
       .populate({ path: "replies", populate: "user" });
 
+    const totalCount = await Comment.countDocuments();
+
     res.status(200).send({
       success: true,
-      result: { result: comment, totalCount: comment.length },
+      result: { result: comment, totalCount: totalCount },
     });
   } catch (err) {
     console.log(err);

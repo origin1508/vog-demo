@@ -3,14 +3,20 @@ const router = Router();
 
 const Post = require("../models/PostSchema");
 
+const postPerPage = 10;
+
 router.get("/", async (req, res) => {
   const { board, page } = req.query;
 
   const post = await Post.find({ postCategory: board })
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * postPerPage)
+    .limit(postPerPage)
     .populate("user")
     .populate("comment")
-    .sort({ createdAt: -1 })
     .lean();
+
+  const totalCount = await Post.countDocuments();
 
   const modifiedPost = post.map((it) => {
     const repliesCount = it.comment.reduce(
@@ -23,7 +29,7 @@ router.get("/", async (req, res) => {
 
   res.status(200).send({
     success: true,
-    result: { result: modifiedPost, totalCount: post.length },
+    result: { result: modifiedPost, totalCount: totalCount },
   });
 });
 

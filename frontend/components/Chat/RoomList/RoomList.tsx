@@ -8,6 +8,7 @@ const RoomList = ({ roomList, handleRoomClick }: RoomListProps) => {
       {roomList.map((room) => (
         <RoomCard
           key={room.roomId}
+          roomId={room.roomId}
           title={room.title}
           game={room.game}
           currentMember={room.currentMember}

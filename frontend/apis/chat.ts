@@ -52,9 +52,16 @@ const searchChatRoomsRequest = async (title: string, page: number) => {
   return res.data;
 };
 
+const getChatRoomInfoRequest = async () => {
+  const res = await customAxios.get("/chats/rooms/info");
+
+  return res.data;
+};
+
 export {
   createChatRoomRequest,
   joinChatRoomRequest,
   getChatRoomsRequest,
   searchChatRoomsRequest,
+  getChatRoomInfoRequest,
 };

@@ -44,6 +44,11 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
   const { toast } = useToast();
   const { isOpen, handleModalClose, handleModalOpen } = useModal();
   const query = router.query as ChatQuery;
+  const [isLoggedin, setIsLoggedin] = useState(false);
+
+  useEffect(() => {
+    if (userId) setIsLoggedin(true);
+  }, [userId]);
 
   useEffect(() => {
     const keyword = query.keyword;
@@ -127,12 +132,15 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
           <MainCard>
             <SearchContainer>
               <ChatButtonContainer>
-                {userId && (
+                {isLoggedin && (
                   <Button width={6} bgColor="primary" onClick={handleModalOpen}>
                     방생성
                   </Button>
                 )}
-                <RefreshButton onClick={() => updateChatRooms(curPage)}>
+                <RefreshButton
+                  type="button"
+                  onClick={() => updateChatRooms(curPage)}
+                >
                   <RefreshIcon>{getIcons("reload", 30)}</RefreshIcon>
                 </RefreshButton>
               </ChatButtonContainer>

@@ -1,4 +1,5 @@
 import tw from "twin.macro";
+import { useRouter } from "next/router";
 import { Content } from "@/types/community";
 import timeDifference from "@/utils/timeDifference";
 
@@ -13,6 +14,7 @@ const CATEGORY = {
 };
 
 const PostInfo = ({ latestPosts }: PostsInfoProps) => {
+  const router = useRouter();
   return (
     <PostInfoContainer>
       <LatestPosts>
@@ -22,7 +24,15 @@ const PostInfo = ({ latestPosts }: PostsInfoProps) => {
         <Posts>
           {latestPosts.length > 0 ? (
             latestPosts.map((it) => (
-              <Post key={it.id}>
+              <Post
+                key={it.id}
+                onClick={() =>
+                  router.push({
+                    pathname: `/community/${it.id}`,
+                    query: { cateogry: it.postCategory },
+                  })
+                }
+              >
                 <PostCategory>{CATEGORY[it.postCategory]}</PostCategory>
                 <PostTitle>{it.title}</PostTitle>
                 <PostDate>{timeDifference(it.createdAt)}</PostDate>
@@ -77,7 +87,7 @@ const Posts = tw.ul`
 `;
 
 const Post = tw.li`
-  flex gap-2 p-2 border-b border-zinc-200
+  flex gap-2 p-2 border-b border-zinc-200 cursor-pointer
 `;
 
 const PostCategory = tw.span`

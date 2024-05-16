@@ -1,9 +1,12 @@
-import tw from "twin.macro";
+import { useState, useEffect } from "react";
+import tw, { styled } from "twin.macro";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { getIcons } from "@/components/icons";
 import { ROOM_IMAGE } from "@/constants/chat";
 
 interface RoomCardProps {
+  roomId: string;
   title: string;
   game: "lol" | "valorant" | "etc";
   currentMember: number;
@@ -12,14 +15,24 @@ interface RoomCardProps {
 }
 
 const RoomCard = ({
+  roomId,
   title,
   game,
   currentMember,
   maximumMember,
   onClickCard,
 }: RoomCardProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const router = useRouter();
+  const { focus } = router.query;
+
+  useEffect(() => {
+    if (focus) {
+      if (focus === roomId) setIsFocused(true);
+    }
+  }, [router]);
   return (
-    <RoomCardContainer onClick={onClickCard}>
+    <RoomCardContainer isFocused={isFocused} onClick={onClickCard}>
       <RoomInfo>
         <RoomMemberCount>
           {new Array(currentMember).fill(getIcons("person", 40, "green"))}
@@ -41,9 +54,10 @@ const RoomCard = ({
 
 export default RoomCard;
 
-const RoomCardContainer = tw.li`
-  relative inline-block h-36 border rounded-md overflow-hidden cursor-pointer
-`;
+const RoomCardContainer = styled.li<{ isFocused: boolean }>(({ isFocused }) => [
+  tw`relative inline-block h-36 border rounded-md overflow-hidden cursor-pointer`,
+  isFocused && tw`ring ring-caution`,
+]);
 
 const RoomInfo = tw.div`
   absolute z-1 flex flex-col justify-center w-full h-full p-2  text-white bg-black/50

@@ -127,9 +127,11 @@ const Chat: NextPageWithLayout<ChatProps> = ({ data }: ChatProps) => {
           <MainCard>
             <SearchContainer>
               <ChatButtonContainer>
-                <Button width={6} bgColor="primary" onClick={handleModalOpen}>
-                  방생성
-                </Button>
+                {userId && (
+                  <Button width={6} bgColor="primary" onClick={handleModalOpen}>
+                    방생성
+                  </Button>
+                )}
                 <RefreshButton onClick={() => updateChatRooms(curPage)}>
                   <RefreshIcon>{getIcons("reload", 30)}</RefreshIcon>
                 </RefreshButton>

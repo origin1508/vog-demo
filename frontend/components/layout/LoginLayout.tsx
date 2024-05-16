@@ -1,6 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import tw from "twin.macro";
 
 interface LoginLayoutProps {
@@ -8,6 +9,15 @@ interface LoginLayoutProps {
 }
 
 const LoginLayout = ({ children }: LoginLayoutProps) => {
+  const router = useRouter();
+  const { alert: alertMessage } = router.query;
+
+  useEffect(() => {
+    if (alertMessage) {
+      alert(alertMessage.toString());
+    }
+  }, [router]);
+
   return (
     <>
       <Head>

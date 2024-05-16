@@ -1,16 +1,31 @@
 import tw from "twin.macro";
+import { useRouter } from "next/router";
+import { ChatRoom } from "@/types/chat";
+import RoomList from "@/components/Chat/RoomList";
 
-const ChatInfo = () => {
+interface ChatRoomProps {
+  latestChatRoom: ChatRoom[];
+}
+
+const ChatInfo = ({ latestChatRoom }: ChatRoomProps) => {
+  const router = useRouter();
   return (
     <ChatInfoContainer>
       <ChatInfoHeader>
         <ChatInfoTitle>입장 가능한 채팅</ChatInfoTitle>
-        <ChatInfoMore>더보기</ChatInfoMore>
+        <ChatInfoMore onClick={() => router.push("/chat")}>더보기</ChatInfoMore>
       </ChatInfoHeader>
       <ChatList>
+        {latestChatRoom.length > 0 ? (
+          <RoomList
+            roomList={latestChatRoom}
+            handleRoomClick={(roomId) => router.push(`/chat?focus=${roomId}`)}
+          />
+        ) : (
+          <Blank>입장 가능한 채팅이 없습니다.</Blank>
+        )}
         <Chat></Chat>
       </ChatList>
-      <Blank>입장 가능한 채팅이 없습니다.</Blank>
     </ChatInfoContainer>
   );
 };
@@ -30,7 +45,7 @@ const ChatInfoTitle = tw.h2`
 `;
 
 const ChatInfoMore = tw.div`
-
+  cursor-pointer
 `;
 
 const Blank = tw.div`

@@ -160,6 +160,8 @@ function setupSocket(io) {
                 socketId: session.socketId,
               });
 
+              if (chatParticipant === null) return;
+
               const roomId = chatParticipant.roomId;
 
               await Chat.updateOne(

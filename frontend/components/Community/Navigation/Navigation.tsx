@@ -16,10 +16,14 @@ const Navigation = ({ category }: NavigationProps) => {
           return (
             <NavLink key={name} isActive={category === query}>
               <Link
-                href={{
-                  pathname: "/community",
-                  query: { category: query },
-                }}
+                href={
+                  query
+                    ? {
+                        pathname: "/community",
+                        query: { category: query },
+                      }
+                    : "/community"
+                }
               >
                 {name}
               </Link>

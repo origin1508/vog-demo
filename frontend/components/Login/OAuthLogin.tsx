@@ -10,6 +10,7 @@ const OAuthLogin = () => {
 
   return (
     <OAuthContainer>
+      <OAuthText>간편로그인</OAuthText>
       <NaverLogin
         href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${STATE}&redirect_uri=http://localhost:3002/auth/login/naver`}
       >
@@ -41,7 +42,7 @@ const OAuthLogin = () => {
 export default OAuthLogin;
 
 const OAuthContainer = tw.div`
-  flex flex-col items-center gap-5 w-full m-auto text-[14px]
+  flex flex-col items-center gap-5 w-full m-auto text-sm text-white
 `;
 
 const LogoIcon = tw(Image)`
@@ -50,12 +51,18 @@ const LogoIcon = tw(Image)`
 
 const NaverLogin = tw(Link)`
   flex items-center justify-center w-full h-12 rounded bg-[#03c75a]
+  hover:brightness-105
 `;
 
 const KakaoLogin = tw(Link)`
   flex items-center justify-center w-full h-12 rounded bg-[#FEE500] text-black
+  hover:brightness-105
 `;
 
 const LoginText = tw.span`
   flex items-center justify-center w-32 text-center
+`;
+
+const OAuthText = tw.p`
+  text-zinc-600
 `;

@@ -4,10 +4,12 @@ import { useRouter } from "next/router";
 import useUserState from "@/hooks/useUserState";
 import useFriendState from "@/hooks/useFriendState";
 import useToast from "@/hooks/useToast";
+import LoginLayout from "../layout/LoginLayout";
+import { NextPageWithLayout } from "@/pages/_app";
 import OAuthLogin from "./OAuthLogin";
 import { deleteAccessToken } from "@/utils/tokenManager";
 
-const Login = () => {
+const Login: NextPageWithLayout = () => {
   const router = useRouter();
   const { resetUser } = useUserState();
   const { resetFriend } = useFriendState();
@@ -22,26 +24,17 @@ const Login = () => {
   }, []);
 
   return (
-    <LoginWrapper>
-      <LoginContainer>
-        <LoginTitle>VOG 로그인</LoginTitle>
-        <OAuthLogin />
-      </LoginContainer>
-    </LoginWrapper>
+    <LoginForm>
+      <OAuthLogin />
+    </LoginForm>
   );
+};
+
+Login.getLayout = function getLayout(page) {
+  return <LoginLayout>{page}</LoginLayout>;
 };
 
 export default Login;
 
-const LoginWrapper = tw.section`
-relative flex items-center justify-center h-full bg-[url("./image/valorant.jpg")] bg-cover
-after:(absolute inset-0 bg-black/50)
-`;
-
-const LoginContainer = tw.div`
-  py-10 px-20 w-[28rem] rounded drop-shadow bg-black/80 z-10
-`;
-
-const LoginTitle = tw.h2`
-  w-full mb-4 text-3xl font-bold text-center
-`;
+const LoginForm = tw.div`
+flex flex-col justify-center py-6 px-9 w-[28rem] h-96 drop-shadow bg-white z-10`;

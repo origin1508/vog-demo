@@ -74,20 +74,20 @@ const Sidebar = () => {
       )}
       <SidebarNavigation>
         {NAV_MENU.map((menu) => {
-          const { name, pathname, icon, query } = menu;
-          return (
-            <SidebarItem key={name} isSelected={selected === pathname}>
-              <SidebarLink
-                href={{
-                  pathname: pathname,
-                  query: query,
-                }}
-              >
-                <ItemIcon>{icon}</ItemIcon>
-                <SidebarText>{name}</SidebarText>
-              </SidebarLink>
-            </SidebarItem>
-          );
+          const { name, pathname, icon, loginRquired } = menu;
+          if (!loginRquired || user.id)
+            return (
+              <SidebarItem key={name} isSelected={selected === pathname}>
+                <SidebarLink
+                  href={{
+                    pathname: pathname,
+                  }}
+                >
+                  <ItemIcon>{icon}</ItemIcon>
+                  <SidebarText>{name}</SidebarText>
+                </SidebarLink>
+              </SidebarItem>
+            );
         })}
       </SidebarNavigation>
       {chat.roomId && (

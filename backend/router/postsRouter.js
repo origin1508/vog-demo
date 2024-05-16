@@ -8,7 +8,7 @@ const postPerPage = 10;
 router.get("/", async (req, res) => {
   const { board, page } = req.query;
 
-  const post = await Post.find({ postCategory: board })
+  const post = await Post.find(board && { postCategory: board })
     .sort({ createdAt: -1 })
     .skip((page - 1) * postPerPage)
     .limit(postPerPage)
@@ -66,6 +66,29 @@ router.get("/search", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+router.get("/info", async (req, res) => {
+  const post = await Post.find()
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .populate("user")
+    .populate("comment")
+    .lean();
+
+  const modifiedPost = post.map((it) => {
+    const repliesCount = it.comment.reduce(
+      (acc, cur) => (acc += cur.repliesCount),
+      0
+    );
+    const commentCount = it.comment.length + repliesCount;
+    return { ...it, commentCount: commentCount };
+  });
+
+  res.status(200).send({
+    success: true,
+    result: { latestPosts: modifiedPost },
+  });
 });
 
 router.get("/:postId", async (req, res) => {

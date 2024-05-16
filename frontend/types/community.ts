@@ -27,7 +27,7 @@ export interface Content {
   title: string;
   likeCount: number;
   commentCount: number;
-  gameCategory: string;
+  postCategory: "humor" | "free" | "championship";
   user: {
     id: number;
     nickname: string;

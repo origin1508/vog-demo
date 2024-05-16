@@ -83,6 +83,12 @@ const searchPostRequest = async (
   return res.data;
 };
 
+const getPostsInfo = async () => {
+  const res = await customAxios.get("/posts/info");
+
+  return res.data;
+};
+
 export {
   createPostRequest,
   editPostRequest,
@@ -90,4 +96,5 @@ export {
   getPostRequest,
   deletePostRequest,
   searchPostRequest,
+  getPostsInfo,
 };

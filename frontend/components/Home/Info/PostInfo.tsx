@@ -1,6 +1,18 @@
 import tw from "twin.macro";
+import { Content } from "@/types/community";
+import timeDifference from "@/utils/timeDifference";
 
-const PostInfo = () => {
+interface PostsInfoProps {
+  latestPosts: Content[];
+}
+
+const CATEGORY = {
+  free: "자유",
+  humor: "유머",
+  championship: "대회",
+};
+
+const PostInfo = ({ latestPosts }: PostsInfoProps) => {
   return (
     <PostInfoContainer>
       <LatestPosts>
@@ -8,15 +20,20 @@ const PostInfo = () => {
           <PostsTitle>최신 글</PostsTitle>
         </PostsHeader>
         <Posts>
-          {/* <Post>
-            <PostCategory>대회</PostCategory>
-            <PostTitle>오늘의 대회</PostTitle>
-            <PostDate>1일전</PostDate>
-          </Post> */}
-          <Blank>최신 글이 없습니다.</Blank>
+          {latestPosts.length > 0 ? (
+            latestPosts.map((it) => (
+              <Post key={it.id}>
+                <PostCategory>{CATEGORY[it.postCategory]}</PostCategory>
+                <PostTitle>{it.title}</PostTitle>
+                <PostDate>{timeDifference(it.createdAt)}</PostDate>
+              </Post>
+            ))
+          ) : (
+            <Blank>최신 글이 없습니다.</Blank>
+          )}
         </Posts>
       </LatestPosts>
-      <PopularPosts>
+      {/* <PopularPosts>
         <PostsHeader>
           <PostsTitle>인기 글</PostsTitle>
         </PostsHeader>
@@ -26,9 +43,8 @@ const PostInfo = () => {
             <PostTitle>오늘의 유머</PostTitle>
             <PostDate>1일전</PostDate>
           </Post>
-          {/* <Blank>인기 글이 없습니다.</Blank> */}
         </Posts>
-      </PopularPosts>
+      </PopularPosts> */}
     </PostInfoContainer>
   );
 };
@@ -44,9 +60,9 @@ const LatestPosts = tw.section`
   w-full p-4 bg-white shadow-md rounded-xl
 `;
 
-const PopularPosts = tw.section`
-  w-full p-4 bg-white shadow-md rounded-xl
-`;
+// const PopularPosts = tw.section`
+//   w-full p-4 bg-white shadow-md rounded-xl
+// `;
 
 const PostsHeader = tw.header`
   px-2 py-1 border-b-2

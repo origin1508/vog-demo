@@ -52,6 +52,16 @@ router.post("/rooms", async (req, res) => {
   }
 });
 
+router.get("/rooms/info", async (req, res) => {
+  try {
+    const chat = await Chat.find().sort({ createdAt: -1 }).limit(8);
+
+    res.status(200).send({ success: true, result: { latestChatRoom: chat } });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 router.get("/rooms/:roomId", async (req, res) => {
   const { roomId } = req.params;
   const { userId } = req.query;

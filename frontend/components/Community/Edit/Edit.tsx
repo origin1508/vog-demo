@@ -33,7 +33,7 @@ const Edit: NextPageWithLayout = () => {
   const [post, setPost] = useState({
     title: "",
     content: "",
-    category: query.category,
+    category: query.category || "free",
   });
   const [editMode, setEditMode] = useState(false);
 

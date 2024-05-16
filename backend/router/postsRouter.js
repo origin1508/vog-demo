@@ -8,7 +8,7 @@ const postPerPage = 10;
 router.get("/", async (req, res) => {
   const { board, page } = req.query;
 
-  const post = await Post.find(board && { postCategory: board })
+  const post = await Post.find(board ? { postCategory: board } : undefined)
     .sort({ createdAt: -1 })
     .skip((page - 1) * postPerPage)
     .limit(postPerPage)

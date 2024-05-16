@@ -46,7 +46,9 @@ const Friend = () => {
       </FriendList>
       <FriendSearch onSubmit={handleNicknameSubmit}>
         <FriendSearchInput name="nickname" placeholder="닉네임을 입력하세요." />
-        <FriendAddBtn type="submit">{getIcons("addFriend", 32)}</FriendAddBtn>
+        <FriendAddBtn type="submit">
+          {getIcons("addFriend", 32, "white")}
+        </FriendAddBtn>
       </FriendSearch>
       <FriendToggle onClick={handleFriendToggle}>
         {getIcons("left", 20)}
@@ -58,12 +60,12 @@ const Friend = () => {
 export default Friend;
 
 const FriendContainer = styled.div<{ isShow: boolean }>(({ isShow }) => [
-  tw`absolute flex flex-col w-60 h-full right-0 bg-black border-l border-neutral-700 transition-all z-50`,
+  tw`absolute flex flex-col w-60 h-full right-0 bg-white shadow transition-all z-50`,
   !isShow && tw`translate-x-full`,
 ]);
 
 const FriendList = tw.ul`
-  grow overflow-auto
+  grow overflow-auto p-4
 `;
 
 const FriendProfile = tw.li`
@@ -72,8 +74,8 @@ const FriendProfile = tw.li`
 `;
 
 const FriendAddBtn = tw.button`
-  shrink-0 flex items-center justify-center w-full h-12 border border-primary
-  hover:bg-white/30
+  shrink-0 flex items-center justify-center w-full h-12 bg-primary border border-primary
+  hover:brightness-125
 `;
 const FriendToggle = tw.button`
   absolute p-2 top-1/2 -left-8
@@ -83,5 +85,5 @@ const FriendSearch = tw.form`
 `;
 
 const FriendSearchInput = tw.input`
-  w-full h-12 px-4 bg-neutral-700 outline-none
+  w-full h-12 px-4 bg-neutral-700 outline-none text-white
 `;

@@ -11,6 +11,7 @@ export const LocalStreamContext = createContext<
       ref: MutableRefObject<MediaStream | undefined>;
       getLocalStream: () => Promise<void>;
       stopLocalStream: () => void;
+      muteLocalStream: (isMuted: boolean) => void;
     }
   | undefined
 >(undefined);
@@ -22,6 +23,13 @@ export const LocalStreamProvider = ({ children }: { children: ReactNode }) => {
     if (!localStreamRef.current) return;
     localStreamRef.current.getTracks().forEach((track) => track.stop());
     localStreamRef.current = undefined;
+  };
+
+  const muteLocalStream = (isMuted: boolean) => {
+    if (!localStreamRef.current) return;
+    localStreamRef.current
+      .getTracks()
+      .forEach((track) => (track.enabled = isMuted));
   };
 
   const getLocalStream = async () => {
@@ -38,7 +46,12 @@ export const LocalStreamProvider = ({ children }: { children: ReactNode }) => {
   };
   return (
     <LocalStreamContext.Provider
-      value={{ ref: localStreamRef, getLocalStream, stopLocalStream }}
+      value={{
+        ref: localStreamRef,
+        getLocalStream,
+        stopLocalStream,
+        muteLocalStream,
+      }}
     >
       {children}
     </LocalStreamContext.Provider>

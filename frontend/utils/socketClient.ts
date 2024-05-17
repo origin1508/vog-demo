@@ -1,6 +1,6 @@
 import { Socket, io } from "socket.io-client";
 
-interface ExtendedSocket extends Socket {
+export interface ExtendedSocket extends Socket {
   socketId?: string;
 }
 

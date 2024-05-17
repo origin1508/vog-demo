@@ -2,7 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { RecoilRoot } from "recoil";
-import { LocalStreamProvider } from "@/context/LocalStreamContext";
+import { LocalStreamProvider, PeerConnectionsProvider } from "@/context";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import GlobalStyle from "@/styles/GlobalStyle";
 import { Loading } from "@/components/common/";
@@ -25,11 +25,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <>
       <ErrorBoundary>
         <LocalStreamProvider>
-          <RecoilRoot>
-            <GlobalStyle />
-            {getLayout(<Component {...pageProps} />)}
-            <Loading />
-          </RecoilRoot>
+          <PeerConnectionsProvider>
+            <RecoilRoot>
+              <GlobalStyle />
+              {getLayout(<Component {...pageProps} />)}
+              <Loading />
+            </RecoilRoot>
+          </PeerConnectionsProvider>
         </LocalStreamProvider>
       </ErrorBoundary>
     </>

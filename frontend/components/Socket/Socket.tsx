@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import useStreamState from "@/hooks/useStreamState";
 import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
-import { useLocalStreamContext } from "@/context/LocalStreamContext";
+import { useLocalStreamContext, usePeerConnectionsContext } from "@/context";
 import { socketClient } from "@/utils/socketClient";
 import { Audio } from "../common/";
 import { getLocalStorage, setLocalStorage } from "@/utils/localStorage";
@@ -12,59 +12,8 @@ const Socket = () => {
   const { chat, setChat } = useChatState();
   const { streams, setStreams } = useStreamState();
   const { ref: localStreamRef } = useLocalStreamContext();
-
-  const peerConnectionsRef = useRef<{ [key: string]: RTCPeerConnection }>({});
-
-  const createPeerConnection = (socketId: string) => {
-    const pc = new RTCPeerConnection({
-      iceServers: [
-        {
-          urls: [
-            "stun:stun1.l.google.com:19302",
-            "stun:stun1.l.google.com:19302",
-          ],
-        },
-      ],
-    });
-
-    pc.addEventListener("icecandidate", (e) => {
-      console.log("onicecandidate", e.candidate);
-      if (e.candidate) {
-        socketClient.emit("iceCandidate", {
-          to: socketId,
-          iceCandidate: e.candidate,
-        });
-      }
-    });
-
-    pc.addEventListener("track", (e) => {
-      console.log("ontrack", e.streams);
-      const stream = e.streams[0];
-      if (stream) {
-        setStreams((prev) => {
-          return { ...prev, socketId: stream };
-        });
-      }
-    });
-
-    pc.addEventListener("negotiationneeded", (e) => {
-      console.log(e);
-    });
-
-    if (localStreamRef.current) {
-      const stream = localStreamRef.current;
-      stream.getTracks().forEach((track) => {
-        pc.addTrack(track, stream);
-      });
-    }
-
-    peerConnectionsRef.current = {
-      ...peerConnectionsRef.current,
-      [socketId]: pc,
-    };
-
-    return pc;
-  };
+  const { ref: peerConnectionsRef, createPeerConnection } =
+    usePeerConnectionsContext();
 
   const connectSocket = () => {
     if (userId === null) return;
@@ -131,7 +80,12 @@ const Socket = () => {
     socketClient.on("welcome", async (socketId: string) => {
       if (!localStreamRef.current) return;
 
-      const pc = createPeerConnection(socketId);
+      const pc = createPeerConnection(
+        socketId,
+        socketClient,
+        localStreamRef,
+        setStreams
+      );
       await pc.setLocalDescription();
       const offer = pc.localDescription;
       console.log("send offer: ", offer);
@@ -140,7 +94,12 @@ const Socket = () => {
 
     socketClient.on("offer", async ({ from, offer }) => {
       console.log("getOffer", from, offer);
-      const pc = createPeerConnection(from);
+      const pc = createPeerConnection(
+        from,
+        socketClient,
+        localStreamRef,
+        setStreams
+      );
       await pc.setRemoteDescription(new RTCSessionDescription(offer));
       await pc.setLocalDescription();
       const answer = pc.localDescription;
@@ -174,7 +133,9 @@ const Socket = () => {
   return (
     <>
       {Object.entries(streams).map(([socketId, stream]) => {
-        return <Audio key={socketId} stream={stream} isMuted={false} />;
+        return (
+          <Audio key={socketId} stream={stream} isMuted={chat.isVolumeMuted} />
+        );
       })}
     </>
   );

@@ -27,7 +27,7 @@ const OAuthLogin = () => {
         <LoginText>네이버로 로그인</LoginText>
       </NaverLogin>
       <KakaoLogin
-        href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=http://localhost:3002/auth/login/kakao&state=${STATE}`}
+        href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}/auth/login/kakao&state=${STATE}`}
       >
         <LogoIcon
           src={"/image/logo_kakao.png"}

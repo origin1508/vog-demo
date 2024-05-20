@@ -103,6 +103,7 @@ export default ChatMember;
 
 const ChatMemberContainer = tw.div`
   flex flex-col h-full min-w-80
+  max-md:min-w-fit
 `;
 
 const ChatMemberList = tw.div`
@@ -111,6 +112,7 @@ const ChatMemberList = tw.div`
 
 const MemberInfoContainer = tw.div`
   flex justify-between items-center p-4
+  max-md:(flex-col p-1)
 `;
 
 const MemberInfo = tw.div`
@@ -119,6 +121,7 @@ const MemberInfo = tw.div`
 
 const MemberProfilePic = tw(Image)`
   w-16 h-16 rounded-full
+  max-md:(w-8 h-8)
 `;
 
 const MemberNickname = tw.span`

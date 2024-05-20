@@ -3,6 +3,10 @@ module.exports = {
   content: ["./pages/**/*.{html,js}", "./components/**/*.{html,js}"],
   theme: {
     extend: {
+      minWidth: {
+        80: "20rem",
+        64: "16rem",
+      },
       colors: {
         primary: "#001C30",
         secondary: "#176B87",

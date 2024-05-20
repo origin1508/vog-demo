@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Image from "next/image";
 import tw from "twin.macro";
 import { useLocalStreamContext } from "@/context/LocalStreamContext";
 import useChatState from "@/hooks/useChatState";
+import useUserState from "@/hooks/useUserState";
 import { Header, Button } from "@/components/common";
 import { getIcons } from "@/components/icons";
 import { ChatMemberProps } from "@/types/chat";
+import MediaControl from "./MediaControl";
 
 const ChatMember = ({
   emitEnterVoiceChat,
@@ -20,28 +22,44 @@ const ChatMember = ({
   const {
     chat: { chatParticipant },
   } = useChatState();
-
+  const { userId } = useUserState();
   const handleEnterVoiceChatClick = async () => {
     await getLocalStream();
     setIsEnterd(true);
     emitEnterVoiceChat();
   };
 
+  const sortedChatParticipant = useMemo(
+    () =>
+      [...chatParticipant].sort((a, b) => {
+        if (a.userId === userId) return -1;
+        if (b.userId === userId) return 1;
+        return 0;
+      }),
+    [chatParticipant, userId]
+  );
+
   return (
     <ChatMemberContainer>
       <Header title="멤버" />
       <ChatMemberList>
-        {chatParticipant.map((member) => {
+        {sortedChatParticipant.map((member) => {
           return (
-            <MemberInfo key={member.userId}>
-              <MemberProfilePic
-                src={member.user.profileUrl}
-                alt="profile pic"
-                width={128}
-                height={128}
+            <MemberInfoContainer key={member.userId}>
+              <MemberInfo>
+                <MemberProfilePic
+                  src={member.user.profileUrl}
+                  alt="profile pic"
+                  width={128}
+                  height={128}
+                />
+                <MemberNickname>{member.user.nickname}</MemberNickname>
+              </MemberInfo>
+              <MediaControl
+                isLoggedInUser={member.userId === userId}
+                isEntered={isEntered}
               />
-              <MemberNickname>{member.user.nickname}</MemberNickname>
-            </MemberInfo>
+            </MemberInfoContainer>
           );
         })}
       </ChatMemberList>
@@ -66,7 +84,6 @@ const ChatMember = ({
             <ExitIcon>{getIcons("mic", 24)}음성채팅 입장</ExitIcon>
           </Button>
         )}
-
         <Button
           type="button"
           bgColor="caution"
@@ -85,15 +102,19 @@ const ChatMember = ({
 export default ChatMember;
 
 const ChatMemberContainer = tw.div`
-  flex flex-col h-full
+  flex flex-col h-full min-w-80
 `;
 
 const ChatMemberList = tw.div`
   grow flex flex-col overflow-auto
 `;
 
+const MemberInfoContainer = tw.div`
+  flex justify-between items-center p-4
+`;
+
 const MemberInfo = tw.div`
-  flex p-4
+  flex items-center
 `;
 
 const MemberProfilePic = tw(Image)`

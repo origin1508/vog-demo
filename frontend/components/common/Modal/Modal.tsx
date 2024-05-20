@@ -9,6 +9,7 @@ interface ModalProps {
   title: string;
   content?: string;
   children?: ReactNode;
+  onlyClose?: boolean;
   handleClose: () => void;
   handleConfirm?: () => void;
 }
@@ -19,6 +20,7 @@ export const Modal = ({
   title,
   content,
   children,
+  onlyClose = false,
   handleClose,
   handleConfirm,
 }: ModalProps) => {
@@ -37,21 +39,24 @@ export const Modal = ({
         </ModalBody>
         {hasFooter && (
           <ModalFooter>
+            {!onlyClose && (
+              <Button
+                type="button"
+                bgColor="primary"
+                width={4}
+                onClick={handleConfirm}
+              >
+                확인
+              </Button>
+            )}
+
             <Button
               type="button"
-              bgColor="secondary"
+              bgColor="warning"
               width={4}
               onClick={handleClose}
             >
               취소
-            </Button>
-            <Button
-              type="button"
-              bgColor="primary"
-              width={4}
-              onClick={handleConfirm}
-            >
-              확인
             </Button>
           </ModalFooter>
         )}
@@ -90,5 +95,5 @@ const ModalBody = tw.div`
 `;
 
 const ModalFooter = tw.div`
-  flex justify-end px-8 space-x-4 border-t border-neutral-700
+  flex justify-end py-4 px-8 space-x-4
 `;

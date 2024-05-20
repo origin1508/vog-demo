@@ -9,7 +9,7 @@ import {
 export const LocalStreamContext = createContext<
   | {
       ref: MutableRefObject<MediaStream | undefined>;
-      getLocalStream: () => Promise<void>;
+      getLocalStream: (deviceId?: string) => Promise<MediaStream | undefined>;
       stopLocalStream: () => void;
       muteLocalStream: (isMuted: boolean) => void;
     }
@@ -29,15 +29,18 @@ export const LocalStreamProvider = ({ children }: { children: ReactNode }) => {
     if (!localStreamRef.current) return;
     localStreamRef.current
       .getTracks()
-      .forEach((track) => (track.enabled = isMuted));
+      .forEach((track) => (track.enabled = !isMuted));
   };
 
-  const getLocalStream = async () => {
+  const getLocalStream = async (deviceId?: string) => {
+    const defaultConstraints = { audio: true };
+    const userSelectConstraints = { audio: { deviceId: { exact: deviceId } } };
     try {
-      const localStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-      });
+      const localStream = await navigator.mediaDevices.getUserMedia(
+        deviceId ? userSelectConstraints : defaultConstraints
+      );
       localStreamRef.current = localStream;
+      return localStream;
     } catch (err) {
       if (err instanceof Error) {
         alert(err.message);

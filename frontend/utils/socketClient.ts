@@ -10,6 +10,7 @@ export const socketClient: ExtendedSocket = io(
     transports: ["websocket", "polling"],
     autoConnect: false,
     closeOnBeforeunload: true,
+    secure: true,
   }
 );
 

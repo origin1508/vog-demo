@@ -4,7 +4,7 @@ import { rooms } from "./data";
 interface ChatRequest {
   userId: number;
   title: string;
-  description: string;
+  game: "lol" | "valorant" | "etc";
   maximumMember: number;
 }
 
@@ -38,14 +38,14 @@ export const handler = [
   }),
 
   http.post<PathParams, ChatRequest>("/chats/rooms", async ({ request }) => {
-    const { title, description, maximumMember } = await request.json();
+    const { title, game, maximumMember } = await request.json();
     const createdAt = new Date().toISOString();
     const roomId = new Date().getMilliseconds().toString();
 
     rooms.push({
       roomId: roomId,
       title: title,
-      description: description,
+      game: game,
       currentMember: 1,
       maximumMember: maximumMember,
       no: 1,

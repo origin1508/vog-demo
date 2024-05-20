@@ -8,11 +8,14 @@ const OAuthLogin = () => {
   const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
   const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
 
+  const REDIRECT_URI =
+    process.env.NEXT_PUBLIC_REDIRECT_URI || "http://localhost:3002";
+
   return (
     <OAuthContainer>
       <OAuthText>간편로그인</OAuthText>
       <NaverLogin
-        href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${STATE}&redirect_uri=http://localhost:3002/auth/login/naver`}
+        href={`https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${STATE}&redirect_uri=${REDIRECT_URI}/auth/login/naver`}
       >
         <LogoIcon
           src={"/image/logo_naver.png"}

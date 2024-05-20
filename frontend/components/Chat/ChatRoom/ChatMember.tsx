@@ -1,9 +1,10 @@
 import { useState, useMemo } from "react";
 import Image from "next/image";
 import tw from "twin.macro";
-import { useLocalStreamContext } from "@/context/LocalStreamContext";
+import { usePeerConnectionsContext, useLocalStreamContext } from "@/context";
 import useChatState from "@/hooks/useChatState";
 import useUserState from "@/hooks/useUserState";
+import useStreamState from "@/hooks/useStreamState";
 import { Header, Button } from "@/components/common";
 import { getIcons } from "@/components/icons";
 import { ChatMemberProps } from "@/types/chat";
@@ -18,15 +19,25 @@ const ChatMember = ({
     getLocalStream,
     stopLocalStream,
   } = useLocalStreamContext();
+  const { closePeerConnection } = usePeerConnectionsContext();
   const [isEntered, setIsEnterd] = useState(!!localStreamRef.current);
   const {
     chat: { chatParticipant },
   } = useChatState();
+  const { resetStreams } = useStreamState();
   const { userId } = useUserState();
+
   const handleEnterVoiceChatClick = async () => {
     await getLocalStream();
     setIsEnterd(true);
     emitEnterVoiceChat();
+  };
+
+  const handleLeaveVoiceChatClick = async () => {
+    stopLocalStream();
+    resetStreams();
+    closePeerConnection();
+    setIsEnterd(false);
   };
 
   const sortedChatParticipant = useMemo(
@@ -68,10 +79,7 @@ const ChatMember = ({
           <Button
             type="button"
             bgColor="warning"
-            onClick={() => {
-              stopLocalStream();
-              setIsEnterd(false);
-            }}
+            onClick={handleLeaveVoiceChatClick}
           >
             <ExitIcon>{getIcons("mic", 24)}음성채팅 퇴장</ExitIcon>
           </Button>

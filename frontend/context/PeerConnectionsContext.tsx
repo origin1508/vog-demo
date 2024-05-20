@@ -21,6 +21,7 @@ export const PeerConnectionsContext = createContext<
         localStreamRef: MutableRefObject<MediaStream | undefined>,
         setStreams: Dispatch<SetStateAction<Stream>>
       ) => RTCPeerConnection;
+      closePeerConnection: () => void;
       switchingAudio: (audioTrack: MediaStreamTrack) => void;
     }
   | undefined
@@ -99,11 +100,16 @@ export const PeerConnectionsProvider = ({
     });
   };
 
+  const closePeerConnection = () => {
+    peerConnectionsRef.current = {};
+  };
+
   return (
     <PeerConnectionsContext.Provider
       value={{
         ref: peerConnectionsRef,
         createPeerConnection: createPeerConnection,
+        closePeerConnection: closePeerConnection,
         switchingAudio: switchingAudio,
       }}
     >

@@ -22,7 +22,6 @@ const Info = () => {
     const initChatInfo = async () => {
       const res = await getChatRoomInfoRequest();
       if (res.success) {
-        console.log(res.result);
         setLatestChatRoom(res.result.latestChatRoom);
       }
     };

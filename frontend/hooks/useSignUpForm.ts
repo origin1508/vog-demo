@@ -24,15 +24,11 @@ const useSignUpForm = () => {
   });
 
   const watchNickname = watch("nickname");
-  const watchGender = watch("gender");
   const nicknameError = errors.nickname;
-  const genderError = errors.gender;
 
   return {
     watchNickname,
-    watchGender,
     nicknameError,
-    genderError,
     register,
     handleSubmit,
   };

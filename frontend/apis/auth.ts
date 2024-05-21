@@ -18,4 +18,12 @@ const oauthLoginRequest = async (
   return res.data;
 };
 
-export { oauthLoginRequest };
+const testLoginRequest = async (oauthId: string) => {
+  const res = await customAxios.post("/auth/login/demo", {
+    oauthId: oauthId,
+  });
+
+  return res.data;
+};
+
+export { oauthLoginRequest, testLoginRequest };

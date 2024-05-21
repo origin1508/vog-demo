@@ -1,6 +1,10 @@
 require("dotenv").config();
 const { PORT, MONGO_URI } = process.env;
-const whitelist = ["http://localhost:3002", "http://origin1508.iptime.org"];
+const whitelist = [
+  "http://localhost:3002",
+  "http://origin1508.iptime.org",
+  "https://vog-demo.vercel.app",
+];
 const corsOptionsDelegate = function (req, callback) {
   let corsOptions;
   if (whitelist.indexOf(req.header("Origin")) !== -1) {

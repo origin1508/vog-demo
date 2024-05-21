@@ -105,4 +105,20 @@ router.post("/login/kakao", async (req, res) => {
   }
 });
 
+router.post("/login/demo", async (req, res) => {
+  const { oauthId } = req.body;
+
+  const user = await User.findOne({ oauthId: oauthId }).lean();
+
+  const jwtAccessToken = jwt.sign({ id: user.id, nickname: user.nickname });
+
+  res.status(200).send({
+    success: true,
+    result: {
+      ...user,
+      jwtAccessToken,
+    },
+  });
+});
+
 module.exports = router;
